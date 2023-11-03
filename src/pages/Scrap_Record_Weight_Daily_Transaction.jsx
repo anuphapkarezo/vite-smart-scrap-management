@@ -15,6 +15,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
+import Navbar from "../components/navbar/Navbar";
 
 import Swal from 'sweetalert2';
 
@@ -62,6 +63,11 @@ export default function Scrap_Record_Weight_Daily_Transaction({ onSearch }) {
     }
   }, [detailWeightSum, editedTotalWeight]);
 
+  const userString = localStorage.getItem("userToken");
+  const userObject = JSON.parse(userString);
+  const userName = userObject?.user_name;
+  const userSurname = userObject?.user_surname;
+
   const columns = [
     { field: 'waste_factory_name', headerName: 'Factory', width: 100 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'center'},
     { field: 'waste_group', headerName: 'Group', width: 250 , headerAlign: 'center' , headerClassName: 'bold-header'},
@@ -92,7 +98,13 @@ export default function Scrap_Record_Weight_Daily_Transaction({ onSearch }) {
         />
       ),
     },
-    { field: 'update_by', headerName: 'Update By', width: 150 , headerAlign: 'center' , headerClassName: 'bold-header', align: 'center'},
+    { field: 'update_by', headerName: 'Update By', width: 150 , headerAlign: 'center' , headerClassName: 'bold-header', align: 'center',
+      renderCell: (params) => (
+        <p>
+          {userName} {userSurname}
+        </p>
+      ),
+    },
     { field: 'update_date', headerName: 'Update Date', width: 150 , headerAlign: 'center' , headerClassName: 'bold-header', align: 'center'},
     { field: 'record_weight', headerName: 'Record Weight', width: 150 , headerAlign: 'center' , headerClassName: 'bold-header', align: 'center',
       renderCell: (params) => (
@@ -319,7 +331,7 @@ export default function Scrap_Record_Weight_Daily_Transaction({ onSearch }) {
         // waste_detail_no: distinct_weight_details.length + 1,
         waste_detail_no: (distinct_weight_details.length + 1).toString(),
         waste_weight: numericValue,
-        waste_update_by: "Anupab.K"
+        waste_update_by: `${userName} ${userSurname}`
       };
   
       // Update the distinct_weight_details state with the new row
@@ -344,46 +356,172 @@ export default function Scrap_Record_Weight_Daily_Transaction({ onSearch }) {
     setIsDialogOpen_button(false);
   };
 
-
   const handleSaveData = () => {
     if (detailWeightSum < parseFloat(editedTotalWeight)) {
       openDialog_button();
     } else {
-      axios.get(
-        `http://10.17.66.242:3001/api/smart_scrap/delete-data-daily-transaction?waste_date_take_off=${selectedDate}&waste_factory_name=${selectedFactory}&waste_group_code=${getCode(selectedRecord.waste_group)}&waste_item_code=${getCode(selectedRecord.waste_item)}`
-      );
-      
-      const dataToSave = distinct_weight_details.map((row) => {
-        return axios.get(
-          `http://10.17.66.242:3001/api/smart_scrap/insert-data-daily-transaction?waste_date_take_off=${row.waste_date_take_off}&waste_factory_name=${row.waste_factory_name}&waste_item_code=${row.waste_item_code}&waste_group_code=${row.waste_group_code}&waste_detail_no=${row.waste_detail_no}&waste_weight=${row.waste_weight}&waste_update_by=${row.waste_update_by}`
-        );
+      // Display a confirmation dialog using SweetAlert
+      const swalWithZIndex = Swal.mixin({
+        customClass: {
+          popup: 'my-swal-popup', // Define a custom class for the SweetAlert popup
+        },
       });
+      handleCloseModal();
       
-      // Use Promise.all to wait for all axios requests to complete
-      Promise.all(dataToSave)
-        .then(() => {
-          // After all requests are completed, fetch the updated data
-          return fetch_record_weight();
-        })
-        .then(() => {
-          Swal.fire({
-            icon: "success",
-            title: "Save Success",
-            text: "Save data record weight successfully",
-            confirmButtonText: "OK",
-          });
-          // handleDeleteData();
-          handleCloseModal();
-        })
-        .catch((error) => {
-          console.error("Error saving data:", error);
-        });
+      swalWithZIndex.fire({
+        title: "Confirm Save",
+        text: "Are you sure you want to save the data?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, Save",
+        cancelButtonText: "Cancel",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // User confirmed, proceed with data saving
+          // Delete existing data
+          axios
+            .get(
+              `http://10.17.66.242:3001/api/smart_scrap/delete-data-daily-transaction?waste_date_take_off=${selectedDate}&waste_factory_name=${selectedFactory}&waste_group_code=${getCode(selectedRecord.waste_group)}&waste_item_code=${getCode(selectedRecord.waste_item)}`
+            )
+            .then(() => {
+              // Create an array of promises to insert data for distinct_weight_details
+              const insertPromises = distinct_weight_details.map((row) => {
+                return axios.get(
+                  `http://10.17.66.242:3001/api/smart_scrap/insert-data-daily-transaction?waste_date_take_off=${row.waste_date_take_off}&waste_factory_name=${row.waste_factory_name}&waste_item_code=${row.waste_item_code}&waste_group_code=${row.waste_group_code}&waste_detail_no=${row.waste_detail_no}&waste_weight=${row.waste_weight}&waste_update_by=${row.waste_update_by}`
+                );
+              });
+  
+              // Use Promise.all to wait for all insert requests to complete
+              return Promise.all(insertPromises);
+            })
+            .then(() => {
+              // After all requests are completed, fetch the updated data
+              return fetch_record_weight();
+            })
+            .then(() => {
+              // Success notification
+              Swal.fire({
+                icon: "success",
+                title: "Save Success",
+                text: "Data record weight saved successfully",
+                confirmButtonText: "OK",
+              });
+  
+              // Close the modal
+              // handleCloseModal();
+            })
+            .catch((error) => {
+              console.error("Error saving data:", error);
+              // Handle the error or display an error message using Swal
+              Swal.fire({
+                icon: "error",
+                title: "Save Error",
+                text: "An error occurred while saving data",
+                confirmButtonText: "OK",
+              });
+            });
+        }
+      });
+  
+      // Set a higher z-index for the SweetAlert dialog
+      document.querySelector('.my-swal-popup').style.zIndex = '9999';
     }
-    
+  };
+
+  // const handleSaveData = () => {
+  //   if (detailWeightSum < parseFloat(editedTotalWeight)) {
+  //     openDialog_button();
+  //   } else {
+  //     // Delete existing data
+  //     axios
+  //       .get(
+  //         `http://10.17.66.242:3001/api/smart_scrap/delete-data-daily-transaction?waste_date_take_off=${selectedDate}&waste_factory_name=${selectedFactory}&waste_group_code=${getCode(selectedRecord.waste_group)}&waste_item_code=${getCode(selectedRecord.waste_item)}`
+  //       )
+  //       .then(() => {
+  //         // Create an array of promises to insert data for distinct_weight_details
+  //         const insertPromises = distinct_weight_details.map((row) => {
+  //           return axios.get(
+  //             `http://10.17.66.242:3001/api/smart_scrap/insert-data-daily-transaction?waste_date_take_off=${row.waste_date_take_off}&waste_factory_name=${row.waste_factory_name}&waste_item_code=${row.waste_item_code}&waste_group_code=${row.waste_group_code}&waste_detail_no=${row.waste_detail_no}&waste_weight=${row.waste_weight}&waste_update_by=${row.waste_update_by}`
+  //           );
+  //         });
+  
+  //         // Use Promise.all to wait for all insert requests to complete
+  //         return Promise.all(insertPromises);
+  //       })
+  //       .then(() => {
+  //         // After all requests are completed, fetch the updated data
+  //         return fetch_record_weight();
+  //       })
+  //       .then(() => {
+  //         // Success notification
+  //         Swal.fire({
+  //           icon: "success",
+  //           title: "Save Success",
+  //           text: "Data record weight saved successfully",
+  //           confirmButtonText: "OK",
+  //         });
+  //         handleCloseModal();
+
+  //       })
+  //       .catch((error) => {
+  //         console.error("Error saving data:", error);
+  //         // Handle the error or display an error message using Swal
+  //         Swal.fire({
+  //           icon: "error",
+  //           title: "Save Error",
+  //           text: "An error occurred while saving data",
+  //           confirmButtonText: "OK",
+  //         });
+  //       });
+  //   }
+  // };
+  
+  // const handleSaveData = () => {
+  //   if (detailWeightSum < parseFloat(editedTotalWeight)) {
+  //     openDialog_button();
+  //   } else {
+  //     axios.get(
+  //       `http://10.17.66.242:3001/api/smart_scrap/delete-data-daily-transaction?waste_date_take_off=${selectedDate}&waste_factory_name=${selectedFactory}&waste_group_code=${getCode(selectedRecord.waste_group)}&waste_item_code=${getCode(selectedRecord.waste_item)}`
+  //     );
+
+  //     const dataToSave = distinct_weight_details.map((row) => {
+  //       return axios.get(
+  //         `http://10.17.66.242:3001/api/smart_scrap/insert-data-daily-transaction?waste_date_take_off=${row.waste_date_take_off}&waste_factory_name=${row.waste_factory_name}&waste_item_code=${row.waste_item_code}&waste_group_code=${row.waste_group_code}&waste_detail_no=${row.waste_detail_no}&waste_weight=${row.waste_weight}&waste_update_by=${row.waste_update_by}`
+  //       );
+  //     });
+      
+  //     // Use Promise.all to wait for all axios requests to complete
+  //     Promise.all(dataToSave)
+  //       .then(() => {
+  //         // After all requests are completed, fetch the updated data
+  //         return fetch_record_weight();
+  //       })
+  //       .then(() => {
+  //         Swal.fire({
+  //           icon: "success",
+  //           title: "Save Success",
+  //           text: "Save data record weight successfully",
+  //           confirmButtonText: "OK",
+  //         });
+  //         // handleDeleteData();
+  //         handleCloseModal();
+  //       })
+  //       .catch((error) => {
+  //         console.error("Error saving data:", error);
+  //       });
+  //   }
+  // };
+  const [isNavbarOpen, setIsNavbarOpen] = React.useState(false);
+
+  const handleNavbarToggle = (openStatus) => {
+    setIsNavbarOpen(openStatus);
   };
 
   return (
-    <div className="table-responsive table-fullscreen" style={{ height: 800, width: '1600' , marginTop: '5px' }}>
+    <>
+      <Navbar onToggle={handleNavbarToggle}/>
+      <Box marginLeft={isNavbarOpen ? "220px" : 4} marginTop={8}>
+    <div className="w-screen ml-16 mt-20">
         <div >
             {/* <Smart_Scrap_SearchFactoryGroup onSearch={onSearch} /> */}
             <Smart_Scrap_SearchFactoryGroup
@@ -587,5 +725,7 @@ export default function Scrap_Record_Weight_Daily_Transaction({ onSearch }) {
           </DialogActions>
         </Dialog>
     </div>
+    </Box>
+    </>
   );
 }

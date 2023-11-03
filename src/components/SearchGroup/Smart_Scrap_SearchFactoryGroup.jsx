@@ -88,11 +88,11 @@ function Smart_Scrap_SearchFactoryGroup({ onSearch }) {
 
     return (
         <React.Fragment>
-            <div>
+            {/* <div>
                 <h1 style={{ fontSize: 24, fontWeight: 'bold', color: '#6528F7' , 
                     backgroundColor: '#FAF1E4' , width: '380px' , paddingLeft: '5px' , marginBottom : '20px'}}>
                     Record weight daily transaction</h1>
-            </div>
+            </div> */}
             <Box maxWidth="xl" sx={{ width: "100%" , height: 50}}>
                 <Grid container spacing={0} style={{width: 1350 }}> 
                     <Grid  item xs={2} md={2} >

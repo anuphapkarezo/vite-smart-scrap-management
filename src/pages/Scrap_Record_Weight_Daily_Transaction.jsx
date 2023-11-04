@@ -15,8 +15,13 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
+import SendIcon from '@mui/icons-material/Send';
+import CancelIcon from '@mui/icons-material/Cancel';
 import Navbar from "../components/navbar/Navbar";
-
+import ScaleIcon from '@mui/icons-material/Scale';
+import VerticalAlignBottomIcon from '@mui/icons-material/VerticalAlignBottom';
+import EditNoteIcon from '@mui/icons-material/EditNote';
+import BorderColorIcon from '@mui/icons-material/BorderColor';
 import Swal from 'sweetalert2';
 
 export default function Scrap_Record_Weight_Daily_Transaction({ onSearch }) {
@@ -108,19 +113,23 @@ export default function Scrap_Record_Weight_Daily_Transaction({ onSearch }) {
     { field: 'update_date', headerName: 'Update Date', width: 150 , headerAlign: 'center' , headerClassName: 'bold-header', align: 'center'},
     { field: 'record_weight', headerName: 'Record Weight', width: 150 , headerAlign: 'center' , headerClassName: 'bold-header', align: 'center',
       renderCell: (params) => (
-        <input
-          type="button"
-          value={"Key Weight"}
-          className="btn_hover"
-          style={{ width: 130 , height: '35px' , textAlign:'center' , backgroundColor: '#FFCD4B' , 
-          cursor:"pointer" , borderRadius: '15px' , border: 'none' 
-          }}
-          onClick={() => {
-            handleKeyWeightClick(params.row.id);
-            setIsModalOpen(true);
+        <Button variant="contained" endIcon={<ScaleIcon />} onClick={() => { handleKeyWeightClick(params.row.id); setIsModalOpen(true); }}
+                className="btn_hover" style={{backgroundColor: '#FFCD4B' , color: 'black' ,  width: 125 , height: '35px' , textAlign:'center' , boxShadow: '3px 3px 5px grey'}}>
+                Key Weight
+        </Button>
+        // <input
+        //   type="button"
+        //   value={"Key Weight"}
+        //   className="btn_hover"
+        //   style={{ width: 130 , height: '35px' , textAlign:'center' , backgroundColor: '#FFCD4B' , 
+        //   cursor:"pointer" , borderRadius: '15px' , border: 'none' 
+        //   }}
+        //   onClick={() => {
+        //     handleKeyWeightClick(params.row.id);
+        //     setIsModalOpen(true);
 
-          }} // Call the handleKeyWeightClick function with the row ID or any other identifier you need
-        />
+        //   }} // Call the handleKeyWeightClick function with the row ID or any other identifier you need
+        // />
       ),
     },
   ]
@@ -357,7 +366,14 @@ export default function Scrap_Record_Weight_Daily_Transaction({ onSearch }) {
   };
 
   const handleSaveData = () => {
+    // console.log("DET" , detailWeightSum);
+    // console.log("TOT" , parseFloat(editedTotalWeight));
+
     if (detailWeightSum < parseFloat(editedTotalWeight)) {
+      console.log("Step 1");
+      openDialog_button();
+    } else if (detailWeightSum == 0 || parseFloat(editedTotalWeight) == '') {
+      console.log("Step 2");
       openDialog_button();
     } else {
       // Display a confirmation dialog using SweetAlert
@@ -430,6 +446,8 @@ export default function Scrap_Record_Weight_Daily_Transaction({ onSearch }) {
 
   // const handleSaveData = () => {
   //   if (detailWeightSum < parseFloat(editedTotalWeight)) {
+  //     openDialog_button();
+  //   } if (detailWeightSum == 0 || parseFloat(editedTotalWeight) == '') {
   //     openDialog_button();
   //   } else {
   //     // Delete existing data
@@ -573,34 +591,34 @@ export default function Scrap_Record_Weight_Daily_Transaction({ onSearch }) {
                     </IconButton>
                 </div>
             </div>
-            <div style={{ height: 650}}>
+            <div style={{ height: 655}}>
                 <div style={{  height: 140 , backgroundColor: '#E4F1FF' , borderRadius: 15 }}>
                     <div>
                       <label style={{marginLeft: '25px' ,marginTop: '15px' , fontSize: 16}}>Date take off :</label>
-                      <input style={{marginLeft: '10px' ,marginTop: '15px' , fontSize: 16, width: 150 , height: 30 , textAlign: 'center' , border: '1px solid black' , borderRadius: '5px' ,backgroundColor: '#EEEEEE'}} type="text" value={selectedDate} disabled/> 
+                      <input style={{marginLeft: '10px' ,marginTop: '15px' , fontSize: 16, width: 150 , height: 30 , textAlign: 'center' , border: '1px solid black' , borderRadius: '5px' ,backgroundColor: '#EEEEEE' , boxShadow: '3px 3px 5px grey'}} type="text" value={selectedDate} disabled/> 
 
                       <label style={{marginLeft: '75px' ,marginTop: '15px' , fontSize: 16}}>Factory :</label>
-                      <input style={{marginLeft: '10px' ,marginTop: '15px' , fontSize: 16, width: 150 , height: 30 , textAlign: 'center' , border: '1px solid black' , borderRadius: '5px' ,backgroundColor: '#EEEEEE'}} type="text" value={selectedFactory} disabled/> 
+                      <input style={{marginLeft: '10px' ,marginTop: '15px' , fontSize: 16, width: 150 , height: 30 , textAlign: 'center' , border: '1px solid black' , borderRadius: '5px' ,backgroundColor: '#EEEEEE' , boxShadow: '3px 3px 5px grey'}} type="text" value={selectedFactory} disabled/> 
                     </div>
                     <div>
                       <label style={{marginLeft: '33px' ,marginTop: '10px' , fontSize: 16}}>Group code :</label>
-                      <input style={{marginLeft: '10px' ,marginTop: '10px' , fontSize: 16, width: 150 , height: 30 , textAlign: 'center' , border: '1px solid black' , borderRadius: '5px' ,backgroundColor: '#EEEEEE'}} type="text" value={selectedRecord ?  getCode(selectedRecord.waste_group) : ''} disabled/> 
+                      <input style={{marginLeft: '10px' ,marginTop: '10px' , fontSize: 16, width: 150 , height: 30 , textAlign: 'center' , border: '1px solid black' , borderRadius: '5px' ,backgroundColor: '#EEEEEE' , boxShadow: '3px 3px 5px grey'}} type="text" value={selectedRecord ?  getCode(selectedRecord.waste_group) : ''} disabled/> 
 
                       <label style={{marginLeft: '38px' ,marginTop: '10px' , fontSize: 16}}>Group Desc. :</label>
-                      <input style={{marginLeft: '10px' ,marginTop: '10px' , fontSize: 16, width: 280 , height: 30 , textAlign: 'center' , border: '1px solid black' , borderRadius: '5px' ,backgroundColor: '#EEEEEE'}} type="text" value={selectedRecord ? getDescription(selectedRecord.waste_group) : ''} disabled/> 
+                      <input style={{marginLeft: '10px' ,marginTop: '10px' , fontSize: 16, width: 280 , height: 30 , textAlign: 'center' , border: '1px solid black' , borderRadius: '5px' ,backgroundColor: '#EEEEEE' , boxShadow: '3px 3px 5px grey'}} type="text" value={selectedRecord ? getDescription(selectedRecord.waste_group) : ''} disabled/> 
                     </div>
                     <div>
                       <label style={{marginLeft: '46px' ,marginTop: '10px' , fontSize: 16}}>Item code :</label>
-                      <input style={{marginLeft: '10px' ,marginTop: '10px' , fontSize: 16, width: 150 , height: 30 , textAlign: 'center' , border: '1px solid black' , borderRadius: '5px' ,backgroundColor: '#EEEEEE'}} type="text" value={selectedRecord ?  getCode(selectedRecord.waste_item) : ''} disabled/> 
+                      <input style={{marginLeft: '10px' ,marginTop: '10px' , fontSize: 16, width: 150 , height: 30 , textAlign: 'center' , border: '1px solid black' , borderRadius: '5px' ,backgroundColor: '#EEEEEE' , boxShadow: '3px 3px 5px grey'}} type="text" value={selectedRecord ?  getCode(selectedRecord.waste_item) : ''} disabled/> 
 
                       <label style={{marginLeft: '52px' ,marginTop: '10px' , fontSize: 16}}>Item Desc. :</label>
-                      <input style={{marginLeft: '10px' ,marginTop: '10px' , fontSize: 16, width: 280 , height: 30 , textAlign: 'center' , border: '1px solid black' , borderRadius: '5px' ,backgroundColor: '#EEEEEE'}} type="text" value={selectedRecord ? getDescription(selectedRecord.waste_item) : ''} disabled/> 
+                      <input style={{marginLeft: '10px' ,marginTop: '10px' , fontSize: 16, width: 280 , height: 30 , textAlign: 'center' , border: '1px solid black' , borderRadius: '5px' ,backgroundColor: '#EEEEEE' , boxShadow: '3px 3px 5px grey'}} type="text" value={selectedRecord ? getDescription(selectedRecord.waste_item) : ''} disabled/> 
                     </div>
                 </div>
                 <div style={{paddingTop: '10px' , display: 'flex'}}>
-                  <label style={{marginTop: '3px' , marginLeft: '10px'}}>Total Weight :</label>
+                  <label style={{marginTop: '5px' , marginLeft: '10px'}}>Total Weight :</label>
                   <input  ref={totalWeightInputRef}  
-                          style={{marginLeft: '10px', fontSize: 16 , fontWeight: 'bold', width: 150 , height: 30 , textAlign: 'center' , border: '1px solid black' , borderRadius: '5px' , color: isEditing && !editedTotalWeightDisabled ? 'blue' : 'black',}} 
+                          style={{marginLeft: '10px', fontSize: 16 , fontWeight: 'bold', width: 150 , height: 30 , textAlign: 'center' , border: '1px solid black' , borderRadius: '5px' , color: isEditing && !editedTotalWeightDisabled ? 'blue' : 'black', boxShadow: '3px 3px 5px grey'}} 
                           type="text" 
                           value={editedTotalWeight !== null ? editedTotalWeight : ''}
                           // onChange={(e) => setEditedTotalWeight(e.target.value)}
@@ -610,8 +628,12 @@ export default function Scrap_Record_Weight_Daily_Transaction({ onSearch }) {
                           disabled={!isEditing || editedTotalWeightDisabled}
                           onKeyPress={handleKeyPress}
                   />
-                  <input className="btn_active" type="button" style={{marginLeft:'5px' , width: 65 , height: 30 , borderRadius: '5px' , backgroundColor: '#FFB000' , cursor:"pointer" , boxShadow: '3px 3px 5px grey' , border: 'none'}} 
-                          value={"Edit"} onClick={handleEditClick}/>
+                  <Button variant="contained" startIcon={<BorderColorIcon />} onClick={handleEditClick}
+                        className="btn_active" style={{marginLeft: 5 , backgroundColor: '#FFB000' , color: 'black' ,  width: 70 , height: 30 , textAlign:'center', borderRadius: '5px' , boxShadow: '3px 3px 5px grey'}}>
+                        Edit
+                </Button>
+                  {/* <input className="btn_active" type="button" style={{marginLeft:'5px' , width: 65 , height: 30 , borderRadius: '5px' , backgroundColor: '#FFB000' , cursor:"pointer" , boxShadow: '3px 3px 5px grey' , border: 'none'}} 
+                          value={"Edit"} onClick={handleEditClick}/> */}
                   <label style={{marginLeft: '5px' , marginTop: '5px' , color: 'brown'}}>(Double click for Edit)</label>
                   {/* <input type="button" style={{marginLeft:'5px' , width: 65 , height: 30 ,border: '1px solid black' , borderRadius: '5px' , backgroundColor: 'lightgreen' , cursor:"pointer" , cursor:"pointer"}} 
                           value={"Confirm"} onClick={handleConfirmClick}/> */}
@@ -641,7 +663,7 @@ export default function Scrap_Record_Weight_Daily_Transaction({ onSearch }) {
                             handleInsertData();
                           }
                         }}
-                        style={{ width: 100, height: 30, marginRight: 10 ,marginTop: 10 , textAlign: 'center' , color: 'blue'}}
+                        style={{ width: 100, height: 30, marginRight: 10 ,marginTop: 10 , textAlign: 'center' , color: 'blue', boxShadow: '3px 3px 5px grey'}}
                         disabled={!isEditing || editedDetailWeightDisabled}
                       />
                 </div>
@@ -653,22 +675,18 @@ export default function Scrap_Record_Weight_Daily_Transaction({ onSearch }) {
                       id="Datagrid-modal"
                       columns={columns_modal}
                       rows={distinct_weight_details}
-                      // slots={{ toolbar: GridToolbar }}
-                      // disableColumnFilter
-                      // disableDensitySelector
-                      // filterModel={filterModel}
-                      // onFilterModelChange={(newModel) => setFilterModel(newModel)}
-                      // slotProps={{ toolbar: { showQuickFilter: true } }}
-                      // columnVisibilityModel={columnVisibilityModel}
-                      // checkboxSelection
-                      // onColumnVisibilityModelChange={(newModel) =>
-                      //   setColumnVisibilityModel(newModel)
-                      // }
                     />
                   )}
                 </Box>
               <div style={{ display: 'flex', justifyContent: 'flex-end' , marginTop: 8}}>
-                <input style={{marginRight: 5,
+                <Button variant="contained" startIcon={<CancelIcon />} onClick={handleCloseModal} className="btn_hover" style={{backgroundColor: 'lightgray' , color: 'black' , width: 120 , height: 40 , marginRight: 10 , boxShadow: '3px 3px 5px grey'}}>
+                    Cancel
+                </Button>
+                
+                <Button variant="contained" endIcon={<VerticalAlignBottomIcon />} onClick={handleSaveData} className="btn_hover" style={{backgroundColor: 'lightgreen' , color: 'black' , width: 120 , height: 40 , boxShadow: '3px 3px 5px grey'}}>
+                    Confirm
+                </Button>
+                {/* <input style={{marginRight: 5,
                           width: 90 , 
                           height: 40,
                           backgroundColor: 'lightgray',
@@ -679,8 +697,8 @@ export default function Scrap_Record_Weight_Daily_Transaction({ onSearch }) {
                         value={'Cancel'}
                         onClick={handleCloseModal}
                         className="btn_hover"
-                        />
-                <input style={{
+                        /> */}
+                {/* <input style={{
                           width: 90 , 
                           height: 40,
                           backgroundColor: 'lightgreen',
@@ -692,7 +710,8 @@ export default function Scrap_Record_Weight_Daily_Transaction({ onSearch }) {
                         // onClick={() => { handleDeleteData(); handleSaveData(); }}
                         onClick={handleSaveData}
                         className="btn_hover"
-                />
+                        endIcon={<SendIcon />}
+                /> */}
               </div>
             </div>
           </Box>

@@ -10,6 +10,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
+import SearchIcon from '@mui/icons-material/Search';
 
 function Smart_Scrap_SearchFactoryGroup({ onSearch }) {
     const [error , setError] = useState(null);
@@ -155,6 +156,7 @@ function Smart_Scrap_SearchFactoryGroup({ onSearch }) {
                             // size="small"
                             style={{width: '120px', height: '50px' , marginTop: '10px', marginLeft: '70px'}}
                             onClick={handleSearch}
+                            endIcon={<SearchIcon />}
                             >Search
                         </Button>
                     </Grid>

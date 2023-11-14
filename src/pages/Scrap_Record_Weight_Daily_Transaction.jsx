@@ -23,6 +23,7 @@ import VerticalAlignBottomIcon from '@mui/icons-material/VerticalAlignBottom';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import BorderColorIcon from '@mui/icons-material/BorderColor';
 import Swal from 'sweetalert2';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 export default function Scrap_Record_Weight_Daily_Transaction({ onSearch }) {
   const [selectedFactory, setSelectedFactory] = useState(null);
@@ -113,10 +114,16 @@ export default function Scrap_Record_Weight_Daily_Transaction({ onSearch }) {
     { field: 'update_date', headerName: 'Update Date', width: 150 , headerAlign: 'center' , headerClassName: 'bold-header', align: 'center'},
     { field: 'record_weight', headerName: 'Record Weight', width: 150 , headerAlign: 'center' , headerClassName: 'bold-header', align: 'center',
       renderCell: (params) => (
-        <Button variant="contained" endIcon={<ScaleIcon />} onClick={() => { handleKeyWeightClick(params.row.id); setIsModalOpen(true); }}
-                className="btn_hover" style={{backgroundColor: '#FFCD4B' , color: 'black' ,  width: 125 , height: '35px' , textAlign:'center' , boxShadow: '3px 3px 5px grey'}}>
-                Key Weight
-        </Button>
+        <div>
+          <Button variant="contained" endIcon={<ScaleIcon />} onClick={() => { handleKeyWeightClick(params.row.id); setIsModalOpen(true); }}
+                  className="btn_hover" style={{backgroundColor: '#FFCD4B' , color: 'black' ,  width: 125 , height: '35px' , textAlign:'center' , boxShadow: '3px 3px 5px grey'}}>
+                  Key Weight
+          </Button>
+          {/* <Button variant="contained" endIcon={<ScaleIcon />} onClick={() => { handleKeyWeightClick(params.row.id); setIsModalOpen(true); }}
+                  className="btn_hover" style={{backgroundColor: '#FFCD4B' , color: 'black' ,  width: 125 , height: '35px' , textAlign:'center' , boxShadow: '3px 3px 5px grey'}}>
+                  Key Weight
+          </Button> */}
+        </div>
         // <input
         //   type="button"
         //   value={"Key Weight"}
@@ -444,6 +451,58 @@ export default function Scrap_Record_Weight_Daily_Transaction({ onSearch }) {
     }
   };
 
+  const handleDeleteData = () => {
+      const swalWithZIndex = Swal.mixin({
+        customClass: {
+          popup: 'my-swal-popup', // Define a custom class for the SweetAlert popup
+        },
+      });
+      handleCloseModal();
+      
+      swalWithZIndex.fire({
+        title: "Confirm Delete",
+        text: "Are you sure you want to Delete the data?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, Delete",
+        cancelButtonText: "Cancel",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // User confirmed, proceed with data saving
+          // Delete existing data
+          axios
+            .get(
+              `http://10.17.66.242:3001/api/smart_scrap/delete-data-daily-transaction?waste_date_take_off=${selectedDate}&waste_factory_name=${selectedFactory}&waste_group_code=${getCode(selectedRecord.waste_group)}&waste_item_code=${getCode(selectedRecord.waste_item)}`
+            )
+            .then(() => {
+              // After all requests are completed, fetch the updated data
+              return fetch_record_weight();
+            })
+            .then(() => {
+              // Success notification
+              Swal.fire({
+                icon: "success",
+                title: "Delete Success",
+                text: "Data record weight Deleteed successfully",
+                confirmButtonText: "OK",
+              });
+  
+              // Close the modal
+              // handleCloseModal();
+            })
+            .catch((error) => {
+              console.error("Error saving data:", error);
+              // Handle the error or display an error message using Swal
+              Swal.fire({
+                icon: "error",
+                title: "Delete Error",
+                text: "An error occurred while Delete data",
+                confirmButtonText: "OK",
+              });
+            });
+        }
+      });
+  }
   // const handleSaveData = () => {
   //   if (detailWeightSum < parseFloat(editedTotalWeight)) {
   //     openDialog_button();
@@ -679,6 +738,9 @@ export default function Scrap_Record_Weight_Daily_Transaction({ onSearch }) {
                   )}
                 </Box>
               <div style={{ display: 'flex', justifyContent: 'flex-end' , marginTop: 8}}>
+                <Button variant="contained" startIcon={<DeleteIcon />} onClick={handleDeleteData} className="btn_hover" style={{backgroundColor: '#FE0000' , color: 'white' , width: 120 , height: 40 , marginRight: 470 , boxShadow: '3px 3px 5px grey'}}>
+                    Delete
+                </Button>
                 <Button variant="contained" startIcon={<CancelIcon />} onClick={handleCloseModal} className="btn_hover" style={{backgroundColor: 'lightgray' , color: 'black' , width: 120 , height: 40 , marginRight: 10 , boxShadow: '3px 3px 5px grey'}}>
                     Cancel
                 </Button>

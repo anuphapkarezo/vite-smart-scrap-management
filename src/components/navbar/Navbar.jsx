@@ -128,14 +128,23 @@ export default function Navbar({ onToggle }) {
   //*Menu name ******************************************************
 
   const [menuName, setMenuName] = React.useState("Smart Waste Management");
+  const [menuIcon, setMenuIcon] = React.useState(
+    <img src="/dashboard1.png" alt="" width={30} />
+  );
 
   React.useEffect(() => {
     switch (location.pathname) {
       case "/env_scrap_record_weight_daily_transaction":
         setMenuName("Record weight daily transaction");
+        setMenuIcon(<img src="/weight-scale.png" alt="" width={30} />);
+        break;
+      case "/env_scrap_summary_weight_date_take_off":
+        setMenuName("Summary Weight by Date take off");
+        setMenuIcon(<img src="/report-summary.png" alt="" width={30} />);
         break;
       default:
         setMenuName("Smart Waste Management");
+        setMenuIcon(<img src="/dashboard1.png" alt="" width={30} />);
     }
   }, [location.pathname]);
 
@@ -170,8 +179,11 @@ export default function Navbar({ onToggle }) {
                 component="div"
                 sx={{
                   fontWeight: "bold",
+                  display: "flex",
+                  gap: 2
                 }}
               >
+                {menuIcon}
                 {menuName}
               </Typography>
             </Box>
@@ -241,10 +253,51 @@ export default function Navbar({ onToggle }) {
                     },
                   }}
                 >
-                  <ScaleOutlinedIcon />
+                  <img src="/weight-scale.png" alt="" width={30} />
+                  {/* <ScaleOutlinedIcon />
+                   */}
                 </ListItemIcon>
                 <ListItemText
                   primary="Record Weight (Daily)"
+                  sx={{ opacity: open ? 1 : 0 }}
+                />
+              </ListItemButton>
+            </ListItem>
+          </List>
+          
+          {/* // Summary weight by Date Take Off*/}
+          <List open={open}>
+            <ListItem
+              onClick={() => setMenuName("Summary Weight by Date take off")}
+              disablePadding
+              sx={{ display: "block", color: "black" }}
+              component={Link}
+              to="/env_scrap_summary_weight_date_take_off"
+            >
+              <ListItemButton
+                sx={{
+                  minHeight: 48,
+                  justifyContent: open ? "initial" : "center",
+                  px: 2.5,
+                }}
+              >
+                <ListItemIcon
+                  sx={{
+                    minWidth: 0,
+                    mr: open ? 3 : "auto",
+                    justifyContent: "center",
+                    color: "inherit", // Set initial color
+                    "&:hover": {
+                      color: "primary.main", // Change color on hover
+                    },
+                  }}
+                >
+                  <img src="/report-summary.png" alt="" width={30} />
+                  {/* <ScaleOutlinedIcon />
+                   */}
+                </ListItemIcon>
+                <ListItemText
+                  primary="Summary Weight"
                   sx={{ opacity: open ? 1 : 0 }}
                 />
               </ListItemButton>

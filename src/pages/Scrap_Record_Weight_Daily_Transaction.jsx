@@ -112,12 +112,12 @@ export default function Scrap_Record_Weight_Daily_Transaction({ onSearch }) {
       ),
     },
     { field: 'update_date', headerName: 'Update Date', width: 150 , headerAlign: 'center' , headerClassName: 'bold-header', align: 'center'},
-    { field: 'record_weight', headerName: 'Record Weight', width: 150 , headerAlign: 'center' , headerClassName: 'bold-header', align: 'center',
+    { field: 'record_weight', headerName: 'Record Weight', width: 130 , headerAlign: 'center' , headerClassName: 'bold-header', align: 'center',
       renderCell: (params) => (
         <div>
-          <Button variant="contained" endIcon={<ScaleIcon />} onClick={() => { handleKeyWeightClick(params.row.id); setIsModalOpen(true); }}
-                  className="btn_hover" style={{backgroundColor: '#FFCD4B' , color: 'black' ,  width: 125 , height: '35px' , textAlign:'center' , boxShadow: '3px 3px 5px grey'}}>
-                  Key Weight
+          <Button variant="contained" onClick={() => { handleKeyWeightClick(params.row.id); setIsModalOpen(true); }}
+                  className="btn_hover hover:scale-110" style={{backgroundColor: '#FFCD4B' , color: 'black' ,  width: 50 , height: '35px' , textAlign:'center' , boxShadow: '3px 3px 5px grey' , marginLeft: 5}}>
+                  <ScaleIcon />
           </Button>
           {/* <Button variant="contained" endIcon={<ScaleIcon />} onClick={() => { handleKeyWeightClick(params.row.id); setIsModalOpen(true); }}
                   className="btn_hover" style={{backgroundColor: '#FFCD4B' , color: 'black' ,  width: 125 , height: '35px' , textAlign:'center' , boxShadow: '3px 3px 5px grey'}}>
@@ -609,7 +609,7 @@ export default function Scrap_Record_Weight_Daily_Transaction({ onSearch }) {
                 }}
             />
         </div>
-        <Box sx={{width: '1570px' , height: 725 , marginTop: '25px'}}>
+        <Box sx={{width: '1550px' , height: 725 , marginTop: '25px'}}>
             {isLoading ? (
               <CircularProgress /> // Display a loading spinner while data is being fetched
             ) : (
@@ -688,7 +688,7 @@ export default function Scrap_Record_Weight_Daily_Transaction({ onSearch }) {
                           onKeyPress={handleKeyPress}
                   />
                   <Button variant="contained" startIcon={<BorderColorIcon />} onClick={handleEditClick}
-                        className="btn_active" style={{marginLeft: 5 , backgroundColor: '#FFB000' , color: 'black' ,  width: 70 , height: 30 , textAlign:'center', borderRadius: '5px' , boxShadow: '3px 3px 5px grey'}}>
+                        className="btn_active hover:scale-110" style={{marginLeft: 5 , backgroundColor: '#FFB000' , color: 'black' ,  width: 70 , height: 30 , textAlign:'center', borderRadius: '5px' , boxShadow: '3px 3px 5px grey'}}>
                         Edit
                 </Button>
                   {/* <input className="btn_active" type="button" style={{marginLeft:'5px' , width: 65 , height: 30 , borderRadius: '5px' , backgroundColor: '#FFB000' , cursor:"pointer" , boxShadow: '3px 3px 5px grey' , border: 'none'}} 

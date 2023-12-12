@@ -3,7 +3,6 @@ import Box from '@mui/material/Box';
 import './Scrap_Deatil_Weight_by_Date.css'; // Import the CSS file
 import axios from "axios";
 import Smart_Scrap_SearchDetailsWeight from "../components/SearchGroup/Smart_Scrap_SearchDetailsWeight";
-import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 
 import Navbar from "../components/navbar/Navbar";
 
@@ -57,6 +56,7 @@ export default function Scrap_Deatil_Weight_by_Date({ onSearch }) {
     }
   }, [selectedFactory, selectedGroup , selectedFromDate , selectedToDate]);
 
+
   return (
     <>
         <Navbar onToggle={handleNavbarToggle}/>
@@ -73,27 +73,7 @@ export default function Scrap_Deatil_Weight_by_Date({ onSearch }) {
                         }}
                     />
                 </div>
-                {/* <div style={{ marginTop: 30 }}>
-                  <div style={{ height: 400, width: '100%' }}>
-                    <DataGrid
-                      rows={distinct_details_waste}
-                      columns={[
-                        { field: 'waste_date_take_off', headerName: 'Date take off', width: 150 },
-                        ...distinct_waste_code.map((item, index) => ({
-                          field: item.waste_item_code,
-                          headerName: item.waste_item_code,
-                          width: 120,
-                          valueGetter: (params) => {
-                            const foundItem = distinct_details_waste.find(row => row.waste_item_code === item.waste_item_code);
-                            return foundItem ? foundItem.waste_weight : 0.00;
-                          },
-                        })),
-                        { field: 'waste_update_by', headerName: 'Update by', width: 150 },
-                      ]}
-                    />
-                  </div>
-                </div> */}
-                <div style={{marginTop: 30 , fontSize: 14}}>
+                <div style={{marginTop: 30 , fontSize: 14 , width: '1850px'}}>
                     <table>
                       <thead>
                           <tr>
@@ -130,12 +110,24 @@ export default function Scrap_Deatil_Weight_by_Date({ onSearch }) {
                                   textAlign: "center",
                                   backgroundColor: "#AED2FF",
                                   height: "40px",
-                                  width: "130px",
+                                  width: "150px",
                                   paddingRight: 5,
                                   border: 'solid black 1px'
                                 }}
                               >
                                 Update by
+                              </th>
+                              <th
+                                style={{
+                                  textAlign: "center",
+                                  backgroundColor: "#AED2FF",
+                                  height: "40px",
+                                  width: "150px",
+                                  paddingRight: 5,
+                                  border: 'solid black 1px'
+                                }}
+                              >
+                                Update datetime
                               </th>
                           </tr>
                       </thead>
@@ -168,12 +160,21 @@ export default function Scrap_Deatil_Weight_by_Date({ onSearch }) {
                             ))}
                             <td
                               style={{
-                                textAlign: "center",
+                                textAlign: "left",
                                 border: 'solid black 1px',
                                 backgroundColor: '#F1EFEF'
                               }}
                             >
                               {rowData.waste_update_by}
+                            </td>
+                            <td
+                              style={{
+                                textAlign: "left",
+                                border: 'solid black 1px',
+                                backgroundColor: '#F1EFEF'
+                              }}
+                            >
+                              {rowData.update_datetime}
                             </td>
                           </tr>
                         ))}

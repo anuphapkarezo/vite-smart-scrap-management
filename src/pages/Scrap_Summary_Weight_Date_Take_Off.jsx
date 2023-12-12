@@ -104,8 +104,8 @@ export default function Scrap_Summary_Weight_Date_Take_Off({ onSearch }) {
     { field: 'waste_group_name', headerName: 'Group Name', width: 250 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'center'},
     { field: 'waste_item_code', headerName: 'Waste Code', width: 130 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'center'},
     { field: 'waste_description_EN', headerName: 'Waste Name', width: 250 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'left'},
-    { field: 'sum_weight', headerName: 'Summary Weight', width: 130 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'center'},
-    { field: 'waste_update_by', headerName: 'Update By', width: 200 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'center'},
+    { field: 'sum_weight', headerName: 'Summary Weight', width: 160 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'center'},
+    // { field: 'waste_update_by', headerName: 'Update By', width: 200 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'center'},
   ]
 
   return (
@@ -125,7 +125,7 @@ export default function Scrap_Summary_Weight_Date_Take_Off({ onSearch }) {
                     />
                 </div>
             </div>
-            <Box sx={{width: '1485px' , height: 725 , marginTop: '25px' , marginLeft: '65px'}}>
+            <Box sx={{width: '1335px' , height: 725 , marginTop: '25px' , marginLeft: '65px'}}>
                   <DataGrid
                     columns={columns}
                     // disableColumnFilter

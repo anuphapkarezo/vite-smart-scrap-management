@@ -104,14 +104,14 @@ export default function Scrap_Record_Weight_Daily_Transaction({ onSearch }) {
         />
       ),
     },
-    { field: 'update_by', headerName: 'Update By', width: 150 , headerAlign: 'center' , headerClassName: 'bold-header', align: 'center',
-      renderCell: (params) => (
-        <p>
-          {userName} {userSurname}
-        </p>
-      ),
+    { field: 'update_by', headerName: 'Update By', width: 180 , headerAlign: 'center' , headerClassName: 'bold-header', align: 'center',
+      // renderCell: (params) => (
+      //   <p>
+      //     {userName} {userSurname}
+      //   </p>
+      // ),
     },
-    { field: 'update_date', headerName: 'Update Date', width: 150 , headerAlign: 'center' , headerClassName: 'bold-header', align: 'center'},
+    { field: 'update_date', headerName: 'Update Date', width: 160 , headerAlign: 'center' , headerClassName: 'bold-header', align: 'center'},
     { field: 'record_weight', headerName: 'Record Weight', width: 130 , headerAlign: 'center' , headerClassName: 'bold-header', align: 'center',
       renderCell: (params) => (
         <div>
@@ -609,7 +609,7 @@ export default function Scrap_Record_Weight_Daily_Transaction({ onSearch }) {
                 }}
             />
         </div>
-        <Box sx={{width: '1550px' , height: 725 , marginTop: '25px'}}>
+        <Box sx={{width: '1590px' , height: 725 , marginTop: '25px'}}>
             {isLoading ? (
               <CircularProgress /> // Display a loading spinner while data is being fetched
             ) : (

@@ -1,0 +1,18 @@
+.bold-header {
+    font-weight: bold;
+    font-size: 14px;
+    text-align: center;
+    background-color: #AED2FF;
+    border: 1px solid blue;
+}
+
+*{
+    /* font-family: 'Chakra Petch', sans-serif; */
+    font-family: 'Whisper', cursive;
+}
+
+.border-table{
+    border: 1px solid black;
+    height: 30px;
+    background-color: #F3F3F3;
+}

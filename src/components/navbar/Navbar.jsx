@@ -142,6 +142,10 @@ export default function Navbar({ onToggle }) {
         setMenuName("Summary Weight by Date take off");
         setMenuIcon(<img src="/report-summary.png" alt="" width={30} />);
         break;
+      case "/env_scrap_detail_weight_by_date":
+        setMenuName("Details Weight by Date");
+        setMenuIcon(<img src="/calendar.png" alt="" width={30} />);
+        break;
       default:
         setMenuName("Smart Waste Management");
         setMenuIcon(<img src="/dashboard1.png" alt="" width={30} />);
@@ -298,6 +302,45 @@ export default function Navbar({ onToggle }) {
                 </ListItemIcon>
                 <ListItemText
                   primary="Summary Weight"
+                  sx={{ opacity: open ? 1 : 0 }}
+                />
+              </ListItemButton>
+            </ListItem>
+          </List>
+
+          {/* // Details weight by Date*/}
+          <List open={open}>
+            <ListItem
+              onClick={() => setMenuName("Details weight by Date")}
+              disablePadding
+              sx={{ display: "block", color: "black" }}
+              component={Link}
+              to="/env_scrap_detail_weight_by_date"
+            >
+              <ListItemButton
+                sx={{
+                  minHeight: 48,
+                  justifyContent: open ? "initial" : "center",
+                  px: 2.5,
+                }}
+              >
+                <ListItemIcon
+                  sx={{
+                    minWidth: 0,
+                    mr: open ? 3 : "auto",
+                    justifyContent: "center",
+                    color: "inherit", // Set initial color
+                    "&:hover": {
+                      color: "primary.main", // Change color on hover
+                    },
+                  }}
+                >
+                  <img src="/calendar.png" alt="" width={30} />
+                  {/* <ScaleOutlinedIcon />
+                   */}
+                </ListItemIcon>
+                <ListItemText
+                  primary="Details Weight"
                   sx={{ opacity: open ? 1 : 0 }}
                 />
               </ListItemButton>

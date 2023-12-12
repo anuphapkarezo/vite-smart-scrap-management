@@ -86,9 +86,15 @@ export default function Scrap_Summary_Weight_Date_Take_Off({ onSearch }) {
         }
   };
 
+  // useEffect(() => {
+  //   fetch_sum_weight();
+  // });
+
   useEffect(() => {
-    fetch_sum_weight();
-  });
+    if (selectedFromDate !== null && selectedToDate !== null) {
+      fetch_sum_weight();
+    }
+  }, [selectedFromDate, selectedToDate]);
 
   const columns = [
     { field: 'from_date', headerName: 'From Data', width: 130 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'center'},

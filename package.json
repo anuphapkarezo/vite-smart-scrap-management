@@ -33,6 +33,7 @@
     "react-bootstrap": "^2.7.4",
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.2.0",
+    "react-html-table-to-excel": "^2.0.0",
     "react-icons": "^4.9.0",
     "react-plotly.js": "^2.6.0",
     "react-router-dom": "^6.13.0",

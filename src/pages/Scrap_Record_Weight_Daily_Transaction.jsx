@@ -653,21 +653,21 @@ export default function Scrap_Record_Weight_Daily_Transaction({ onSearch }) {
             <div style={{ height: 655}}>
                 <div style={{  height: 140 , backgroundColor: '#E4F1FF' , borderRadius: 15 }}>
                     <div>
-                      <label style={{marginLeft: '25px' ,marginTop: '15px' , fontSize: 16}}>Date take off :</label>
+                      <label style={{marginLeft: '28px' ,marginTop: '15px' , fontSize: 16}}>Date take off :</label>
                       <input style={{marginLeft: '10px' ,marginTop: '15px' , fontSize: 16, width: 150 , height: 30 , textAlign: 'center' , border: '1px solid black' , borderRadius: '5px' ,backgroundColor: '#EEEEEE' , boxShadow: '3px 3px 5px grey'}} type="text" value={selectedDate} disabled/> 
 
                       <label style={{marginLeft: '75px' ,marginTop: '15px' , fontSize: 16}}>Factory :</label>
                       <input style={{marginLeft: '10px' ,marginTop: '15px' , fontSize: 16, width: 150 , height: 30 , textAlign: 'center' , border: '1px solid black' , borderRadius: '5px' ,backgroundColor: '#EEEEEE' , boxShadow: '3px 3px 5px grey'}} type="text" value={selectedFactory} disabled/> 
                     </div>
                     <div>
-                      <label style={{marginLeft: '33px' ,marginTop: '10px' , fontSize: 16}}>Group code :</label>
+                      <label style={{marginLeft: '48px' ,marginTop: '10px' , fontSize: 16}}>Group code :</label>
                       <input style={{marginLeft: '10px' ,marginTop: '10px' , fontSize: 16, width: 150 , height: 30 , textAlign: 'center' , border: '1px solid black' , borderRadius: '5px' ,backgroundColor: '#EEEEEE' , boxShadow: '3px 3px 5px grey'}} type="text" value={selectedRecord ?  getCode(selectedRecord.waste_group) : ''} disabled/> 
 
-                      <label style={{marginLeft: '38px' ,marginTop: '10px' , fontSize: 16}}>Group Desc. :</label>
+                      <label style={{marginLeft: '45px' ,marginTop: '10px' , fontSize: 16}}>Group Desc. :</label>
                       <input style={{marginLeft: '10px' ,marginTop: '10px' , fontSize: 16, width: 280 , height: 30 , textAlign: 'center' , border: '1px solid black' , borderRadius: '5px' ,backgroundColor: '#EEEEEE' , boxShadow: '3px 3px 5px grey'}} type="text" value={selectedRecord ? getDescription(selectedRecord.waste_group) : ''} disabled/> 
                     </div>
                     <div>
-                      <label style={{marginLeft: '46px' ,marginTop: '10px' , fontSize: 16}}>Item code :</label>
+                      <label style={{marginLeft: '55px' ,marginTop: '10px' , fontSize: 16}}>Item code :</label>
                       <input style={{marginLeft: '10px' ,marginTop: '10px' , fontSize: 16, width: 150 , height: 30 , textAlign: 'center' , border: '1px solid black' , borderRadius: '5px' ,backgroundColor: '#EEEEEE' , boxShadow: '3px 3px 5px grey'}} type="text" value={selectedRecord ?  getCode(selectedRecord.waste_item) : ''} disabled/> 
 
                       <label style={{marginLeft: '52px' ,marginTop: '10px' , fontSize: 16}}>Item Desc. :</label>

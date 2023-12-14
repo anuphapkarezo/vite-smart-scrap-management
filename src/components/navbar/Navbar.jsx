@@ -146,12 +146,16 @@ export default function Navbar({ onToggle }) {
         setMenuName("Details Weight by Date");
         setMenuIcon(<img src="/calendar.png" alt="" width={30} />);
         break;
+      case "/env_scrap_prices_list":
+        setMenuName("Master Prices List");
+        setMenuIcon(<img src="/price-list.png" alt="" width={30} />);
+        break;
       default:
         setMenuName("Smart Waste Management");
         setMenuIcon(<img src="/dashboard1.png" alt="" width={30} />);
     }
   }, [location.pathname]);
-
+  
   return (
     <>
       <Box sx={{ display: "flex" }}>
@@ -341,6 +345,45 @@ export default function Navbar({ onToggle }) {
                 </ListItemIcon>
                 <ListItemText
                   primary="Details Weight"
+                  sx={{ opacity: open ? 1 : 0 }}
+                />
+              </ListItemButton>
+            </ListItem>
+          </List>
+
+          {/* // Master Prices List*/}
+          <List open={open}>
+            <ListItem
+              onClick={() => setMenuName("Master Prices List")}
+              disablePadding
+              sx={{ display: "block", color: "black" }}
+              component={Link}
+              to="/env_scrap_prices_list"
+            >
+              <ListItemButton
+                sx={{
+                  minHeight: 48,
+                  justifyContent: open ? "initial" : "center",
+                  px: 2.5,
+                }}
+              >
+                <ListItemIcon
+                  sx={{
+                    minWidth: 0,
+                    mr: open ? 3 : "auto",
+                    justifyContent: "center",
+                    color: "inherit", // Set initial color
+                    "&:hover": {
+                      color: "primary.main", // Change color on hover
+                    },
+                  }}
+                >
+                  <img src="/price-list.png" alt="" width={30} />
+                  {/* <ScaleOutlinedIcon />
+                   */}
+                </ListItemIcon>
+                <ListItemText
+                  primary="Master Prices List"
                   sx={{ opacity: open ? 1 : 0 }}
                 />
               </ListItemButton>

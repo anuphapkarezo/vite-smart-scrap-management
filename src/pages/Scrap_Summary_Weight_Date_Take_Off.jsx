@@ -2,29 +2,10 @@ import React, { useState, useEffect , useRef } from "react";
 import Box from '@mui/material/Box';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import './Scrap_Record_Weight_Daily_Transaction.css'; // Import the CSS file
-import CircularProgress from '@mui/material/CircularProgress';
 import axios from "axios";
-import Smart_Scrap_SearchFactoryGroup from "../components/SearchGroup/Smart_Scrap_SearchFactoryGroup";
 import Smart_Scrap_SearchSummaryWeight from "../components/SearchGroup/Smart_Scrap_SearchSummaryWeight";
-import Modal from '@mui/material/Modal';
-import IconButton from '@mui/material/IconButton';
-import CloseIcon from '@mui/icons-material/Close'; // Import CloseIcon
 
-import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogActions from '@mui/material/DialogActions';
-import Button from '@mui/material/Button';
-import SendIcon from '@mui/icons-material/Send';
-import CancelIcon from '@mui/icons-material/Cancel';
 import Navbar from "../components/navbar/Navbar";
-import ScaleIcon from '@mui/icons-material/Scale';
-import VerticalAlignBottomIcon from '@mui/icons-material/VerticalAlignBottom';
-import EditNoteIcon from '@mui/icons-material/EditNote';
-import BorderColorIcon from '@mui/icons-material/BorderColor';
-import Swal from 'sweetalert2';
-import DeleteIcon from '@mui/icons-material/Delete';
 
 export default function Scrap_Summary_Weight_Date_Take_Off({ onSearch }) {
   const [selectedFactory, setSelectedFactory] = useState(null);

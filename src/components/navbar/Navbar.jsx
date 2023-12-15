@@ -159,6 +159,13 @@ export default function Navbar({ onToggle }) {
         setMenuIcon(<img src="/dashboard1.png" alt="" width={30} />);
     }
   }, [location.pathname]);
+
+  const getUserDataString = localStorage.getItem('userToken'); // Retrieve the string
+    const getUserData = JSON.parse(getUserDataString); // Parse the string to an object
+    const getUserRoleNo = getUserData.role_no; // Access the property
+    console.log(getUserRoleNo); // Output the value
+
+
   
   return (
     <>
@@ -357,6 +364,7 @@ export default function Navbar({ onToggle }) {
 
           {/* // Master Prices List*/}
           <List open={open}>
+            <div className={`${getUserRoleNo === 3 ? "hidden" : "block"}`}>
             <ListItem
               onClick={() => setMenuName("Master Prices List")}
               disablePadding
@@ -392,10 +400,12 @@ export default function Navbar({ onToggle }) {
                 />
               </ListItemButton>
             </ListItem>
+            </div>
           </List>
 
           {/* // Master Company List*/}
           <List open={open}>
+            <div className={`${getUserRoleNo === 3 ? "hidden" : "block"}`}>
             <ListItem
               onClick={() => setMenuName("Master Company List")}
               disablePadding
@@ -431,6 +441,7 @@ export default function Navbar({ onToggle }) {
                 />
               </ListItemButton>
             </ListItem>
+            </div>
           </List>
         </Drawer>
       </Box>

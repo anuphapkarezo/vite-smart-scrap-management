@@ -6,8 +6,8 @@ import axios from "axios";
 
 import Navbar from "../components/navbar/Navbar";
 
-export default function Scrap_Prices_List({ onSearch }) {
-  const [distinctPricesList, setDistinctPricesList] = useState([]);
+export default function Scrap_Company_List({ onSearch }) {
+  const [distinctCompanyList, setDistinctCompanyList] = useState([]);
 
   const [isNavbarOpen, setIsNavbarOpen] = React.useState(false);
 
@@ -30,7 +30,7 @@ export default function Scrap_Prices_List({ onSearch }) {
   const fetch_prices_list = async () => {
     try {
       setIsLoading(true);
-      const response = await axios.get(`http://10.17.66.242:3001/api/smart_scrap/filter-master-prices-list`);
+      const response = await axios.get(`http://10.17.66.242:3001/api/smart_scrap/filter-master-company-list`);
       const data = await response.data;
       console.log(data);
       // Add a unique id property to each row
@@ -38,7 +38,7 @@ export default function Scrap_Prices_List({ onSearch }) {
           ...row,
           id: index, // You can use a better unique identifier here if available
       }));
-      setDistinctPricesList(rowsWithId);
+      setDistinctCompanyList(rowsWithId);
       } catch (error) {
       console.error('Error fetching data:', error);
       setError('An error occurred while fetching data Master prices list');
@@ -52,29 +52,23 @@ export default function Scrap_Prices_List({ onSearch }) {
   }, );
 
   const columns = [
-    { field: 'item_code', headerName: 'Item Code', width: 120 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'center'},
-    { field: 'factory', headerName: 'Factory', width: 70 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'center'},
-    { field: 'desc_en', headerName: 'Description EN', width: 230 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'left'},
-    { field: 'desc_th', headerName: 'Description TH', width: 230 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'left'},
-    { field: 'group', headerName: 'Group', width: 230 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'left'},
-    { field: 'price', headerName: 'Price', width: 80 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'center'},
-    { field: 'unit_price', headerName: 'Unit', width: 60 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'center'},
-    { field: 'effective_from', headerName: 'Eff. from', width: 140 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'center'},
-    { field: 'effective_to', headerName: 'Eff. To', width: 140 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'center'},
-    { field: 'company_code', headerName: 'Company', width: 100 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'center'},
-    { field: 'remark', headerName: 'Remark', width: 180 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'center'},
+    { field: 'comp_code', headerName: 'Company Code', width: 150 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'center'},
+    { field: 'comp_name', headerName: 'Company Name', width: 450 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'left'},
+    { field: 'cont_name', headerName: 'Contact Name', width: 150 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'left'},
+    { field: 'cont_mail', headerName: 'Contact Email', width: 450 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'left'},
+    { field: 'cont_phone', headerName: 'Contact Phone', width: 250 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'left'},
   ]
 
   return (
     <>
         <Navbar onToggle={handleNavbarToggle}/>
         <Box marginLeft={isNavbarOpen ? "220px" : 4} marginTop={10}>
-            <Box sx={{width: '1605px' , height: 725 , marginTop: '30px' , marginLeft: '65px'}}>
+            <Box sx={{width: '1470px' , height: 725 , marginTop: '30px' , marginLeft: '65px'}}>
                   <DataGrid
                     columns={columns}
                     // disableColumnFilter
                     // disableDensitySelector
-                    rows={distinctPricesList}
+                    rows={distinctCompanyList}
                     slots={{ toolbar: GridToolbar }}
                     filterModel={filterModel}
                     onFilterModelChange={(newModel) => setFilterModel(newModel)}

@@ -150,6 +150,10 @@ export default function Navbar({ onToggle }) {
         setMenuName("Master Prices List");
         setMenuIcon(<img src="/price-list.png" alt="" width={30} />);
         break;
+      case "/env_scrap_company_list":
+        setMenuName("Master Company List");
+        setMenuIcon(<img src="/communicate.png" alt="" width={30} />);
+        break;
       default:
         setMenuName("Smart Waste Management");
         setMenuIcon(<img src="/dashboard1.png" alt="" width={30} />);
@@ -384,6 +388,45 @@ export default function Navbar({ onToggle }) {
                 </ListItemIcon>
                 <ListItemText
                   primary="Master Prices List"
+                  sx={{ opacity: open ? 1 : 0 }}
+                />
+              </ListItemButton>
+            </ListItem>
+          </List>
+
+          {/* // Master Company List*/}
+          <List open={open}>
+            <ListItem
+              onClick={() => setMenuName("Master Company List")}
+              disablePadding
+              sx={{ display: "block", color: "black" }}
+              component={Link}
+              to="/env_scrap_company_list"
+            >
+              <ListItemButton
+                sx={{
+                  minHeight: 48,
+                  justifyContent: open ? "initial" : "center",
+                  px: 2.5,
+                }}
+              >
+                <ListItemIcon
+                  sx={{
+                    minWidth: 0,
+                    mr: open ? 3 : "auto",
+                    justifyContent: "center",
+                    color: "inherit", // Set initial color
+                    "&:hover": {
+                      color: "primary.main", // Change color on hover
+                    },
+                  }}
+                >
+                  <img src="/communicate.png" alt="" width={30} />
+                  {/* <ScaleOutlinedIcon />
+                   */}
+                </ListItemIcon>
+                <ListItemText
+                  primary="Master Company List"
                   sx={{ opacity: open ? 1 : 0 }}
                 />
               </ListItemButton>

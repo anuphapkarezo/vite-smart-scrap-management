@@ -15,7 +15,7 @@ function Login() {
   //*State for user login and password*//
   const [password, setPassword] = useState("");
   const [userLogin, setUserLogin] = useState("");
-  const system_no = 2;
+  const system_no = 4;
 
   //*Navigate to home page*//
   const navigate = useNavigate();
@@ -35,7 +35,7 @@ function Login() {
         if (
           data[0].user_login === userLogin &&
           data[0].user_password === password &&
-          data[0].system_no === 2
+          data[0].system_no === 4
         ) {
           localStorage.setItem("userToken", JSON.stringify(data[0]));
           console.log("Logged in successfully");
@@ -70,7 +70,7 @@ function Login() {
       JSON.stringify({
         user_login: "Guest",
         role_type: "Guest",
-        system_no: 2,
+        system_no: 4,
         role_no: 4,
       })
     );

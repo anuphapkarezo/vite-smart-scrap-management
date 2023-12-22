@@ -27,7 +27,7 @@ export default function Scrap_Deatil_Weight_by_Date({ onSearch }) {
 
   const fetch_waste_code = async () => {
     try {
-      const response = await axios.get(`http://10.17.66.242:3001/api/smart_scrap/filter-data-waste-item-code-by-factory-group?factory=${selectedFactory}&group=${selectedGroup}`);
+      const response = await axios.get(`http://10.17.100.115:3001/api/smart_scrap/filter-data-waste-item-code-by-factory-group?factory=${selectedFactory}&group=${selectedGroup}`);
       const datawaste  = response.data;
       // const datawaste = await response.data;
       console.log('datawaste >', datawaste);
@@ -39,7 +39,7 @@ export default function Scrap_Deatil_Weight_by_Date({ onSearch }) {
 
   const fetch_details_waste = async () => {
     try {
-      const response = await axios.get(`http://10.17.66.242:3001/api/smart_scrap/filter-details-weight-by-date?factory=${selectedFactory}&group=${selectedGroup}&from_dto=${selectedFromDate}&to_dto=${selectedToDate}`);
+      const response = await axios.get(`http://10.17.100.115:3001/api/smart_scrap/filter-details-weight-by-date?factory=${selectedFactory}&group=${selectedGroup}&from_dto=${selectedFromDate}&to_dto=${selectedToDate}`);
       const datawaste_details  = response.data;
       // const datawaste = await response.data;
       console.log('datawaste_details >', datawaste_details);

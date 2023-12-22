@@ -265,7 +265,7 @@ export default function Scrap_Record_Weight_Daily_Transaction({ onSearch }) {
   const fetch_record_weight = async () => {
     try {
         setIsLoading(true);
-        const response = await axios.get(`http://10.17.66.242:3001/api/smart_scrap/filter-daily-transaction?date_take_of=${selectedDate}&group=${selectedGroup}&factory=${selectedFactory}`);
+        const response = await axios.get(`http://10.17.100.115:3001/api/smart_scrap/filter-daily-transaction?date_take_of=${selectedDate}&group=${selectedGroup}&factory=${selectedFactory}`);
         const data = await response.data;
         console.log(data);
         // Add a unique id property to each row
@@ -285,7 +285,7 @@ export default function Scrap_Record_Weight_Daily_Transaction({ onSearch }) {
   const fetch_weight_by_detail = async (selectedWasteItem_split) => {
     try {
         setIsLoading(true);
-        const response = await axios.get(`http://10.17.66.242:3001/api/smart_scrap/filter-select-daily-transaction-by-detail?date_take_of=${selectedDate}&waste_item_code=${selectedWasteItem_split}&factory=${selectedFactory}`);
+        const response = await axios.get(`http://10.17.100.115:3001/api/smart_scrap/filter-select-daily-transaction-by-detail?date_take_of=${selectedDate}&waste_item_code=${selectedWasteItem_split}&factory=${selectedFactory}`);
         const data = await response.data;
 
         const rowsWithId = data.map((row, index) => ({
@@ -404,13 +404,13 @@ export default function Scrap_Record_Weight_Daily_Transaction({ onSearch }) {
           // Delete existing data
           axios
             .get(
-              `http://10.17.66.242:3001/api/smart_scrap/delete-data-daily-transaction?waste_date_take_off=${selectedDate}&waste_factory_name=${selectedFactory}&waste_group_code=${getCode(selectedRecord.waste_group)}&waste_item_code=${getCode(selectedRecord.waste_item)}`
+              `http://10.17.100.115:3001/api/smart_scrap/delete-data-daily-transaction?waste_date_take_off=${selectedDate}&waste_factory_name=${selectedFactory}&waste_group_code=${getCode(selectedRecord.waste_group)}&waste_item_code=${getCode(selectedRecord.waste_item)}`
             )
             .then(() => {
               // Create an array of promises to insert data for distinct_weight_details
               const insertPromises = distinct_weight_details.map((row) => {
                 return axios.get(
-                  `http://10.17.66.242:3001/api/smart_scrap/insert-data-daily-transaction?waste_date_take_off=${row.waste_date_take_off}&waste_factory_name=${row.waste_factory_name}&waste_item_code=${row.waste_item_code}&waste_group_code=${row.waste_group_code}&waste_detail_no=${row.waste_detail_no}&waste_weight=${row.waste_weight}&waste_update_by=${row.waste_update_by}`
+                  `http://10.17.100.115:3001/api/smart_scrap/insert-data-daily-transaction?waste_date_take_off=${row.waste_date_take_off}&waste_factory_name=${row.waste_factory_name}&waste_item_code=${row.waste_item_code}&waste_group_code=${row.waste_group_code}&waste_detail_no=${row.waste_detail_no}&waste_weight=${row.waste_weight}&waste_update_by=${row.waste_update_by}`
                 );
               });
   
@@ -472,7 +472,7 @@ export default function Scrap_Record_Weight_Daily_Transaction({ onSearch }) {
           // Delete existing data
           axios
             .get(
-              `http://10.17.66.242:3001/api/smart_scrap/delete-data-daily-transaction?waste_date_take_off=${selectedDate}&waste_factory_name=${selectedFactory}&waste_group_code=${getCode(selectedRecord.waste_group)}&waste_item_code=${getCode(selectedRecord.waste_item)}`
+              `http://10.17.100.115:3001/api/smart_scrap/delete-data-daily-transaction?waste_date_take_off=${selectedDate}&waste_factory_name=${selectedFactory}&waste_group_code=${getCode(selectedRecord.waste_group)}&waste_item_code=${getCode(selectedRecord.waste_item)}`
             )
             .then(() => {
               // After all requests are completed, fetch the updated data
@@ -512,13 +512,13 @@ export default function Scrap_Record_Weight_Daily_Transaction({ onSearch }) {
   //     // Delete existing data
   //     axios
   //       .get(
-  //         `http://10.17.66.242:3001/api/smart_scrap/delete-data-daily-transaction?waste_date_take_off=${selectedDate}&waste_factory_name=${selectedFactory}&waste_group_code=${getCode(selectedRecord.waste_group)}&waste_item_code=${getCode(selectedRecord.waste_item)}`
+  //         `http://10.17.100.115:3001/api/smart_scrap/delete-data-daily-transaction?waste_date_take_off=${selectedDate}&waste_factory_name=${selectedFactory}&waste_group_code=${getCode(selectedRecord.waste_group)}&waste_item_code=${getCode(selectedRecord.waste_item)}`
   //       )
   //       .then(() => {
   //         // Create an array of promises to insert data for distinct_weight_details
   //         const insertPromises = distinct_weight_details.map((row) => {
   //           return axios.get(
-  //             `http://10.17.66.242:3001/api/smart_scrap/insert-data-daily-transaction?waste_date_take_off=${row.waste_date_take_off}&waste_factory_name=${row.waste_factory_name}&waste_item_code=${row.waste_item_code}&waste_group_code=${row.waste_group_code}&waste_detail_no=${row.waste_detail_no}&waste_weight=${row.waste_weight}&waste_update_by=${row.waste_update_by}`
+  //             `http://10.17.100.115:3001/api/smart_scrap/insert-data-daily-transaction?waste_date_take_off=${row.waste_date_take_off}&waste_factory_name=${row.waste_factory_name}&waste_item_code=${row.waste_item_code}&waste_group_code=${row.waste_group_code}&waste_detail_no=${row.waste_detail_no}&waste_weight=${row.waste_weight}&waste_update_by=${row.waste_update_by}`
   //           );
   //         });
   
@@ -558,12 +558,12 @@ export default function Scrap_Record_Weight_Daily_Transaction({ onSearch }) {
   //     openDialog_button();
   //   } else {
   //     axios.get(
-  //       `http://10.17.66.242:3001/api/smart_scrap/delete-data-daily-transaction?waste_date_take_off=${selectedDate}&waste_factory_name=${selectedFactory}&waste_group_code=${getCode(selectedRecord.waste_group)}&waste_item_code=${getCode(selectedRecord.waste_item)}`
+  //       `http://10.17.100.115:3001/api/smart_scrap/delete-data-daily-transaction?waste_date_take_off=${selectedDate}&waste_factory_name=${selectedFactory}&waste_group_code=${getCode(selectedRecord.waste_group)}&waste_item_code=${getCode(selectedRecord.waste_item)}`
   //     );
 
   //     const dataToSave = distinct_weight_details.map((row) => {
   //       return axios.get(
-  //         `http://10.17.66.242:3001/api/smart_scrap/insert-data-daily-transaction?waste_date_take_off=${row.waste_date_take_off}&waste_factory_name=${row.waste_factory_name}&waste_item_code=${row.waste_item_code}&waste_group_code=${row.waste_group_code}&waste_detail_no=${row.waste_detail_no}&waste_weight=${row.waste_weight}&waste_update_by=${row.waste_update_by}`
+  //         `http://10.17.100.115:3001/api/smart_scrap/insert-data-daily-transaction?waste_date_take_off=${row.waste_date_take_off}&waste_factory_name=${row.waste_factory_name}&waste_item_code=${row.waste_item_code}&waste_group_code=${row.waste_group_code}&waste_detail_no=${row.waste_detail_no}&waste_weight=${row.waste_weight}&waste_update_by=${row.waste_update_by}`
   //       );
   //     });
       

@@ -26,7 +26,7 @@ function Smart_Scrap_SearchFactoryGroup({ onSearch }) {
 
     const fetchFactory = async () => {
         try {
-          const response = await axios.get("http://10.17.66.242:3001/api/smart_scrap/factorylist");
+          const response = await axios.get("http://10.17.100.115:3001/api/smart_scrap/factorylist");
           const dataFactory  = response.data;
           setDistinctFactory(dataFactory);
         } catch (error) {
@@ -36,7 +36,7 @@ function Smart_Scrap_SearchFactoryGroup({ onSearch }) {
 
     const fetchGroup = async (factory) => {
         try {
-          const response = await axios.get(`http://10.17.66.242:3001/api/smart_scrap/grouplist?factory=${factory}`);
+          const response = await axios.get(`http://10.17.100.115:3001/api/smart_scrap/grouplist?factory=${factory}`);
           const dataGroup  = response.data;
         // const dataGroup = await response.data;
           setDistinctGroup(dataGroup);

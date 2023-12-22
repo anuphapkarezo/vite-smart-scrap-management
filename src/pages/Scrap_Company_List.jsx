@@ -30,7 +30,7 @@ export default function Scrap_Company_List({ onSearch }) {
   const fetch_prices_list = async () => {
     try {
       setIsLoading(true);
-      const response = await axios.get(`http://10.17.66.242:3001/api/smart_scrap/filter-master-company-list`);
+      const response = await axios.get(`http://10.17.100.115:3001/api/smart_scrap/filter-master-company-list`);
       const data = await response.data;
       console.log(data);
       // Add a unique id property to each row

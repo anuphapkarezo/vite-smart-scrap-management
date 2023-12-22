@@ -37,8 +37,8 @@ export default function Scrap_Summary_Weight_Date_Take_Off({ onSearch }) {
     try {
         setIsLoading(true);
         if (selectedGroup === "All Group") {
-          // const response = await axios.get(`http://10.17.66.242:3001/api/smart_scrap/filter-summary-weight-date-take-off?factory=${selectedFactory}&group=${selectedGroup}&from_dto=${selectedFromDate}&to_dto=${selectedToDate}`);
-          const response = await axios.get(`http://10.17.66.242:3001/api/smart_scrap/filter-summary-weight-date-take-off-no-group?factory=${selectedFactory}&from_dto=${selectedFromDate}&to_dto=${selectedToDate}`);
+          // const response = await axios.get(`http://10.17.100.115:3001/api/smart_scrap/filter-summary-weight-date-take-off?factory=${selectedFactory}&group=${selectedGroup}&from_dto=${selectedFromDate}&to_dto=${selectedToDate}`);
+          const response = await axios.get(`http://10.17.100.115:3001/api/smart_scrap/filter-summary-weight-date-take-off-no-group?factory=${selectedFactory}&from_dto=${selectedFromDate}&to_dto=${selectedToDate}`);
           const data = await response.data;
 
           // Add a unique id property to each row
@@ -49,7 +49,7 @@ export default function Scrap_Summary_Weight_Date_Take_Off({ onSearch }) {
           setDistinct_sum_weight(rowsWithId);
         } 
         else {
-          const response = await axios.get(`http://10.17.66.242:3001/api/smart_scrap/filter-summary-weight-date-take-off?factory=${selectedFactory}&group=${selectedGroup}&from_dto=${selectedFromDate}&to_dto=${selectedToDate}`);
+          const response = await axios.get(`http://10.17.100.115:3001/api/smart_scrap/filter-summary-weight-date-take-off?factory=${selectedFactory}&group=${selectedGroup}&from_dto=${selectedFromDate}&to_dto=${selectedToDate}`);
           const data = await response.data;
           // Add a unique id property to each row
           const rowsWithId = data.map((row, index) => ({

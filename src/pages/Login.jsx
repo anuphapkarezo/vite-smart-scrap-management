@@ -21,7 +21,7 @@ function Login() {
   const navigate = useNavigate();
 
   //*Database for user login and password*//
-  const userDatabase = `http://10.17.66.242:3001/api/smart_planning/filter-user-login-smart-recovery?user_login=${userLogin}&system_no=${system_no}`;
+  const userDatabase = `http://10.17.100.115:3001/api/smart_planning/filter-user-login-smart-recovery?user_login=${userLogin}&system_no=${system_no}`;
 
   //*Check user login and password in database*//
   const handleLogin = (event) => {

@@ -154,6 +154,10 @@ export default function Navbar({ onToggle }) {
         setMenuName("Master Company List");
         setMenuIcon(<img src="/communicate.png" alt="" width={30} />);
         break;
+      case "/env_scrap_monthly_monitoring_by_buyer":
+        setMenuName("Monthly Monitoring by Buyer");
+        setMenuIcon(<img src="/monitoring-buyer.png" alt="" width={30} />);
+        break;
       default:
         setMenuName("Smart Waste Management");
         setMenuIcon(<img src="/dashboard1.png" alt="" width={30} />);
@@ -437,6 +441,47 @@ export default function Navbar({ onToggle }) {
                 </ListItemIcon>
                 <ListItemText
                   primary="Master Company List"
+                  sx={{ opacity: open ? 1 : 0 }}
+                />
+              </ListItemButton>
+            </ListItem>
+            </div>
+          </List>
+
+          {/* // Monthly monitoring by Buyer*/}
+          <List open={open}>
+            <div className={`${getUserRoleNo === 3 ? "hidden" : "block"}`}>
+            <ListItem
+              onClick={() => setMenuName("Monthly monitoring by Buyer")}
+              disablePadding
+              sx={{ display: "block", color: "black" }}
+              component={Link}
+              to="/env_scrap_monthly_monitoring_by_buyer"
+            >
+              <ListItemButton
+                sx={{
+                  minHeight: 48,
+                  justifyContent: open ? "initial" : "center",
+                  px: 2.5,
+                }}
+              >
+                <ListItemIcon
+                  sx={{
+                    minWidth: 0,
+                    mr: open ? 3 : "auto",
+                    justifyContent: "center",
+                    color: "inherit", // Set initial color
+                    "&:hover": {
+                      color: "primary.main", // Change color on hover
+                    },
+                  }}
+                >
+                  <img src="/monitoring-buyer.png" alt="" width={30} />
+                  {/* <ScaleOutlinedIcon />
+                   */}
+                </ListItemIcon>
+                <ListItemText
+                  primary="Monitoring by Buyer"
                   sx={{ opacity: open ? 1 : 0 }}
                 />
               </ListItemButton>

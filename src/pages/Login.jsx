@@ -42,7 +42,7 @@ function Login() {
           Swal.fire({
             icon: "success",
             title: "Login Success",
-            text: "Welcome to Smart Planning",
+            text: "Welcome to Smart Waste Management",
           });
           navigate("/home");
         } else {

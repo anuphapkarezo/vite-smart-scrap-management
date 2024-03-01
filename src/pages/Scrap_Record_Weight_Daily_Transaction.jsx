@@ -160,6 +160,7 @@ export default function Scrap_Record_Weight_Daily_Transaction({ onSearch }) {
   const handleKeyWeightClick = (row) => {
     setSelectedRecord(row);
     setEditedTotalWeight(row.total || '');
+    console.log('row.total',row.total);
     // setIsModalOpen(false);
 
     // Check if row.waste_item is defined

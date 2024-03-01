@@ -158,6 +158,14 @@ export default function Navbar({ onToggle }) {
         setMenuName("Monthly Monitoring by Buyer");
         setMenuIcon(<img src="/monitoring-buyer.png" alt="" width={30} />);
         break;
+      case "/env_scrap_monthly_monitoring_by_group":
+        setMenuName("Monthly Monitoring by Group");
+        setMenuIcon(<img src="/monitor-group.png" alt="" width={30} />);
+        break;
+      case "/env_scrap_monthly_monitoring_by_group_factory":
+        setMenuName("Monthly Monitoring by Group and Factory");
+        setMenuIcon(<img src="/factory.png" alt="" width={30} />);
+        break;
       default:
         setMenuName("Smart Waste Management");
         setMenuIcon(<img src="/dashboard1.png" alt="" width={30} />);
@@ -482,6 +490,88 @@ export default function Navbar({ onToggle }) {
                 </ListItemIcon>
                 <ListItemText
                   primary="Monitoring by Buyer"
+                  sx={{ opacity: open ? 1 : 0 }}
+                />
+              </ListItemButton>
+            </ListItem>
+            </div>
+          </List>
+
+          {/* // Monthly monitoring by Group*/}
+          <List open={open}>
+            <div className={`${getUserRoleNo === 3 ? "hidden" : "block"}`}>
+            <ListItem
+              onClick={() => setMenuName("Monthly monitoring by Group")}
+              disablePadding
+              sx={{ display: "block", color: "black" }}
+              component={Link}
+              to="/env_scrap_monthly_monitoring_by_group"
+            >
+              <ListItemButton
+                sx={{
+                  minHeight: 48,
+                  justifyContent: open ? "initial" : "center",
+                  px: 2.5,
+                }}
+              >
+                <ListItemIcon
+                  sx={{
+                    minWidth: 0,
+                    mr: open ? 3 : "auto",
+                    justifyContent: "center",
+                    color: "inherit", // Set initial color
+                    "&:hover": {
+                      color: "primary.main", // Change color on hover
+                    },
+                  }}
+                >
+                  <img src="/monitor-group.png" alt="" width={30} />
+                  {/* <ScaleOutlinedIcon />
+                   */}
+                </ListItemIcon>
+                <ListItemText
+                  primary="Monitoring by Group"
+                  sx={{ opacity: open ? 1 : 0 }}
+                />
+              </ListItemButton>
+            </ListItem>
+            </div>
+          </List>
+
+          {/* // Monthly monitoring by Group and Factory*/}
+          <List open={open}>
+            <div className={`${getUserRoleNo === 3 ? "hidden" : "block"}`}>
+            <ListItem
+              onClick={() => setMenuName("Monthly monitoring by Group and Factory")}
+              disablePadding
+              sx={{ display: "block", color: "black" }}
+              component={Link}
+              to="/env_scrap_monthly_monitoring_by_group_factory"
+            >
+              <ListItemButton
+                sx={{
+                  minHeight: 48,
+                  justifyContent: open ? "initial" : "center",
+                  px: 2.5,
+                }}
+              >
+                <ListItemIcon
+                  sx={{
+                    minWidth: 0,
+                    mr: open ? 3 : "auto",
+                    justifyContent: "center",
+                    color: "inherit", // Set initial color
+                    "&:hover": {
+                      color: "primary.main", // Change color on hover
+                    },
+                  }}
+                >
+                  <img src="/factory.png" alt="" width={30} />
+                  {/* <ScaleOutlinedIcon />
+                   */}
+                </ListItemIcon>
+                <ListItemText
+                  primary="Monitoring by Group&Factory"
                   sx={{ opacity: open ? 1 : 0 }}
                 />
               </ListItemButton>

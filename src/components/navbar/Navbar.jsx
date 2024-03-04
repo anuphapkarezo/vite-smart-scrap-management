@@ -376,7 +376,7 @@ export default function Navbar({ onToggle }) {
 
           {/* // Master Prices List*/}
           <List open={open}>
-            <div className={`${getUserRoleNo === 3 ? "hidden" : "block"}`}>
+            <div className={`${getUserRoleNo === 3 || getUserRoleNo === 2 ? "hidden" : "block"}`}>
             <ListItem
               onClick={() => setMenuName("Master Prices List")}
               disablePadding

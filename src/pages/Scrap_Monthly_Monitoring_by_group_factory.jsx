@@ -62,6 +62,9 @@ export default function Scrap_Monthly_Monitoring_by_group_factory({ onSearch }) 
       fetchDataMonthly();
       fetchBarChartData();
       fetchBasicBarChartData();
+
+      fetchBarChartData_Weight();
+      fetchBasicBarChartData_weight();
     }
   }, [selectedFromYear, selectedToYear , selectedFactory]);
 
@@ -224,7 +227,6 @@ export default function Scrap_Monthly_Monitoring_by_group_factory({ onSearch }) 
       setIsLoading(true);
       const response = await axios.get(`http://10.17.100.115:3001/api/smart_scrap/filter-data-monthly-monitoring-group-factory-chart?from_year=${selectedFromYear}&to_year=${selectedToYear}&factory=${selectedFactory}`);
       const data = await response.data;
-      setDistinctMonthly_Chart(data);
 
       // const jun19Data = data.filter(item => item.month_inv === 'Jun-19');
 
@@ -389,6 +391,255 @@ export default function Scrap_Monthly_Monitoring_by_group_factory({ onSearch }) 
     }
   };
 
+  // ------------------------------------------------------------------------------------------
+  const [chartData_Weight, setChartData_Weight] = useState({
+    series: [],
+    options: {
+      chart: {
+        type: 'bar',
+        height: 350,
+        stacked: true,
+        toolbar: {
+          show: true
+        },
+        zoom: {
+          enabled: true
+        }
+      },
+      responsive: [{
+        breakpoint: 480,
+        options: {
+          legend: {
+            position: 'bottom',
+            offsetX: 0,
+            offsetY: 0
+          }
+        }
+      }],
+      plotOptions: {
+        bar: {
+          horizontal: false,
+          borderRadius: 10,
+          dataLabels: {
+            total: {
+              enabled: false,
+              style: {
+                fontSize: '13px',
+                fontWeight: 900
+              }
+            }
+          }
+        },
+      },
+      xaxis: {
+        categories: [],
+      },
+      yaxis: {
+        title: {
+          text: 'Total Weight (KG)',
+        },
+      },
+      legend: {
+        position: 'right',
+        offsetY: 40
+      },
+      fill: {
+        opacity: 1
+      },
+      dataLabels: {
+        enabled: false, // Disable data labels for the bars
+      },
+      tooltip: {
+        y: {
+          formatter: function (val) {
+            return new Intl.NumberFormat("en-US", {
+              style: "decimal",
+              // currency: "THB", // You can change the currency as needed
+            }).format(val) + " KG";
+          },
+        },
+      },
+      title: {
+        // ชื่อ chart หรือข้อความที่ต้องการแสดง
+        text: 'Monthly Weight Monitoring by Factory (KG)',
+        align: 'center',
+        margin: 10,
+        offsetY: 10,
+        style: {
+          fontSize: '20px',
+        },
+      },
+    },
+  });
+  const fetchBarChartData_Weight = async () => {
+    try {
+      setIsLoading(true);
+      const response = await axios.get(`http://10.17.100.115:3001/api/smart_scrap/filter-data-monthly-monitoring-group-factory-chart_weight?from_year=${selectedFromYear}&to_year=${selectedToYear}&factory=${selectedFactory}`);
+      const data = await response.data;
+
+      // const jun19Data = data.filter(item => item.month_inv === 'Jun-19');
+
+      const chartData_Weight = {};
+      data.forEach((item) => {
+        const key = `${item.month_inv}-${item.factory}`;
+        // console.log('Key:', key, 'Value:', item.total_amount);
+        if (!chartData_Weight[key]) {
+          chartData_Weight[key] = {
+            x: item.month_inv,
+            y: parseFloat(item.total_weight),
+            name: item.factory,
+          };
+        } else {
+          chartData_Weight[key].y += parseFloat(item.total_weight);
+        }
+      });
+
+      const series = Object.values(chartData_Weight).reduce((acc, value) => {
+        
+        if (!acc[value.name]) {
+          acc[value.name] = {
+            name: value.name,
+            data: [],
+          };
+        }
+        acc[value.name].data.push({
+          x: value.x,
+          y: parseFloat(value.y.toFixed(2)), // Round to 2 decimal places
+        });
+        return acc;
+      }, {});
+
+      const xCategories = Object.values(chartData_Weight)
+        .map((value) => value.x)
+        .filter((value, index, self) => self.indexOf(value) === index)
+        .sort((a, b) => {
+          const dateA = new Date(`01 ${a}`);
+          const dateB = new Date(`01 ${b}`);
+          return dateA - dateB;
+        });
+
+      setChartData_Weight({
+        series: Object.values(series),
+        options: {
+          ...chartData_Weight.options,
+          xaxis: {
+            categories: xCategories,
+          },
+        },
+      });
+      } catch (error) {
+      console.error('Error fetching data:', error);
+      setError('An error occurred while fetching data Master');
+      } finally {
+        setIsLoading(false); // Set isLoading back to false when fetch is complete
+      }
+  };
+
+  const [basicBarChartData_weight, setBasicBarChartData_weight] = useState({
+    series: [],
+    options: {
+      title: {
+        // ชื่อ chart หรือข้อความที่ต้องการแสดง
+        text: 'Total Weight by Factory (KG)',
+        align: 'center',
+        margin: 10,
+        offsetY: 5,
+        style: {
+          fontSize: '20px',
+        },
+        position: 'top',
+      },
+    },
+    
+  });
+  const fetchBasicBarChartData_weight = async () => {
+    try {
+      setIsLoading(true);
+      const response = await axios.get(`http://10.17.100.115:3001/api/smart_scrap/filter-data-monthly-monitoring-group-factory-chart-total-weight?from_year=${selectedFromYear}&to_year=${selectedToYear}&factory=${selectedFactory}`);
+      const data = response.data;
+  
+      // Process data for the basic bar chart
+      const series = data.map(item => parseFloat(item.total_weight)); // Extract series data from total_amount
+      const categories = data.map(item => item.factory); // Extract categories (x-axis labels) from month_inv
+      const colors = ['#0B60B0']; // Add more colors as needed
+  
+      setBasicBarChartData_weight({
+        series: [{ data: series }],
+        options: {
+          chart: {
+            type: 'bar',
+            height: 350,
+            stacked: true,
+            toolbar: {
+              show: true
+            },
+            zoom: {
+              enabled: true
+            },
+          },
+          xaxis: {
+            categories: categories,
+          },
+          yaxis: {
+            title: {
+              text: 'Total Weight (KG)',
+            },
+            labels: {
+              formatter: function (value) {
+                return value.toFixed(2); // Format to two decimal places
+              }
+            },
+          },
+          legend: {
+            position: 'right',
+            offsetY: 40
+          },
+          fill: {
+            opacity: 1,
+            colors: colors
+          },
+          plotOptions: {
+            bar: {
+              // borderRadius: 10,
+              dataLabels: {
+                position: 'top', // top, center, bottom
+              },
+            }
+          },
+          dataLabels: {
+            enabled: true, // Disable data labels for the bars
+            formatter: function (val) {
+              return new Intl.NumberFormat("en-US", {
+                style: "decimal",
+                // currency: "THB", // You can change the currency as needed
+              }).format(val);
+            },
+            offsetY: -20,
+            style: {
+              colors: ['#000000'], // Set font color to black
+              rotate: -45
+            },
+          },
+          tooltip: {
+            y: {
+              formatter: function (val) {
+                return new Intl.NumberFormat("en-US", {
+                  style: "decimal",
+                  // currency: "THB", // You can change the currency as needed
+                }).format(val) + " KG";
+              },
+            },
+          },
+        },
+      });
+    } catch (error) {
+      console.error('Error fetching basic bar chart data:', error);
+      setError('An error occurred while fetching basic bar chart data');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <>
         <Navbar onToggle={handleNavbarToggle}/>
@@ -432,10 +683,17 @@ export default function Scrap_Monthly_Monitoring_by_group_factory({ onSearch }) 
                       <ReactApexChart options={basicBarChartData.options} series={basicBarChartData.series} type="bar" height={370} />
                   </Box>
               </div>
+              <div style={{width: 1470 , border: '3px solid black' , marginTop: 20}}>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'row'}}>
+                  <Box sx={{width: 850 , height: 380 , marginTop: '15px' , backgroundColor: '#D2E0FB'}}>
+                      <ReactApexChart options={chartData_Weight.options} series={chartData_Weight.series} type="bar" height={370} />
+                  </Box>
+                  <Box sx={{width: 600 , height: 380 , marginTop: '15px' , backgroundColor: '#D2E0FB' , marginLeft: '20px'}}>
+                      <ReactApexChart options={basicBarChartData_weight.options} series={basicBarChartData_weight.series} type="bar" height={370} />
+                  </Box>
+              </div>
           </div>
-       
-              
-          
         </Box>
     </>
   );

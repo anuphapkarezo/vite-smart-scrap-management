@@ -203,13 +203,13 @@ export default function Scrap_Monthly_Monitoring_by_group_factory({ onSearch }) 
             return new Intl.NumberFormat("en-US", {
               style: "decimal",
               // currency: "THB", // You can change the currency as needed
-            }).format(val) + " Baht";
+            }).format(val) + " Mbaht";
           },
         },
       },
       title: {
         // ชื่อ chart หรือข้อความที่ต้องการแสดง
-        text: 'Monthly Sale Amount Monitoring by Factory',
+        text: 'Monthly Sale Amount Monitoring by Factory (Mbaht)',
         align: 'center',
         margin: 10,
         offsetY: 10,
@@ -235,11 +235,11 @@ export default function Scrap_Monthly_Monitoring_by_group_factory({ onSearch }) 
         if (!chartData[key]) {
           chartData[key] = {
             x: item.month_inv,
-            y: parseFloat(item.total_amount),
+            y: parseFloat(item.total_amount) / 1000000,
             name: item.factory,
           };
         } else {
-          chartData[key].y += parseFloat(item.total_amount);
+          chartData[key].y += parseFloat(item.total_amount) / 1000000;
         }
       });
 
@@ -289,7 +289,7 @@ export default function Scrap_Monthly_Monitoring_by_group_factory({ onSearch }) 
     options: {
       title: {
         // ชื่อ chart หรือข้อความที่ต้องการแสดง
-        text: 'Total Sale Amount by Factory',
+        text: 'Total Sale Amount by Factory (Mbaht)',
         align: 'center',
         margin: 10,
         offsetY: 5,
@@ -308,7 +308,7 @@ export default function Scrap_Monthly_Monitoring_by_group_factory({ onSearch }) 
       const data = response.data;
   
       // Process data for the basic bar chart
-      const series = data.map(item => parseFloat(item.total_amount)); // Extract series data from total_amount
+      const series = data.map(item => parseFloat(item.total_amount)/ 1000000); // Extract series data from total_amount
       const categories = data.map(item => item.factory); // Extract categories (x-axis labels) from month_inv
       const colors = ['#0B60B0']; // Add more colors as needed
   
@@ -375,7 +375,7 @@ export default function Scrap_Monthly_Monitoring_by_group_factory({ onSearch }) 
                 return new Intl.NumberFormat("en-US", {
                   style: "decimal",
                   // currency: "THB", // You can change the currency as needed
-                }).format(val) + " Baht";
+                }).format(val) + " Mbaht";
               },
             },
           },

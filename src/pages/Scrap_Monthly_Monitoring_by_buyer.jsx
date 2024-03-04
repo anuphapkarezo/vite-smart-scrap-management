@@ -123,7 +123,7 @@ export default function Scrap_Monthly_Monitoring_by_buyer({ onSearch }) {
       },
       title: {
         // ชื่อ chart หรือข้อความที่ต้องการแสดง
-        text: 'Monthly Sale Amount Monitoring by Buyer',
+        text: 'Monthly Sale Amount Monitoring by Buyer (Mbaht)',
         align: 'center',
         margin: 10,
         offsetY: 10,
@@ -277,7 +277,7 @@ export default function Scrap_Monthly_Monitoring_by_buyer({ onSearch }) {
       },
       title: {
         // ชื่อ chart หรือข้อความที่ต้องการแสดง
-        text: 'Monthly Weight Monitoring by Buyer',
+        text: 'Monthly Weight Monitoring by Buyer (KG)',
         align: 'center',
         margin: 10,
         offsetY: 10,
@@ -365,7 +365,7 @@ export default function Scrap_Monthly_Monitoring_by_buyer({ onSearch }) {
     options: {
       title: {
         // ชื่อ chart หรือข้อความที่ต้องการแสดง
-        text: 'Total Sale Amount by Buyer (THB)',
+        text: 'Total Sale Amount by Buyer (Mbaht)',
         align: 'center',
         margin: 10,
         offsetY: 5,
@@ -542,7 +542,7 @@ export default function Scrap_Monthly_Monitoring_by_buyer({ onSearch }) {
     options: {
       title: {
         // ชื่อ chart หรือข้อความที่ต้องการแสดง
-        text: 'Total Sale Amount by Month (THB)',
+        text: 'Total Sale Amount by Month (Mbaht)',
         align: 'center',
         margin: 10,
         offsetY: 5,

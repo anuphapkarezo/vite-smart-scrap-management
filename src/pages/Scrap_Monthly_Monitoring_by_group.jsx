@@ -123,7 +123,7 @@ export default function Scrap_Monthly_Monitoring_by_group({ onSearch }) {
       },
       title: {
         // ชื่อ chart หรือข้อความที่ต้องการแสดง
-        text: 'Monthly Sale Amount Monitoring by Group',
+        text: 'Monthly Sale Amount Monitoring by Group (Mbaht)',
         align: 'center',
         margin: 10,
         offsetY: 10,
@@ -266,7 +266,7 @@ export default function Scrap_Monthly_Monitoring_by_group({ onSearch }) {
       },
       title: {
         // ชื่อ chart หรือข้อความที่ต้องการแสดง
-        text: 'Monthly Weight Monitoring by Group',
+        text: 'Monthly Weight Monitoring by Group (KG)',
         align: 'center',
         margin: 10,
         offsetY: 10,
@@ -344,7 +344,7 @@ export default function Scrap_Monthly_Monitoring_by_group({ onSearch }) {
     options: {
       title: {
         // ชื่อ chart หรือข้อความที่ต้องการแสดง
-        text: 'Total Sale Amount by Group (THB)',
+        text: 'Total Sale Amount by Group (Mbaht)',
         align: 'center',
         margin: 10,
         offsetY: 5,
@@ -499,7 +499,7 @@ export default function Scrap_Monthly_Monitoring_by_group({ onSearch }) {
     options: {
       title: {
         // ชื่อ chart หรือข้อความที่ต้องการแสดง
-        text: 'Total Sale Amount by Month (THB)',
+        text: 'Total Sale Amount by Month (Mbaht)',
         align: 'center',
         margin: 10,
         offsetY: 5,

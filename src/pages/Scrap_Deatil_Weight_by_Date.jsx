@@ -3,6 +3,7 @@ import Box from '@mui/material/Box';
 import './Scrap_Deatil_Weight_by_Date.css'; // Import the CSS file
 import axios from "axios";
 import Smart_Scrap_SearchDetailsWeight from "../components/SearchGroup/Smart_Scrap_SearchDetailsWeight";
+import Button from '@mui/material/Button';
 
 import Navbar from "../components/navbar/Navbar";
 
@@ -56,6 +57,45 @@ export default function Scrap_Deatil_Weight_by_Date({ onSearch }) {
     }
   }, [selectedFactory, selectedGroup , selectedFromDate , selectedToDate]);
 
+  const exportToCsv = () => {
+    // Prepare datetime format (yyyymmddhhss)
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = (now.getMonth() + 1).toString().padStart(2, '0');
+    const date = now.getDate().toString().padStart(2, '0');
+    const hours = now.getHours().toString().padStart(2, '0');
+    const minutes = now.getMinutes().toString().padStart(2, '0');
+    const seconds = now.getSeconds().toString().padStart(2, '0');
+    const formattedDateTime = `${year}${month}${date}${hours}${minutes}`;
+
+    // Prepare CSV header
+    let csvContent = "Date take off,";
+    distinct_waste_code.forEach(item => {
+        csvContent += `${item.waste_item_code},`;
+    });
+    csvContent += "Update by,Update datetime\n";
+
+    // Add data rows
+    distinct_details_waste.forEach(rowData => {
+        csvContent += `${rowData.waste_date_take_off},`;
+        distinct_waste_code.forEach(item => {
+            const weight = rowData.waste_item_code === item.waste_item_code ? rowData.waste_weight : 0;
+            csvContent += `${weight},`;
+        });
+        csvContent += `${rowData.waste_update_by},${rowData.update_datetime}\n`;
+    });
+
+    // Trigger download
+    const fileName = `detailsweightbydate_${formattedDateTime}.csv`;
+    const encodedUri = encodeURI("data:text/csv;charset=utf-8," + csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", fileName);
+    // link.setAttribute("download", "detailsweightbydate.csv");
+    document.body.appendChild(link);
+    link.click();
+  };
+
 
   return (
     <>
@@ -73,7 +113,18 @@ export default function Scrap_Deatil_Weight_by_Date({ onSearch }) {
                         }}
                     />
                 </div>
-                <div style={{marginTop: 30 , fontSize: 14 , width: '1850px'}}>
+                <div style={{ marginTop: 30}}>
+                    {/* <button onClick={exportToCsv}>Export to CSV</button> */}
+                    <Button 
+                            variant="contained" 
+                            // size="small"
+                            style={{height: 40}}
+                            onClick={exportToCsv}
+                            // endIcon={<SearchIcon />}
+                            >Export to CSV
+                    </Button>
+                </div>
+                <div style={{marginTop: 10 , fontSize: 14 , width: '1850px'}}>
                     <table>
                       <thead>
                           <tr>

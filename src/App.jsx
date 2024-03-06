@@ -12,6 +12,7 @@ import Scrap_Company_List from "./pages/Scrap_Company_List";
 import Scrap_Monthly_Monitoring_by_buyer from "./pages/Scrap_Monthly_Monitoring_by_buyer";
 import Scrap_Monthly_Monitoring_by_group from "./pages/Scrap_Monthly_Monitoring_by_group";
 import Scrap_Monthly_Monitoring_by_group_factory from "./pages/Scrap_Monthly_Monitoring_by_group_factory";
+import Scrap_Monthly_Monitoring_by_item from "./pages/Scrap_Monthly_Monitoring_by_item";
 
 export default function App() {
   
@@ -31,6 +32,7 @@ export default function App() {
               <Route path="/env_scrap_monthly_monitoring_by_buyer" element={<Scrap_Monthly_Monitoring_by_buyer />}/>
               <Route path="/env_scrap_monthly_monitoring_by_group" element={<Scrap_Monthly_Monitoring_by_group />}/>
               <Route path="/env_scrap_monthly_monitoring_by_group_factory" element={<Scrap_Monthly_Monitoring_by_group_factory />}/>
+              <Route path="/env_scrap_monthly_monitoring_by_item" element={<Scrap_Monthly_Monitoring_by_item />}/>
             </Route>
         </Routes>
   );

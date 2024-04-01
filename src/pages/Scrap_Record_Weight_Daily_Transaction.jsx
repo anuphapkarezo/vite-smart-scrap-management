@@ -35,7 +35,6 @@ export default function Scrap_Record_Weight_Daily_Transaction({ onSearch }) {
   const [editedTotalWeightDisabled, setEditedTotalWeightDisabled] = useState(false);
   const [editedDetailWeightDisabled, setEditedDetailWeightDisabled] = useState(false);
   
-  // const [confirmButtonClicked, setConfirmButtonClicked] = useState(false);
   const [error, setError] = useState(null);
   const [roundedTotalWeight, setRoundedTotalWeight] = useState(0);
   const [labelColor, setLabelColor] = useState('black');
@@ -53,6 +52,10 @@ export default function Scrap_Record_Weight_Daily_Transaction({ onSearch }) {
 
   const [showLblSum, setShowLblSum] = useState(true);
   const [showLblDet, setShowLblDet] = useState(false);
+
+  const [distinct_record_weight, setDistinct_record_weight] = useState([]);
+  const [distinct_weight_details, setDistinct_weight_details] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const openDialog = () => {
@@ -79,12 +82,14 @@ export default function Scrap_Record_Weight_Daily_Transaction({ onSearch }) {
     { field: 'waste_group', headerName: 'Group', width: 250 , headerAlign: 'center' , headerClassName: 'bold-header'},
     { field: 'waste_date_take_off', headerName: 'Date take off', width: 150 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'center'},
     { field: 'waste_item', headerName: 'Waste Item', width: 300 , headerAlign: 'center' , headerClassName: 'bold-header'},
+    { field: 'waste_unit', headerName: 'Unit', width: 80 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'center'},
     { field: 'total', headerName: 'Total', width: 150 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'center',
       renderCell: (params) => (
         <input
           type="input"
           // value={params.value}
-          value={params.value === 0 ? '0.00' : params.value}
+          // value={params.value === 0 ? '0.00' : params.value}
+          value={params.value === 0 ? '0.00' : Number(params.value).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
           onChange={(e) => handleTotalChange(params.id, e.target.value)}
           // onKeyPress={(e) => handleKeyPress(e, params.id)}
           style={{ width: 130 , height: '30px' , textAlign:'center'}}
@@ -97,7 +102,8 @@ export default function Scrap_Record_Weight_Daily_Transaction({ onSearch }) {
         <input
           type="input"
           // value={params.value}
-          value={params.value === 0 ? '0.00' : params.value}
+          // value={params.value === 0 ? '0.00' : params.value}
+          value={params.value === 0 ? '0.00' : Number(params.value).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
           onChange={(e) => handleTotalChange(params.id, e.target.value)}
           style={{ width: 130 , height: '30px' , textAlign:'center'}}
           disabled={params.row.detail >= 0}
@@ -105,11 +111,6 @@ export default function Scrap_Record_Weight_Daily_Transaction({ onSearch }) {
       ),
     },
     { field: 'update_by', headerName: 'Update By', width: 180 , headerAlign: 'center' , headerClassName: 'bold-header', align: 'center',
-      // renderCell: (params) => (
-      //   <p>
-      //     {userName} {userSurname}
-      //   </p>
-      // ),
     },
     { field: 'update_date', headerName: 'Update Date', width: 160 , headerAlign: 'center' , headerClassName: 'bold-header', align: 'center'},
     { field: 'record_weight', headerName: 'Record Weight', width: 130 , headerAlign: 'center' , headerClassName: 'bold-header', align: 'center',
@@ -119,24 +120,7 @@ export default function Scrap_Record_Weight_Daily_Transaction({ onSearch }) {
                   className="btn_hover hover:scale-110" style={{backgroundColor: '#FFCD4B' , color: 'black' ,  width: 50 , height: '35px' , textAlign:'center' , boxShadow: '3px 3px 5px grey' , marginLeft: 5}}>
                   <ScaleIcon />
           </Button>
-          {/* <Button variant="contained" endIcon={<ScaleIcon />} onClick={() => { handleKeyWeightClick(params.row.id); setIsModalOpen(true); }}
-                  className="btn_hover" style={{backgroundColor: '#FFCD4B' , color: 'black' ,  width: 125 , height: '35px' , textAlign:'center' , boxShadow: '3px 3px 5px grey'}}>
-                  Key Weight
-          </Button> */}
         </div>
-        // <input
-        //   type="button"
-        //   value={"Key Weight"}
-        //   className="btn_hover"
-        //   style={{ width: 130 , height: '35px' , textAlign:'center' , backgroundColor: '#FFCD4B' , 
-        //   cursor:"pointer" , borderRadius: '15px' , border: 'none' 
-        //   }}
-        //   onClick={() => {
-        //     handleKeyWeightClick(params.row.id);
-        //     setIsModalOpen(true);
-
-        //   }} // Call the handleKeyWeightClick function with the row ID or any other identifier you need
-        // />
       ),
     },
   ]
@@ -147,9 +131,17 @@ export default function Scrap_Record_Weight_Daily_Transaction({ onSearch }) {
     { field: 'waste_item_code', headerName: 'Waste Item', width: 150 , headerAlign: 'center' , headerClassName: 'custom-header' , align: 'center'},
     { field: 'waste_group_code', headerName: 'Waste Group', width: 150 , headerAlign: 'center' , headerClassName: 'custom-header' , align: 'center'},
     { field: 'waste_detail_no', headerName: 'Detail No.', width: 120 , headerAlign: 'center' , headerClassName: 'custom-header' , align: 'center'},
-    { field: 'waste_weight', headerName: 'Weight', width: 120 , headerAlign: 'center' , headerClassName: 'custom-header' , align: 'center'},
+    { field: 'waste_weight', headerName: 'Weight', width: 120 , headerAlign: 'center' , headerClassName: 'custom-header' , align: 'center' , editable: true},
   ]
-  
+  const [editRowsModel, setEditRowsModel] = React.useState({});
+
+
+  const handleEditRowsModelChange = React.useCallback((newModel) => {
+    console.log("editRowsModel" , editRowsModel);
+
+    setEditRowsModel(newModel);
+  }, []);
+
   const handleTotalChange = (id, value) => {
     const updatedRows = distinct_record_weight.map((row) =>
       row.id === id ? { ...row, total: value } : row
@@ -161,7 +153,6 @@ export default function Scrap_Record_Weight_Daily_Transaction({ onSearch }) {
     setSelectedRecord(row);
     setEditedTotalWeight(row.total || '');
     console.log('row.total',row.total);
-    // setIsModalOpen(false);
 
     // Check if row.waste_item is defined
     if (row.waste_item) {
@@ -209,19 +200,15 @@ export default function Scrap_Record_Weight_Daily_Transaction({ onSearch }) {
     setEditedTotalWeightDisabled(false);
     setEditedDetailWeightDisabled(false);
     setEditedTotalWeight('');
-    setRoundedTotalWeight('0.00');
+    // setRoundedTotalWeight('5.00');
     // setConfirmButtonClicked(false);
     
     totalWeightInputRef.current.focus();
-    setDistinct_weight_details([]);
+    // setDistinct_weight_details([]);
 
     setShowLblSum(false);
     setShowLblDet(true);
   };
-
-  // const handleConfirmClick = () => {
-  //   setConfirmButtonClicked(true);
-  // };
   
   const [filterModel, setFilterModel] = React.useState({
     items: [],
@@ -229,9 +216,6 @@ export default function Scrap_Record_Weight_Daily_Transaction({ onSearch }) {
     quickFilterValues: [''],
   });
 
-  const [distinct_record_weight, setDistinct_record_weight] = useState([]);
-  const [distinct_weight_details, setDistinct_weight_details] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (selectedFactory && selectedGroup && selectedDate) {
@@ -313,11 +297,14 @@ export default function Scrap_Record_Weight_Daily_Transaction({ onSearch }) {
   const updateDetailWeightSum = (value) => {
     // Parse the input value as a float
     const parsedValue = parseFloat(value);
+    const TotalValue = parseFloat(roundedTotalWeight);
     
     // Check if the parsed value is a valid number
     if (!isNaN(parsedValue)) {
       // Update the sum by adding the parsed value
-      setDetailWeightSum((prevSum) => prevSum + parsedValue);
+      const SumValue = parsedValue + TotalValue
+      setRoundedTotalWeight(0)
+      setDetailWeightSum((prevSum) => prevSum + SumValue);
     }
   };
 
@@ -374,8 +361,6 @@ export default function Scrap_Record_Weight_Daily_Transaction({ onSearch }) {
   };
 
   const handleSaveData = () => {
-    // console.log("DET" , detailWeightSum);
-    // console.log("TOT" , parseFloat(editedTotalWeight));
 
     if (detailWeightSum < parseFloat(editedTotalWeight)) {
       console.log("Step 1");
@@ -410,8 +395,17 @@ export default function Scrap_Record_Weight_Daily_Transaction({ onSearch }) {
             .then(() => {
               // Create an array of promises to insert data for distinct_weight_details
               const insertPromises = distinct_weight_details.map((row) => {
+                // console.log("row.id" , row.id);
+                // console.log("row.waste_date_take_off" , row.waste_date_take_off);
+                // console.log("row.waste_factory_name" , row.waste_factory_name);
+                // console.log("row.waste_item_code" , row.waste_item_code);
+                // console.log("row.waste_group_code" , row.waste_group_code);
+                // console.log("row.waste_detail_no" , row.waste_detail_no);
+                // console.log("row.waste_weight" , row.waste_weight);
+
+
                 return axios.get(
-                  `http://10.17.100.115:3001/api/smart_scrap/insert-data-daily-transaction?waste_date_take_off=${row.waste_date_take_off}&waste_factory_name=${row.waste_factory_name}&waste_item_code=${row.waste_item_code}&waste_group_code=${row.waste_group_code}&waste_detail_no=${row.waste_detail_no}&waste_weight=${row.waste_weight}&waste_update_by=${row.waste_update_by}`
+                  `http://10.17.100.115:3001/api/smart_scrap/insert-data-daily-transaction?waste_date_take_off=${row.waste_date_take_off}&waste_factory_name=${row.waste_factory_name}&waste_item_code=${row.waste_item_code}&waste_group_code=${row.waste_group_code}&waste_detail_no=${row.waste_detail_no}&waste_weight=${row.waste_weight}&waste_update_by=${userName} ${userSurname}`
                 );
               });
   
@@ -504,91 +498,7 @@ export default function Scrap_Record_Weight_Daily_Transaction({ onSearch }) {
         }
       });
   }
-  // const handleSaveData = () => {
-  //   if (detailWeightSum < parseFloat(editedTotalWeight)) {
-  //     openDialog_button();
-  //   } if (detailWeightSum == 0 || parseFloat(editedTotalWeight) == '') {
-  //     openDialog_button();
-  //   } else {
-  //     // Delete existing data
-  //     axios
-  //       .get(
-  //         `http://10.17.100.115:3001/api/smart_scrap/delete-data-daily-transaction?waste_date_take_off=${selectedDate}&waste_factory_name=${selectedFactory}&waste_group_code=${getCode(selectedRecord.waste_group)}&waste_item_code=${getCode(selectedRecord.waste_item)}`
-  //       )
-  //       .then(() => {
-  //         // Create an array of promises to insert data for distinct_weight_details
-  //         const insertPromises = distinct_weight_details.map((row) => {
-  //           return axios.get(
-  //             `http://10.17.100.115:3001/api/smart_scrap/insert-data-daily-transaction?waste_date_take_off=${row.waste_date_take_off}&waste_factory_name=${row.waste_factory_name}&waste_item_code=${row.waste_item_code}&waste_group_code=${row.waste_group_code}&waste_detail_no=${row.waste_detail_no}&waste_weight=${row.waste_weight}&waste_update_by=${row.waste_update_by}`
-  //           );
-  //         });
   
-  //         // Use Promise.all to wait for all insert requests to complete
-  //         return Promise.all(insertPromises);
-  //       })
-  //       .then(() => {
-  //         // After all requests are completed, fetch the updated data
-  //         return fetch_record_weight();
-  //       })
-  //       .then(() => {
-  //         // Success notification
-  //         Swal.fire({
-  //           icon: "success",
-  //           title: "Save Success",
-  //           text: "Data record weight saved successfully",
-  //           confirmButtonText: "OK",
-  //         });
-  //         handleCloseModal();
-
-  //       })
-  //       .catch((error) => {
-  //         console.error("Error saving data:", error);
-  //         // Handle the error or display an error message using Swal
-  //         Swal.fire({
-  //           icon: "error",
-  //           title: "Save Error",
-  //           text: "An error occurred while saving data",
-  //           confirmButtonText: "OK",
-  //         });
-  //       });
-  //   }
-  // };
-  
-  // const handleSaveData = () => {
-  //   if (detailWeightSum < parseFloat(editedTotalWeight)) {
-  //     openDialog_button();
-  //   } else {
-  //     axios.get(
-  //       `http://10.17.100.115:3001/api/smart_scrap/delete-data-daily-transaction?waste_date_take_off=${selectedDate}&waste_factory_name=${selectedFactory}&waste_group_code=${getCode(selectedRecord.waste_group)}&waste_item_code=${getCode(selectedRecord.waste_item)}`
-  //     );
-
-  //     const dataToSave = distinct_weight_details.map((row) => {
-  //       return axios.get(
-  //         `http://10.17.100.115:3001/api/smart_scrap/insert-data-daily-transaction?waste_date_take_off=${row.waste_date_take_off}&waste_factory_name=${row.waste_factory_name}&waste_item_code=${row.waste_item_code}&waste_group_code=${row.waste_group_code}&waste_detail_no=${row.waste_detail_no}&waste_weight=${row.waste_weight}&waste_update_by=${row.waste_update_by}`
-  //       );
-  //     });
-      
-  //     // Use Promise.all to wait for all axios requests to complete
-  //     Promise.all(dataToSave)
-  //       .then(() => {
-  //         // After all requests are completed, fetch the updated data
-  //         return fetch_record_weight();
-  //       })
-  //       .then(() => {
-  //         Swal.fire({
-  //           icon: "success",
-  //           title: "Save Success",
-  //           text: "Save data record weight successfully",
-  //           confirmButtonText: "OK",
-  //         });
-  //         // handleDeleteData();
-  //         handleCloseModal();
-  //       })
-  //       .catch((error) => {
-  //         console.error("Error saving data:", error);
-  //       });
-  //   }
-  // };
   const [isNavbarOpen, setIsNavbarOpen] = React.useState(false);
 
   const handleNavbarToggle = (openStatus) => {
@@ -610,7 +520,7 @@ export default function Scrap_Record_Weight_Daily_Transaction({ onSearch }) {
                 }}
             />
         </div>
-        <Box sx={{width: '1590px' , height: 725 , marginTop: '25px'}}>
+        <Box sx={{width: '1675px' , height: 725 , marginTop: '25px'}}>
             {isLoading ? (
               <CircularProgress /> // Display a loading spinner while data is being fetched
             ) : (
@@ -681,24 +591,17 @@ export default function Scrap_Record_Weight_Daily_Transaction({ onSearch }) {
                           style={{marginLeft: '10px', fontSize: 16 , fontWeight: 'bold', width: 150 , height: 30 , textAlign: 'center' , border: '1px solid black' , borderRadius: '5px' , color: isEditing && !editedTotalWeightDisabled ? 'blue' : 'black', boxShadow: '3px 3px 5px grey'}} 
                           type="text" 
                           value={editedTotalWeight !== null ? editedTotalWeight : ''}
-                          // onChange={(e) => setEditedTotalWeight(e.target.value)}
                           onChange={(e) => handleTotalWeightChange(e)}
-                          // onChange={(e) => handleTotalChange(selectedRecord.id, e.target.value)}
-                          // disabled={!isEditing || editedTotalWeightDisabled}
                           disabled={!isEditing || editedTotalWeightDisabled}
                           onKeyPress={handleKeyPress}
                   />
                   <Button variant="contained" startIcon={<BorderColorIcon />} onClick={handleEditClick}
                         className="btn_active hover:scale-110" style={{marginLeft: 5 , backgroundColor: '#FFB000' , color: 'black' ,  width: 70 , height: 30 , textAlign:'center', borderRadius: '5px' , boxShadow: '3px 3px 5px grey'}}>
                         Edit
-                </Button>
-                  {/* <input className="btn_active" type="button" style={{marginLeft:'5px' , width: 65 , height: 30 , borderRadius: '5px' , backgroundColor: '#FFB000' , cursor:"pointer" , boxShadow: '3px 3px 5px grey' , border: 'none'}} 
-                          value={"Edit"} onClick={handleEditClick}/> */}
+                  </Button>
+                  
                   <label style={{marginLeft: '5px' , marginTop: '5px' , color: 'brown'}}>(Double click for Edit)</label>
-                  {/* <input type="button" style={{marginLeft:'5px' , width: 65 , height: 30 ,border: '1px solid black' , borderRadius: '5px' , backgroundColor: 'lightgreen' , cursor:"pointer" , cursor:"pointer"}} 
-                          value={"Confirm"} onClick={handleConfirmClick}/> */}
-                  {/* <label id="lbl_sum" style={{marginLeft: '170px' , marginTop: '5px' , color: labelColor}}>{roundedTotalWeight}</label> */}
-                  {/* <label id="lbl_det" style={{marginLeft: '20px' , marginTop: '5px' , color: labelColor}}>{detailWeightSum.toFixed(2)}</label> */}
+                 
                   {showLblSum && (
                       <label id="lbl_sum" style={{ marginLeft: '170px', marginTop: '5px', color: labelColor }}>
                           {roundedTotalWeight}
@@ -710,6 +613,7 @@ export default function Scrap_Record_Weight_Daily_Transaction({ onSearch }) {
                           {detailWeightSum.toFixed(2)}
                       </label>
                   )}
+
                 </div>
                 <div >
                     <input
@@ -727,7 +631,7 @@ export default function Scrap_Record_Weight_Daily_Transaction({ onSearch }) {
                         disabled={!isEditing || editedDetailWeightDisabled}
                       />
                 </div>
-                <Box sx={{width: '100%' , height: 400 , marginTop: '5px' , backgroundColor: '#E4F1FF' , boxShadow: '5px 5px 10px grey'}}>
+                <Box sx={{width: 830 , height: 400 , marginTop: '5px' , backgroundColor: '#E4F1FF' , boxShadow: '5px 5px 10px grey'}}>
                   {isLoading ? (
                     <CircularProgress /> // Display a loading spinner while data is being fetched
                   ) : (
@@ -735,9 +639,12 @@ export default function Scrap_Record_Weight_Daily_Transaction({ onSearch }) {
                       id="Datagrid-modal"
                       columns={columns_modal}
                       rows={distinct_weight_details}
+                      editRowsModel={editRowsModel}
+                      onEditRowsModelChange={handleEditRowsModelChange}
                     />
                   )}
                 </Box>
+               
               <div style={{ display: 'flex', justifyContent: 'flex-end' , marginTop: 8}}>
                 <Button variant="contained" startIcon={<DeleteIcon />} onClick={handleDeleteData} className="btn_hover" style={{backgroundColor: '#FE0000' , color: 'white' , width: 120 , height: 40 , marginRight: 470 , boxShadow: '3px 3px 5px grey'}}>
                     Delete
@@ -749,32 +656,6 @@ export default function Scrap_Record_Weight_Daily_Transaction({ onSearch }) {
                 <Button variant="contained" endIcon={<VerticalAlignBottomIcon />} onClick={handleSaveData} className="btn_hover" style={{backgroundColor: 'lightgreen' , color: 'black' , width: 120 , height: 40 , boxShadow: '3px 3px 5px grey'}}>
                     Confirm
                 </Button>
-                {/* <input style={{marginRight: 5,
-                          width: 90 , 
-                          height: 40,
-                          backgroundColor: 'lightgray',
-                          cursor: 'pointer',
-                          borderRadius: 15 , border: 'none' , boxShadow: '3px 3px 5px grey'
-                        }} 
-                        type="button" 
-                        value={'Cancel'}
-                        onClick={handleCloseModal}
-                        className="btn_hover"
-                        /> */}
-                {/* <input style={{
-                          width: 90 , 
-                          height: 40,
-                          backgroundColor: 'lightgreen',
-                          cursor: 'pointer',
-                          borderRadius: 15 , border: 'none' , boxShadow: '3px 3px 5px grey'
-                        }} 
-                        type="button" 
-                        value={'Confirm'}
-                        // onClick={() => { handleDeleteData(); handleSaveData(); }}
-                        onClick={handleSaveData}
-                        className="btn_hover"
-                        endIcon={<SendIcon />}
-                /> */}
               </div>
             </div>
           </Box>

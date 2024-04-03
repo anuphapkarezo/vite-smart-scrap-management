@@ -24,6 +24,7 @@ import EditNoteIcon from '@mui/icons-material/EditNote';
 import BorderColorIcon from '@mui/icons-material/BorderColor';
 import Swal from 'sweetalert2';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { v4 as uuidv4 } from 'uuid';
 
 export default function Scrap_Record_Weight_Daily_Transaction({ onSearch }) {
   const [selectedFactory, setSelectedFactory] = useState(null);
@@ -31,7 +32,7 @@ export default function Scrap_Record_Weight_Daily_Transaction({ onSearch }) {
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedWasteItem, setSelectedWasteItem] = useState(null);
   const [selectedRecord, setSelectedRecord] = useState(null);
-  const [editedTotalWeight, setEditedTotalWeight] = useState('0.00');
+  const [editedTotalWeight, setEditedTotalWeight] = useState('');
   const [editedTotalWeightDisabled, setEditedTotalWeightDisabled] = useState(false);
   const [editedDetailWeightDisabled, setEditedDetailWeightDisabled] = useState(false);
   
@@ -69,6 +70,7 @@ export default function Scrap_Record_Weight_Daily_Transaction({ onSearch }) {
   useEffect(() => {
     if (detailWeightSum > parseFloat(editedTotalWeight)) {
       openDialog();
+      detailWeightInputRef.current.focus();
     }
   }, [detailWeightSum, editedTotalWeight]);
 
@@ -125,22 +127,57 @@ export default function Scrap_Record_Weight_Daily_Transaction({ onSearch }) {
     },
   ]
 
+  const [isEditing_Edit, setIsEditing_Edit] = useState(true);
+
   const columns_modal = [
     { field: 'waste_date_take_off', headerName: 'Date take off', width: 150 , headerAlign: 'center' , headerClassName: 'custom-header' , align: 'center'},
     { field: 'waste_factory_name', headerName: 'Factory', width: 137 , headerAlign: 'center' , headerClassName: 'custom-header' , align: 'center'},
     { field: 'waste_item_code', headerName: 'Waste Item', width: 150 , headerAlign: 'center' , headerClassName: 'custom-header' , align: 'center'},
     { field: 'waste_group_code', headerName: 'Waste Group', width: 150 , headerAlign: 'center' , headerClassName: 'custom-header' , align: 'center'},
     { field: 'waste_detail_no', headerName: 'Detail No.', width: 120 , headerAlign: 'center' , headerClassName: 'custom-header' , align: 'center'},
-    { field: 'waste_weight', headerName: 'Weight', width: 120 , headerAlign: 'center' , headerClassName: 'custom-header' , align: 'center' , editable: true},
+    { field: 'waste_weight', headerName: 'Weight', width: 120 , headerAlign: 'center' , headerClassName: 'custom-header' , align: 'center' },
+    { field: 'actions', headerName: '', width: 50, headerAlign: 'center', headerClassName: 'custom-header', align: 'center',
+        renderCell: (params) => (
+            <div>
+                <IconButton onClick={() => handleDelete(params.row.id , params.row.waste_weight)} disabled={isEditing_Edit}>
+                    <DeleteIcon />
+                </IconButton>
+            </div>
+        ),
+    },
   ]
-  const [editRowsModel, setEditRowsModel] = React.useState({});
 
+  const [CheckStatusDelete, setCheckStatusDelete] = useState('N');
 
-  const handleEditRowsModelChange = React.useCallback((newModel) => {
-    console.log("editRowsModel" , editRowsModel);
+  const handleDelete = (id , waste_weight) => {
+    const updatedRows = distinct_weight_details.filter(row => row.id !== id);
+    setDistinct_weight_details(updatedRows);
 
-    setEditRowsModel(newModel);
-  }, []);
+    // Update 'Detail No.' after deleting a row
+    const updatedRowsWithNewDetailNos = updatedRows.map((row, index) => {
+        return {
+            ...row,
+            id: uuidv4(), // Generate new unique id for each row
+            waste_detail_no: (index + 1).toString()
+        };
+    });
+    setDistinct_weight_details(updatedRowsWithNewDetailNos);
+
+    let waste_Del = waste_weight
+    // console.log("waste_Del" , waste_Del);
+
+    if (roundedTotalWeight == 0) {
+      let UpdateroundedDetailWeightSum = (detailWeightSum - waste_Del).toFixed(2);
+      setDetailWeightSum(parseFloat(UpdateroundedDetailWeightSum))
+    } else {
+      let UpdateroundedTotalWeight = (roundedTotalWeight - waste_Del).toFixed(2);
+      setRoundedTotalWeight(parseFloat(UpdateroundedTotalWeight))
+      setDetailWeightSum(parseFloat(UpdateroundedTotalWeight));
+    }
+    setCheckStatusDelete("Y")
+    detailWeightInputRef.current.focus();
+  };
+  console.log("distinct_weight_details" , distinct_weight_details);
 
   const handleTotalChange = (id, value) => {
     const updatedRows = distinct_record_weight.map((row) =>
@@ -152,7 +189,7 @@ export default function Scrap_Record_Weight_Daily_Transaction({ onSearch }) {
   const handleKeyWeightClick = (row) => {
     setSelectedRecord(row);
     setEditedTotalWeight(row.total || '');
-    console.log('row.total',row.total);
+    // console.log('row.total',row.total);
 
     // Check if row.waste_item is defined
     if (row.waste_item) {
@@ -172,41 +209,48 @@ export default function Scrap_Record_Weight_Daily_Transaction({ onSearch }) {
     setEditedDetailWeightDisabled(true);
     setDetailWeightSum(0);
     setShowLblSum(true);
+    setIsEditing_Edit(true);
+    setCheckStatusDelete("N")
+    setCheckUpdate(0)
   };
 
   const handleTotalWeightChange = (e , id) => {
-    console.log('Handling total weight change');
     const sanitizedValue = e.target.value.replace(/[^0-9.]/g, '');
 
     if (/^-?\d*\.?\d*$/.test(sanitizedValue)) {
       setEditedTotalWeight(sanitizedValue);
     }
+    // console.log("editedTotalWeight" , editedTotalWeight);
+
     const updatedRows = distinct_record_weight.map((row) =>
       row.id === id ? { ...row, total: editedTotalWeight } : row
     );
 
     setDistinct_record_weight(updatedRows);
+    // console.log("setDistinct_record_weight" , distinct_record_weight);
   };
+
 
   const handleKeyPress = (e, id) => {
     if (e.key === 'Enter') {
-      detailWeightInputRef.current.focus();
+      
       setEditedTotalWeightDisabled(true);
+      detailWeightInputRef.current.focus();
+      setEditedDetailWeightDisabled(false);
     }
   };
   
   const handleEditClick = () => {
     setIsEditing(true);
+    setIsEditing_Edit(false);
     setEditedTotalWeightDisabled(false);
-    setEditedDetailWeightDisabled(false);
+    // setEditedDetailWeightDisabled(false);
     setEditedTotalWeight('');
-    // setRoundedTotalWeight('5.00');
-    // setConfirmButtonClicked(false);
     
     totalWeightInputRef.current.focus();
     // setDistinct_weight_details([]);
 
-    setShowLblSum(false);
+    setShowLblSum(true);
     setShowLblDet(true);
   };
   
@@ -244,7 +288,7 @@ export default function Scrap_Record_Weight_Daily_Transaction({ onSearch }) {
     } else {
       setLabelColor('red');
     }
-  }, [editedTotalWeight, roundedTotalWeight ]);
+  }, [editedTotalWeight, roundedTotalWeight]);
 
 
   const fetch_record_weight = async () => {
@@ -252,7 +296,7 @@ export default function Scrap_Record_Weight_Daily_Transaction({ onSearch }) {
         setIsLoading(true);
         const response = await axios.get(`http://10.17.100.115:3001/api/smart_scrap/filter-daily-transaction?date_take_of=${selectedDate}&group=${selectedGroup}&factory=${selectedFactory}`);
         const data = await response.data;
-        console.log(data);
+        // console.log(data);
         // Add a unique id property to each row
         const rowsWithId = data.map((row, index) => ({
             ...row,
@@ -284,7 +328,7 @@ export default function Scrap_Record_Weight_Daily_Transaction({ onSearch }) {
         // Round the result to two decimal places
         const roundedTotalWeight = totalWeight.toFixed(2);
         setRoundedTotalWeight(roundedTotalWeight);
-        console.log('Total Waste Weight:', roundedTotalWeight);
+        // console.log('Total Waste Weight:', roundedTotalWeight);
         
         } catch (error) {
         console.error('Error fetching data:', error);
@@ -298,19 +342,53 @@ export default function Scrap_Record_Weight_Daily_Transaction({ onSearch }) {
     // Parse the input value as a float
     const parsedValue = parseFloat(value);
     const TotalValue = parseFloat(roundedTotalWeight);
-    
+   
     // Check if the parsed value is a valid number
     if (!isNaN(parsedValue)) {
       // Update the sum by adding the parsed value
       const SumValue = parsedValue + TotalValue
-      setRoundedTotalWeight(0)
+
+      // setRoundedTotalWeight(0)
       setDetailWeightSum((prevSum) => prevSum + SumValue);
+      // setRoundedTotalWeight(detailWeightSum);
+    }
+  };
+
+  const [CheckUpdate, setCheckUpdate] = useState(0);
+  const updateDetailWeightSum_X = (value) => {
+    // Parse the input value as a float
+    const parsedValue = parseFloat(value);
+    let TotalValue = parseFloat(roundedTotalWeight);
+
+    // if (CheckUpdate == 1) {
+    //   TotalValue = 0
+    // }
+   
+    // Check if the parsed value is a valid number
+    if (!isNaN(parsedValue)) {
+      // Update the sum by adding the parsed value
+      
+      if (CheckStatusDelete == "N") {
+        let SumValue = parsedValue + TotalValue
+
+        if (CheckUpdate == 0) {
+          setDetailWeightSum((prevSum) => prevSum + SumValue);
+          setCheckUpdate(1)
+        } else {
+          setDetailWeightSum((prevSum) => prevSum + (SumValue - TotalValue));
+        }
+      } else {
+        const SumValue = parsedValue
+        setDetailWeightSum((prevSum) => prevSum + SumValue);
+        setRoundedTotalWeight((prevSum) => prevSum + SumValue)
+      }
     }
   };
 
   useEffect(() => {
     if (editedTotalWeight > detailWeightSum ) {
       setLabelColor_detail('red');
+    } else if ( editedTotalWeight < detailWeightSum){
     } else {
       setLabelColor_detail('green');
     }
@@ -327,32 +405,41 @@ export default function Scrap_Record_Weight_Daily_Transaction({ onSearch }) {
   
       // Create a new row with the input data and an unique ID
       const newRow = {
-        id: distinct_weight_details.length + 1, // You can use a better unique identifier here if available
+        // id: distinct_weight_details.length + 1, // You can use a better unique identifier here if available
+        id: uuidv4(),
         waste_date_take_off: selectedDate,
         waste_factory_name: selectedFactory,
         waste_item_code: selectedRecord ? getCode(selectedRecord.waste_item) : '',
         waste_group_code: selectedRecord ? getCode(selectedRecord.waste_group) : '',
-        // waste_detail_no: distinct_weight_details.length + 1,
-        waste_detail_no: (distinct_weight_details.length + 1).toString(),
+        // waste_detail_no: (distinct_weight_details.length + 1).toString(),
         waste_weight: numericValue,
         waste_update_by: `${userName} ${userSurname}`
       };
-  
-      // Update the distinct_weight_details state with the new row
-      setDistinct_weight_details([...distinct_weight_details, newRow]);
 
-      updateDetailWeightSum(inputData);
-  
-      // Clear the input field after inserting data
+      // Increment the 'Detail No.' for the new row
+        const maxDetailNo = distinct_weight_details.length > 0 ?
+            Math.max(...distinct_weight_details.map(row => parseInt(row.waste_detail_no))) :
+            0;
+        newRow.waste_detail_no = (maxDetailNo + 1).toString();
+
+        setDistinct_weight_details([...distinct_weight_details, newRow]);
+
+      if (roundedTotalWeight == 0) {
+        // console.log("Round = 0");
+        updateDetailWeightSum(inputData);
+      } else {
+        // console.log("Round > 0");
+        updateDetailWeightSum_X(inputData);
+      }
+        
       setInputData('');
-      // setRoundedTotalWeight(inputData);
-
     }
   };
 
   const [isDialogOpen_button, setIsDialogOpen_button] = useState(false);
   const openDialog_button = () => {
     setIsDialogOpen_button(true);
+    detailWeightInputRef.current.focus();
   };
   
   const closeDialog_button = () => {
@@ -363,11 +450,15 @@ export default function Scrap_Record_Weight_Daily_Transaction({ onSearch }) {
   const handleSaveData = () => {
 
     if (detailWeightSum < parseFloat(editedTotalWeight)) {
-      console.log("Step 1");
+      // console.log("Step 1");
+      // console.log("detailWeightSum" , detailWeightSum);
       openDialog_button();
     } else if (detailWeightSum == 0 || parseFloat(editedTotalWeight) == '') {
-      console.log("Step 2");
+      // console.log("Step 2");
       openDialog_button();
+    } else if (detailWeightSum > parseFloat(editedTotalWeight)) {
+      // console.log("Step 3");
+      openDialog();
     } else {
       // Display a confirmation dialog using SweetAlert
       const swalWithZIndex = Swal.mixin({
@@ -424,7 +515,10 @@ export default function Scrap_Record_Weight_Daily_Transaction({ onSearch }) {
                 text: "Data record weight saved successfully",
                 confirmButtonText: "OK",
               });
-  
+              setIsEditing_Edit(true);
+              setCheckStatusDelete("N")
+              setCheckUpdate(0)
+
               // Close the modal
               // handleCloseModal();
             })
@@ -481,6 +575,8 @@ export default function Scrap_Record_Weight_Daily_Transaction({ onSearch }) {
                 text: "Data record weight Deleteed successfully",
                 confirmButtonText: "OK",
               });
+              setCheckStatusDelete("N")
+              setCheckUpdate(0)
   
               // Close the modal
               // handleCloseModal();
@@ -550,7 +646,7 @@ export default function Scrap_Record_Weight_Daily_Transaction({ onSearch }) {
           aria-describedby="key-weight-modal-description"
         >
           
-          <Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: 900, bgcolor: '#AED2FF', boxShadow: 24, p: 4 }}>
+          <Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: 950, bgcolor: '#AED2FF', boxShadow: 24, p: 4 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '5px' , fontFamily: 'Lucida Sans'}}>
                 <div style={{textAlign: 'center' , fontWeight: 'bold' , fontSize: '20px' , marginBottom: '10px'}}>
                     <label htmlFor="" >Key weight details by item scrap</label>
@@ -561,7 +657,7 @@ export default function Scrap_Record_Weight_Daily_Transaction({ onSearch }) {
                     </IconButton>
                 </div>
             </div>
-            <div style={{ height: 655}}>
+            <div style={{ height: 655 , width: '100%'}}>
                 <div style={{  height: 140 , backgroundColor: '#E4F1FF' , borderRadius: 15 }}>
                     <div>
                       <label style={{marginLeft: '28px' ,marginTop: '15px' , fontSize: 16}}>Date take off :</label>
@@ -600,19 +696,23 @@ export default function Scrap_Record_Weight_Daily_Transaction({ onSearch }) {
                         Edit
                   </Button>
                   
-                  <label style={{marginLeft: '5px' , marginTop: '5px' , color: 'brown'}}>(Double click for Edit)</label>
-                 
-                  {showLblSum && (
-                      <label id="lbl_sum" style={{ marginLeft: '170px', marginTop: '5px', color: labelColor }}>
+                  {/* <label style={{marginLeft: '5px' , marginTop: '5px' , color: 'brown'}}>(Double click for Edit)</label> */}
+                  
+                  {/* <label htmlFor="" style={{marginLeft: '50px' , marginTop: '5px'}}>( Total :</label> */}
+                  <label htmlFor="" style={{marginLeft: '20px' , marginTop: '5px' , marginRight: '5px'}}>(</label>
+                  {showLblSum && roundedTotalWeight > 0 && CheckStatusDelete == "N" && CheckUpdate == 0 &&(
+                      <label id="lbl_sum" style={{ marginTop: '5px', color: labelColor }}>
                           {roundedTotalWeight}
                       </label>
                   )}
 
+                  {/* <label htmlFor="" style={{marginLeft: '35px' , marginTop: '5px'}}>( Detail :</label>   */}
                   {showLblDet && detailWeightSum > 0 && (
-                      <label id="lbl_det" style={{ marginLeft: '200px', marginTop: '5px', color: labelColor_detail }}>
+                      <label id="lbl_det" style={{marginTop: '5px', color: labelColor_detail }}>
                           {detailWeightSum.toFixed(2)}
                       </label>
                   )}
+                  <label htmlFor="" style={{ marginTop: '5px'  ,marginLeft: '5px' }}> )</label>
 
                 </div>
                 <div >
@@ -631,7 +731,7 @@ export default function Scrap_Record_Weight_Daily_Transaction({ onSearch }) {
                         disabled={!isEditing || editedDetailWeightDisabled}
                       />
                 </div>
-                <Box sx={{width: 830 , height: 400 , marginTop: '5px' , backgroundColor: '#E4F1FF' , boxShadow: '5px 5px 10px grey'}}>
+                <Box sx={{width: 885 , height: 400 , marginTop: '5px' , backgroundColor: '#E4F1FF' , boxShadow: '5px 5px 10px grey'}}>
                   {isLoading ? (
                     <CircularProgress /> // Display a loading spinner while data is being fetched
                   ) : (
@@ -639,21 +739,19 @@ export default function Scrap_Record_Weight_Daily_Transaction({ onSearch }) {
                       id="Datagrid-modal"
                       columns={columns_modal}
                       rows={distinct_weight_details}
-                      editRowsModel={editRowsModel}
-                      onEditRowsModelChange={handleEditRowsModelChange}
                     />
                   )}
                 </Box>
                
-              <div style={{ display: 'flex', justifyContent: 'flex-end' , marginTop: 8}}>
-                <Button variant="contained" startIcon={<DeleteIcon />} onClick={handleDeleteData} className="btn_hover" style={{backgroundColor: '#FE0000' , color: 'white' , width: 120 , height: 40 , marginRight: 470 , boxShadow: '3px 3px 5px grey'}}>
+              <div style={{ display: 'flex', justifyContent: 'flex-end' , marginTop: 10}}>
+                <Button variant="contained" startIcon={<DeleteIcon />} onClick={handleDeleteData} className="btn_hover" style={{backgroundColor: '#FE0000' , color: 'white' , width: 120 , height: 40 , marginRight: 520 , boxShadow: '3px 3px 5px grey'}}>
                     Delete
                 </Button>
                 <Button variant="contained" startIcon={<CancelIcon />} onClick={handleCloseModal} className="btn_hover" style={{backgroundColor: 'lightgray' , color: 'black' , width: 120 , height: 40 , marginRight: 10 , boxShadow: '3px 3px 5px grey'}}>
                     Cancel
                 </Button>
                 
-                <Button variant="contained" endIcon={<VerticalAlignBottomIcon />} onClick={handleSaveData} className="btn_hover" style={{backgroundColor: 'lightgreen' , color: 'black' , width: 120 , height: 40 , boxShadow: '3px 3px 5px grey'}}>
+                <Button variant="contained" endIcon={<VerticalAlignBottomIcon />} onClick={handleSaveData} className="btn_hover" style={{backgroundColor: 'lightgreen' , color: 'black' , width: 120 , marginRight: 5 , height: 40 , boxShadow: '3px 3px 5px grey'}}>
                     Confirm
                 </Button>
               </div>
@@ -668,7 +766,7 @@ export default function Scrap_Record_Weight_Daily_Transaction({ onSearch }) {
             </DialogContentText>
           </DialogContent>
           <DialogActions style={{backgroundColor: '#9EDDFF' , height: 50}}>
-            <Button onClick={() => { closeDialog(); handleCloseModal(); }} style={{width: 100 , backgroundColor: '#7C81AD' , borderRadius:5 , border: '1px solid black' , color: 'white'}}>
+            <Button onClick={() => { closeDialog(); }} style={{width: 100 , backgroundColor: '#7C81AD' , borderRadius:5 , border: '1px solid black' , color: 'white'}}>
               OK
             </Button>
           </DialogActions>

@@ -72,7 +72,7 @@ function Smart_Scrap_SearchFactoryGroup({ onSearch }) {
             group: selectedGroup.group,
             date_take_of: formattedDate,
         };
-        console.log('Query Params:', queryParams);
+        // console.log('Query Params:', queryParams);
         onSearch(queryParams);
     };
 

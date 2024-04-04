@@ -148,6 +148,7 @@ export default function Scrap_Record_Weight_Daily_Transaction({ onSearch }) {
   ]
 
   const [CheckStatusDelete, setCheckStatusDelete] = useState('N');
+  const [CheckStatusAdd, setCheckStatusAdd] = useState('N');
 
   const handleDelete = (id , waste_weight) => {
     const updatedRows = distinct_weight_details.filter(row => row.id !== id);
@@ -167,17 +168,54 @@ export default function Scrap_Record_Weight_Daily_Transaction({ onSearch }) {
     // console.log("waste_Del" , waste_Del);
 
     if (roundedTotalWeight == 0) {
+      // console.log("roundedTotalWeight == 0");
       let UpdateroundedDetailWeightSum = (detailWeightSum - waste_Del).toFixed(2);
       setDetailWeightSum(parseFloat(UpdateroundedDetailWeightSum))
-    } else {
-      let UpdateroundedTotalWeight = (roundedTotalWeight - waste_Del).toFixed(2);
-      setRoundedTotalWeight(parseFloat(UpdateroundedTotalWeight))
-      setDetailWeightSum(parseFloat(UpdateroundedTotalWeight));
+    } 
+    // else if (roundedTotalWeight > 0 && CheckStatusDelete == 'N') {
+    //   console.log("roundedTotalWeight >> 0 && N");
+
+    //   let roundedTotalWeightNumber = Number(roundedTotalWeight);
+    //   let waste_DelNumber = Number(waste_Del);
+    
+    //   let UpdateroundedTotalWeight = (roundedTotalWeightNumber + waste_DelNumber).toFixed(2);
+
+    //   let UpdateroundedTotalWeight_2 = (UpdateroundedTotalWeight - waste_DelNumber).toFixed(2);
+
+    //   setRoundedTotalWeight(parseFloat(UpdateroundedTotalWeight_2))
+    //   setDetailWeightSum(parseFloat(UpdateroundedTotalWeight_2));
+    // } 
+    else {
+      // console.log("roundedTotalWeight >> 0");
+      // console.log("------------------------");
+      // console.log("roundedTotalWeight ===" , roundedTotalWeight);
+      // console.log("detailWeightSum ===" , detailWeightSum);
+      // console.log("------------------------");
+      // console.log("Type Round" , typeof roundedTotalWeight);
+      // console.log("Type Detail" , typeof detailWeightSum);
+
+      if (CheckStatusAdd == 'Y') {
+        // console.log("------------------------");
+        // console.log("CheckStatusAdd" , CheckStatusAdd);
+        // console.log('Add Y');
+        let UpdateroundedTotalWeight = (detailWeightSum - waste_Del).toFixed(2);
+        // console.log("------------------------");
+        // console.log("UpdateroundedTotalWeight ===" , UpdateroundedTotalWeight);
+        setRoundedTotalWeight(parseFloat(UpdateroundedTotalWeight))
+        setDetailWeightSum(parseFloat(UpdateroundedTotalWeight));
+      }
+      else {
+        let UpdateroundedTotalWeight = (roundedTotalWeight - waste_Del).toFixed(2);
+        // console.log("------------------------");
+        // console.log("UpdateroundedTotalWeight ===" , UpdateroundedTotalWeight);
+        setRoundedTotalWeight(parseFloat(UpdateroundedTotalWeight))
+        setDetailWeightSum(parseFloat(UpdateroundedTotalWeight));
+      }
     }
     setCheckStatusDelete("Y")
     detailWeightInputRef.current.focus();
   };
-  console.log("distinct_weight_details" , distinct_weight_details);
+  // console.log("distinct_weight_details" , distinct_weight_details);
 
   const handleTotalChange = (id, value) => {
     const updatedRows = distinct_record_weight.map((row) =>
@@ -211,6 +249,7 @@ export default function Scrap_Record_Weight_Daily_Transaction({ onSearch }) {
     setShowLblSum(true);
     setIsEditing_Edit(true);
     setCheckStatusDelete("N")
+    setCheckStatusAdd('N')
     setCheckUpdate(0)
   };
 
@@ -431,7 +470,7 @@ export default function Scrap_Record_Weight_Daily_Transaction({ onSearch }) {
         // console.log("Round > 0");
         updateDetailWeightSum_X(inputData);
       }
-        
+      setCheckStatusAdd('Y')
       setInputData('');
     }
   };
@@ -517,6 +556,7 @@ export default function Scrap_Record_Weight_Daily_Transaction({ onSearch }) {
               });
               setIsEditing_Edit(true);
               setCheckStatusDelete("N")
+              setCheckStatusAdd('N')
               setCheckUpdate(0)
 
               // Close the modal
@@ -576,6 +616,7 @@ export default function Scrap_Record_Weight_Daily_Transaction({ onSearch }) {
                 confirmButtonText: "OK",
               });
               setCheckStatusDelete("N")
+              setCheckStatusAdd('N')
               setCheckUpdate(0)
   
               // Close the modal
@@ -731,7 +772,7 @@ export default function Scrap_Record_Weight_Daily_Transaction({ onSearch }) {
                         disabled={!isEditing || editedDetailWeightDisabled}
                       />
                 </div>
-                <Box sx={{width: 885 , height: 400 , marginTop: '5px' , backgroundColor: '#E4F1FF' , boxShadow: '5px 5px 10px grey'}}>
+                <Box sx={{width: 900 , height: 400 , marginTop: '5px' , backgroundColor: '#E4F1FF' , boxShadow: '5px 5px 10px grey'}}>
                   {isLoading ? (
                     <CircularProgress /> // Display a loading spinner while data is being fetched
                   ) : (

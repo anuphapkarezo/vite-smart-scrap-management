@@ -166,10 +166,14 @@ export default function Navbar({ onToggle }) {
         setMenuName("Monthly Monitoring by Group and Factory");
         setMenuIcon(<img src="/factory.png" alt="" width={30} />);
         break;
-        case "/env_scrap_monthly_monitoring_by_item":
-          setMenuName("Monthly monitoring by Item (Weight,Amount)");
-          setMenuIcon(<img src="/item.png" alt="" width={30} />);
-          break;
+      case "/env_scrap_monthly_monitoring_by_item":
+        setMenuName("Monthly monitoring by Item (Weight,Amount)");
+        setMenuIcon(<img src="/item.png" alt="" width={30} />);
+        break;
+      case "/env_scrap_moi_waste_master":
+        setMenuName("MOI Waste Item Master");
+        setMenuIcon(<img src="/moi-1.png" alt="" width={30} />);
+        break;
       default:
         setMenuName("Smart Waste Management");
         setMenuIcon(<img src="/dashboard1.png" alt="" width={30} />);
@@ -617,6 +621,47 @@ export default function Navbar({ onToggle }) {
                 </ListItemIcon>
                 <ListItemText
                   primary="Monitoring by Item"
+                  sx={{ opacity: open ? 1 : 0 }}
+                />
+              </ListItemButton>
+            </ListItem>
+            </div>
+          </List>
+
+          {/* // MOI Waste Item Master*/}
+          <List open={open}>
+            <div className={`${getUserRoleNo === 3 || getUserRoleNo === 2 ? "hidden" : "block"}`}>
+            <ListItem
+              onClick={() => setMenuName("MOI Master")}
+              disablePadding
+              sx={{ display: "block", color: "black" }}
+              component={Link}
+              to="/env_scrap_moi_waste_master"
+            >
+              <ListItemButton
+                sx={{
+                  minHeight: 48,
+                  justifyContent: open ? "initial" : "center",
+                  px: 2.5,
+                }}
+              >
+                <ListItemIcon
+                  sx={{
+                    minWidth: 0,
+                    mr: open ? 3 : "auto",
+                    justifyContent: "center",
+                    color: "inherit", // Set initial color
+                    "&:hover": {
+                      color: "primary.main", // Change color on hover
+                    },
+                  }}
+                >
+                  <img src="/moi-1.png" alt="" width={30} />
+                  {/* <ScaleOutlinedIcon />
+                   */}
+                </ListItemIcon>
+                <ListItemText
+                  primary="MOI Master"
                   sx={{ opacity: open ? 1 : 0 }}
                 />
               </ListItemButton>

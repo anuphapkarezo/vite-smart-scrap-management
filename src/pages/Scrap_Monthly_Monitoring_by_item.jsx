@@ -21,6 +21,9 @@ export default function Scrap_Monthly_Monitoring_by_item({ onSearch }) {
 
   const [distinctMonthInv, setDistinctMonthInv] = useState(null);
   const [distinctWasteItem, setDistinctWasteItem] = useState(null);
+  const [distinctWasteDescription, setDistinctWasteDescription] = useState(null);
+  const [distinctWasteFactory, setDistinctWasteFactory] = useState(null);
+  const [distinctWasteGroup, setDistinctWasteGroup] = useState(null);
 
   const [distinctDetailsItem, setDistinctDetailsItem] = useState(null);
   const [distinctDetailsWeight, setDistinctDetailsWeight] = useState(null);
@@ -45,17 +48,28 @@ export default function Scrap_Monthly_Monitoring_by_item({ onSearch }) {
     try {
       const response = await axios.get(`http://10.17.100.115:3001/api/smart_scrap/filter-data-waste-item-table?from_year=${selectedFromYear}&to_year=${selectedToYear}&factory=${selectedFactory}&group=${selectedGroup}`);
       const data  = response.data;
+
+      const wasteItems = data.map(item => item.waste_item);
+      const wasteDescriptions = data.map(item => item.waste_description_en);
+      const wasteFactory = data.map(item => item.factory);
+      const wasteGroup = data.map(item => item.waste_group_name);
+
       // const data = await response.data;
-      setDistinctWasteItem(data);
+      setDistinctWasteItem(wasteItems);
+      setDistinctWasteDescription(wasteDescriptions);
+      setDistinctWasteFactory(wasteFactory);
+      setDistinctWasteGroup(wasteGroup);
     } catch (error) {
       console.error(`Error fetching distinct data Group List: ${error}`);
     }
   };
 
+
   const fetchDetailsItem = async () => {
     try {
       const response = await axios.get(`http://10.17.100.115:3001/api/smart_scrap/filter-data-monitoring-by-item?from_year=${selectedFromYear}&to_year=${selectedToYear}&factory=${selectedFactory}&group=${selectedGroup}`);
       const data  = response.data;
+      console.log("data" , data);
       setDistinctDetailsItem(data);
     } catch (error) {
       console.error(`Error fetching distinct data Group List: ${error}`);
@@ -104,7 +118,7 @@ export default function Scrap_Monthly_Monitoring_by_item({ onSearch }) {
     // Sort months chronologically
     months.sort((a, b) => new Date(a.split('-')[1], a.split('-')[0] - 1) - new Date(b.split('-')[1], b.split('-')[0] - 1));
 
-    let csvContent = "Waste Item / Month," + months.join(',') + "\n";
+    let csvContent = "Waste Group,Waste Item,Waste Description,Factory," + months.join(',') + "\n";
 
     // Create an object to store total weights for each waste item
     const totalAmount = {};
@@ -129,10 +143,19 @@ export default function Scrap_Monthly_Monitoring_by_item({ onSearch }) {
 
     // Add data rows
     sortedWasteItems.forEach(wasteItem => {
-        csvContent += `${wasteItem}`;
+        const descriptionIndex = distinctWasteItem.indexOf(wasteItem);
+        const wasteDescription = distinctWasteDescription[descriptionIndex];
+
+        const factoryIndex = distinctWasteItem.indexOf(wasteItem);
+        const wasteFactory = distinctWasteFactory[factoryIndex];
+
+        const groupIndex = distinctWasteItem.indexOf(wasteItem);
+        const wasteGroup = distinctWasteGroup[groupIndex];
+
+        csvContent += `${wasteGroup},${wasteItem},${wasteDescription},${wasteFactory}`;
         months.forEach(month => {
             const weight = totalAmount[wasteItem][month] || 0; // Use 0 if weight is not available
-            csvContent += `,${weight}`;
+            csvContent += `,${weight.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
         });
         csvContent += "\n";
     });
@@ -169,7 +192,7 @@ export default function Scrap_Monthly_Monitoring_by_item({ onSearch }) {
     // Sort months chronologically
     months.sort((a, b) => new Date(a.split('-')[1], a.split('-')[0] - 1) - new Date(b.split('-')[1], b.split('-')[0] - 1));
 
-    let csvContent = "Waste Item / Month," + months.join(',') + "\n";
+    let csvContent = "Waste Group,Waste Item,Waste Description,Factory," + months.join(',') + "\n";
 
     // Create an object to store total weights for each waste item
     const totalWeights = {};
@@ -194,12 +217,20 @@ export default function Scrap_Monthly_Monitoring_by_item({ onSearch }) {
 
     // Add data rows
     sortedWasteItems.forEach(wasteItem => {
-        csvContent += `${wasteItem}`;
-        months.forEach(month => {
-            const weight = totalWeights[wasteItem][month] || 0; // Use 0 if weight is not available
-            csvContent += `,${weight}`;
-        });
-        csvContent += "\n";
+      const descriptionIndex = distinctWasteItem.indexOf(wasteItem);
+      const wasteDescription = distinctWasteDescription[descriptionIndex];
+      const factoryIndex = distinctWasteItem.indexOf(wasteItem);
+      const wasteFactory = distinctWasteFactory[factoryIndex];
+
+      const groupIndex = distinctWasteItem.indexOf(wasteItem);
+      const wasteGroup = distinctWasteGroup[groupIndex];
+
+      csvContent += `${wasteGroup},${wasteItem},${wasteDescription},${wasteFactory}`;
+      months.forEach(month => {
+          const weight = totalWeights[wasteItem][month] || 0; // Use 0 if weight is not available
+          csvContent += `,${weight}`;
+      });
+      csvContent += "\n";
     });
 
     // Trigger download
@@ -256,7 +287,43 @@ export default function Scrap_Monthly_Monitoring_by_item({ onSearch }) {
                                   border: 'solid black 1px'
                                 }}
                               >
-                                Waste Item / Month
+                                Group Name
+                              </th>
+                              <th
+                                style={{
+                                  textAlign: "center",
+                                  backgroundColor: "#8ACDD7",
+                                  height: "40px",
+                                  width: "120px",
+                                  paddingRight: 5,
+                                  border: 'solid black 1px'
+                                }}
+                              >
+                                Waste Item
+                              </th>
+                              <th
+                                style={{
+                                  textAlign: "center",
+                                  backgroundColor: "#8ACDD7",
+                                  height: "40px",
+                                  width: "250px",
+                                  paddingRight: 5,
+                                  border: 'solid black 1px'
+                                }}
+                              >
+                                Waste Description
+                              </th>
+                              <th
+                                style={{
+                                  textAlign: "center",
+                                  backgroundColor: "#8ACDD7",
+                                  height: "40px",
+                                  width: "80px",
+                                  paddingRight: 5,
+                                  border: 'solid black 1px'
+                                }}
+                              >
+                                Factory
                               </th>
                               {distinctMonthInv && distinctMonthInv.map((item, index) => {
                                   return (
@@ -281,15 +348,45 @@ export default function Scrap_Monthly_Monitoring_by_item({ onSearch }) {
                                   <tr key={index}>
                                       <td
                                           style={{
+                                              textAlign: "left",
+                                              border: 'solid black 1px',
+                                              backgroundColor: '#F1EFEF'
+                                          }}
+                                      >
+                                          {distinctWasteGroup[index]}
+                                          {/* Waste Descriptions */}
+                                      </td>
+                                      <td
+                                          style={{
                                               textAlign: "center",
                                               border: 'solid black 1px',
                                               backgroundColor: '#F1EFEF'
                                           }}
                                       >
-                                          {item.waste_item} {/* Assuming item is the correct object */}
+                                          {item}
+                                      </td>
+                                      <td
+                                          style={{
+                                              textAlign: "left",
+                                              border: 'solid black 1px',
+                                              backgroundColor: '#F1EFEF'
+                                          }}
+                                      >
+                                          {distinctWasteDescription[index]}
+                                          {/* Waste Descriptions */}
+                                      </td>
+                                      <td
+                                          style={{
+                                              textAlign: "center",
+                                              border: 'solid black 1px',
+                                              backgroundColor: '#F1EFEF'
+                                          }}
+                                      >
+                                          {distinctWasteFactory[index]}
+                                          {/* Waste Factory */}
                                       </td>
                                       {distinctMonthInv && distinctMonthInv.map((monthInv, idx) => {
-                                          const detailItem = distinctDetailsItem && distinctDetailsItem.find(detail => detail.month_inv === monthInv.month_inv && detail.waste_item === item.waste_item);
+                                          const detailItem = distinctDetailsItem && distinctDetailsItem.find(detail => detail.month_inv === monthInv.month_inv && detail.waste_item === item);
                                           return (
                                               <td
                                                   key={idx}
@@ -337,7 +434,43 @@ export default function Scrap_Monthly_Monitoring_by_item({ onSearch }) {
                                   border: 'solid black 1px'
                                 }}
                               >
-                                Waste Item / Month
+                                Group Name
+                              </th>
+                              <th
+                                style={{
+                                  textAlign: "center",
+                                  backgroundColor: "#8ACDD7",
+                                  height: "40px",
+                                  width: "120px",
+                                  paddingRight: 5,
+                                  border: 'solid black 1px'
+                                }}
+                              >
+                                Waste Item
+                              </th>
+                              <th
+                                style={{
+                                  textAlign: "center",
+                                  backgroundColor: "#8ACDD7",
+                                  height: "40px",
+                                  width: "250px",
+                                  paddingRight: 5,
+                                  border: 'solid black 1px'
+                                }}
+                              >
+                                Waste Description
+                              </th>
+                              <th
+                                style={{
+                                  textAlign: "center",
+                                  backgroundColor: "#8ACDD7",
+                                  height: "40px",
+                                  width: "80px",
+                                  paddingRight: 5,
+                                  border: 'solid black 1px'
+                                }}
+                              >
+                                Factory
                               </th>
                               {distinctMonthInv && distinctMonthInv.map((item, index) => {
                                   return (
@@ -362,15 +495,44 @@ export default function Scrap_Monthly_Monitoring_by_item({ onSearch }) {
                                   <tr key={index}>
                                       <td
                                           style={{
+                                              textAlign: "left",
+                                              border: 'solid black 1px',
+                                              backgroundColor: '#F1EFEF'
+                                          }}
+                                      >
+                                          {distinctWasteGroup[index]}
+                                          {/* Waste Descriptions */}
+                                      </td>
+                                      <td
+                                          style={{
                                               textAlign: "center",
                                               border: 'solid black 1px',
                                               backgroundColor: '#F1EFEF'
                                           }}
                                       >
-                                          {item.waste_item} {/* Assuming item is the correct object */}
+                                          {item} {/* Assuming item is the correct object */}
+                                      </td>
+                                      <td
+                                          style={{
+                                              textAlign: "left",
+                                              border: 'solid black 1px',
+                                              backgroundColor: '#F1EFEF'
+                                          }}
+                                      >
+                                          {distinctWasteDescription[index]}
+                                      </td>
+                                      <td
+                                          style={{
+                                              textAlign: "center",
+                                              border: 'solid black 1px',
+                                              backgroundColor: '#F1EFEF'
+                                          }}
+                                      >
+                                          {distinctWasteFactory[index]}
+                                          {/* Waste Factory */}
                                       </td>
                                       {distinctMonthInv && distinctMonthInv.map((monthInv, idx) => {
-                                          const detailWeight = distinctDetailsWeight && distinctDetailsWeight.find(detail => detail.month_inv === monthInv.month_inv && detail.waste_item === item.waste_item);
+                                          const detailWeight = distinctDetailsWeight && distinctDetailsWeight.find(detail => detail.month_inv === monthInv.month_inv && detail.waste_item === item);
                                           return (
                                               <td
                                                   key={idx}

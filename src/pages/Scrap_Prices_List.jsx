@@ -49,7 +49,7 @@ export default function Scrap_Prices_List({ onSearch }) {
 
   useEffect(() => {
     fetch_prices_list();
-  }, );
+  }, []);
 
   const columns = [
     { field: 'item_code', headerName: 'Item Code', width: 120 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'center'},

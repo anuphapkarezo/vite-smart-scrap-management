@@ -63,26 +63,25 @@ function Smart_Scrap_SearchMonitorItem({ onSearch }) {
         }
     };
 
-    const fetchWasteItem = async () => {
-        try {
-          const response = await axios.get(`http://10.17.100.115:3001/api/smart_scrap/filter-data-waste-item-sold-waste?from_year=${selectedFromYear.year_inv}&to_year=${selectedToYear.year_inv}&factory=${selectedFactory.factory}&group=${selectedGroup.waste_group_name}`);
-          const dataItem  = response.data;
-        // const dataItem = await response.data;
-          setDistinctItem(dataItem);
-          console.log('Item' , distinctItem);
-        } catch (error) {
-          console.error(`Error fetching distinct data Group List: ${error}`);
-        }
-    };
+    // const fetchWasteItem = async () => {
+    //     try {
+    //       const response = await axios.get(`http://10.17.100.115:3001/api/smart_scrap/filter-data-waste-item-sold-waste?from_year=${selectedFromYear.year_inv}&to_year=${selectedToYear.year_inv}&factory=${selectedFactory.factory}&group=${selectedGroup.waste_group_name}`);
+    //       const dataItem  = response.data;
+    //     // const dataItem = await response.data;
+    //       setDistinctItem(dataItem);
+    //     } catch (error) {
+    //       console.error(`Error fetching distinct data Group List: ${error}`);
+    //     }
+    // };
 
     useEffect(() => {
         fetchYears();
         fetchFactory();
         if (selectedFactory) {
             fetchGroup(selectedFactory.factory);
-            if (selectedGroup) {
-                fetchWasteItem(selectedGroup.group);
-            }
+            // if (selectedGroup) {
+            //     fetchWasteItem(selectedGroup.group);
+            // }
         }
       }, [selectedFactory , selectedGroup]);
 

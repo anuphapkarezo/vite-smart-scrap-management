@@ -383,8 +383,8 @@ export default function Navbar({ onToggle }) {
           </List>
 
           {/* // Master Prices List*/}
+          <div className={`${getUserRoleNo === 3 || getUserRoleNo === 2 ? "hidden" : "block"}`}>
           <List open={open}>
-            <div className={`${getUserRoleNo === 3 || getUserRoleNo === 2 ? "hidden" : "block"}`}>
             <ListItem
               onClick={() => setMenuName("Master Prices List")}
               disablePadding
@@ -420,12 +420,12 @@ export default function Navbar({ onToggle }) {
                 />
               </ListItemButton>
             </ListItem>
-            </div>
           </List>
+          </div>
 
           {/* // Master Company List*/}
+          <div className={`${getUserRoleNo === 3 ? "hidden" : "block"}`}>
           <List open={open}>
-            <div className={`${getUserRoleNo === 3 ? "hidden" : "block"}`}>
             <ListItem
               onClick={() => setMenuName("Master Company List")}
               disablePadding
@@ -461,12 +461,12 @@ export default function Navbar({ onToggle }) {
                 />
               </ListItemButton>
             </ListItem>
-            </div>
           </List>
+          </div>
 
           {/* // Monthly monitoring by Buyer*/}
+          <div className={`${getUserRoleNo === 3 ? "hidden" : "block"}`}>
           <List open={open}>
-            <div className={`${getUserRoleNo === 3 ? "hidden" : "block"}`}>
             <ListItem
               onClick={() => setMenuName("Monthly monitoring by Buyer")}
               disablePadding
@@ -502,12 +502,12 @@ export default function Navbar({ onToggle }) {
                 />
               </ListItemButton>
             </ListItem>
-            </div>
           </List>
+          </div>
 
           {/* // Monthly monitoring by Group*/}
+          <div className={`${getUserRoleNo === 3 ? "hidden" : "block"}`}>
           <List open={open}>
-            <div className={`${getUserRoleNo === 3 ? "hidden" : "block"}`}>
             <ListItem
               onClick={() => setMenuName("Monthly monitoring by Group")}
               disablePadding
@@ -543,12 +543,12 @@ export default function Navbar({ onToggle }) {
                 />
               </ListItemButton>
             </ListItem>
-            </div>
           </List>
+          </div>
 
           {/* // Monthly monitoring by Group and Factory*/}
+          <div className={`${getUserRoleNo === 3 ? "hidden" : "block"}`}>
           <List open={open}>
-            <div className={`${getUserRoleNo === 3 ? "hidden" : "block"}`}>
             <ListItem
               onClick={() => setMenuName("Monthly monitoring by Group and Factory")}
               disablePadding
@@ -584,12 +584,12 @@ export default function Navbar({ onToggle }) {
                 />
               </ListItemButton>
             </ListItem>
-            </div>
           </List>
+          </div>
 
           {/* // Monthly monitoring by Item*/}
+          <div className={`${getUserRoleNo === 3 ? "hidden" : "block"}`}>
           <List open={open}>
-            <div className={`${getUserRoleNo === 3 ? "hidden" : "block"}`}>
             <ListItem
               onClick={() => setMenuName("Monthly monitoring by Item (Weight,Amount)")}
               disablePadding
@@ -625,12 +625,12 @@ export default function Navbar({ onToggle }) {
                 />
               </ListItemButton>
             </ListItem>
-            </div>
           </List>
+          </div>
 
           {/* // MOI Waste Item Master*/}
+          <div className={`${getUserRoleNo === 3 ? "hidden" : "block"}`}>
           <List open={open}>
-            <div className={`${getUserRoleNo === 3 || getUserRoleNo === 2 ? "hidden" : "block"}`}>
             <ListItem
               onClick={() => setMenuName("MOI Master")}
               disablePadding
@@ -666,8 +666,10 @@ export default function Navbar({ onToggle }) {
                 />
               </ListItemButton>
             </ListItem>
-            </div>
+            {/* </div> */}
           </List>
+          </div>
+          {/* </div> */}
           {/* ---- */}
         </Drawer>
       </Box>

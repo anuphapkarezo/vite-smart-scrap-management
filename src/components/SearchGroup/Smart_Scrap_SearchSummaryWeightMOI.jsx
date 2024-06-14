@@ -12,7 +12,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
 import SearchIcon from '@mui/icons-material/Search';
 
-function Smart_Scrap_SearchSummaryWeight({ onSearch }) {
+function Smart_Scrap_SearchSummaryWeightMOI({ onSearch }) {
     const [error , setError] = useState(null);
 
     //Set Dropdown List
@@ -39,7 +39,7 @@ function Smart_Scrap_SearchSummaryWeight({ onSearch }) {
 
     const fetchGroup = async (factory) => {
         try {
-          const response = await axios.get(`http://10.17.100.115:3001/api/smart_scrap/grouplist-summary?factory=${factory}`);
+          const response = await axios.get(`http://10.17.100.115:3001/api/smart_scrap/grouplist-moi`);
           const dataGroup  = response.data;
         // const dataGroup = await response.data;
           setDistinctGroup(dataGroup);
@@ -86,8 +86,8 @@ function Smart_Scrap_SearchSummaryWeight({ onSearch }) {
         const queryParams = {
             factory: selectedFactory.factory,
             group: selectedGroup.group,
-            From_date_take_of: formattedFromDate,
-            To_date_take_of: formattedToDate,
+            From_date: formattedFromDate,
+            To_date: formattedToDate,
         };
         // console.log('Query Params:', queryParams);
         onSearch(queryParams);
@@ -142,9 +142,9 @@ function Smart_Scrap_SearchSummaryWeight({ onSearch }) {
                                 getOptionLabel={(option) => option && option.group}
                                 value={selectedGroup}
                                 onChange={handleGroupChange}
-                                sx={{ width: 250 , height: '60px' , marginTop: '8px' , marginLeft: '15px'}}
+                                sx={{ width: 350 , height: '60px' , marginTop: '8px' , marginLeft: '15px'}}
                                 // renderInput={(params) => <TextField {...params} label="Group" />}
-                                renderInput={(params) => <TextField {...params} label="Group" />}
+                                renderInput={(params) => <TextField {...params} label="Group MOI" />}
                                 isOptionEqualToValue={(option, value) =>
                                     option && value && option.group === value.group
                                 }
@@ -157,7 +157,7 @@ function Smart_Scrap_SearchSummaryWeight({ onSearch }) {
                                 <DemoContainer components={['DatePicker']}>
                                     <DatePicker 
                                         label="From Date take off" 
-                                        sx={{ height: '60px' , marginLeft: '90px' }}
+                                        sx={{ height: '60px' , marginLeft: '290px' }}
                                         value={selectedFromDate}
                                         onChange={(newDate) => handleFromDateChange(newDate)}
                                         // renderInput={(params) => <TextField {...params} />}
@@ -175,7 +175,7 @@ function Smart_Scrap_SearchSummaryWeight({ onSearch }) {
                                 <DemoContainer components={['DatePicker']}>
                                     <DatePicker 
                                         label="To Date take off" 
-                                        sx={{ height: '60px' , marginLeft: '75px'}}
+                                        sx={{ height: '60px' , marginLeft: '275px'}}
                                         value={selectedToDate}
                                         onChange={(newDate) => handleToDateChange(newDate)}
                                         // renderInput={(params) => <TextField {...params} />}
@@ -190,7 +190,7 @@ function Smart_Scrap_SearchSummaryWeight({ onSearch }) {
                         <Button 
                             variant="contained" 
                             // size="small"
-                            style={{width: '120px', height: '50px' , marginTop: '10px', marginLeft: '70px' , backgroundColor: '#AEDEFC' , color:'black'}}
+                            style={{width: '120px', height: '50px' , marginTop: '10px', marginLeft: '150px' , backgroundColor: '#AEDEFC' , color:'black'}}
                             onClick={handleSearch}
                             endIcon={<SearchIcon />}
                             >Search
@@ -202,4 +202,4 @@ function Smart_Scrap_SearchSummaryWeight({ onSearch }) {
     );
 }
 
-export default Smart_Scrap_SearchSummaryWeight
+export default Smart_Scrap_SearchSummaryWeightMOI

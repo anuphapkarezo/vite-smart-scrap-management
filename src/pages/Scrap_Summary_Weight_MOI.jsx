@@ -4,10 +4,11 @@ import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import './Scrap_Record_Weight_Daily_Transaction.css'; // Import the CSS file
 import axios from "axios";
 import Smart_Scrap_SearchSummaryWeight from "../components/SearchGroup/Smart_Scrap_SearchSummaryWeight";
+import Smart_Scrap_SearchSummaryWeightMOI from "../components/SearchGroup/Smart_Scrap_SearchSummaryWeightMOI";
 
 import Navbar from "../components/navbar/Navbar";
 
-export default function Scrap_Summary_Weight_Date_Take_Off({ onSearch }) {
+export default function Scrap_Summary_Weight_MOI({ onSearch }) {
   const [selectedFactory, setSelectedFactory] = useState(null);
   const [selectedGroup, setSelectedGroup] = useState(null);
   const [selectedFromDate, setSelectedFromDate] = useState(null);
@@ -36,38 +37,21 @@ export default function Scrap_Summary_Weight_Date_Take_Off({ onSearch }) {
   const fetch_sum_weight = async () => {
     try {
         setIsLoading(true);
-        if (selectedGroup === "All Group") {
-          // const response = await axios.get(`http://10.17.100.115:3001/api/smart_scrap/filter-summary-weight-date-take-off?factory=${selectedFactory}&group=${selectedGroup}&from_dto=${selectedFromDate}&to_dto=${selectedToDate}`);
-          const response = await axios.get(`http://10.17.100.115:3001/api/smart_scrap/filter-summary-weight-date-take-off-no-group?factory=${selectedFactory}&from_dto=${selectedFromDate}&to_dto=${selectedToDate}`);
-          const data = await response.data;
-
-          // Add a unique id property to each row
-          const rowsWithId = data.map((row, index) => ({
-            ...row,
-            id: index, // You can use a better unique identifier here if available
-            sum_weight: parseFloat(row.sum_weight) // Ensure this is a float
-          }));
-          setDistinct_sum_weight(rowsWithId);
-          
-        } 
-        else {
-          const response = await axios.get(`http://10.17.100.115:3001/api/smart_scrap/filter-summary-weight-date-take-off?factory=${selectedFactory}&group=${selectedGroup}&from_dto=${selectedFromDate}&to_dto=${selectedToDate}`);
+          const response = await axios.get(`http://10.17.100.115:3001/api/smart_scrap/filter-summary-waste-moi?from_date=${selectedFromDate}&to_date=${selectedToDate}&factory=${selectedFactory}&grp_moi=${selectedGroup}`);
           const data = await response.data;
           // Add a unique id property to each row
           const rowsWithId = data.map((row, index) => ({
             ...row,
             id: index, // You can use a better unique identifier here if available
-            sum_weight: parseFloat(row.sum_weight) // Ensure this is a float
+            sum_waste_weight: parseFloat(row.sum_waste_weight)
           }));
           setDistinct_sum_weight(rowsWithId);
-        }
-        
         } catch (error) {
         console.error('Error fetching data:', error);
         setError('An error occurred while fetching data record_weight');
-        } finally {
-          setIsLoading(false); // Set isLoading back to false when fetch is complete
-        }
+    } finally {
+      setIsLoading(false); // Set isLoading back to false when fetch is complete
+    }
   };
 
   // useEffect(() => {
@@ -85,19 +69,16 @@ export default function Scrap_Summary_Weight_Date_Take_Off({ onSearch }) {
     { field: 'from_date', headerName: 'From Data', width: 130 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'center'},
     { field: 'to_date', headerName: 'To Data', width: 130 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'center'},
     { field: 'waste_factory_name', headerName: 'Factory', width: 130 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'center'},
-    { field: 'waste_group_code', headerName: 'Group Code', width: 130 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'center'},
-    { field: 'waste_group_name', headerName: 'Group Name', width: 250 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'center'},
-    { field: 'waste_item_code', headerName: 'Waste Code', width: 130 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'center'},
-    { field: 'waste_description_EN', headerName: 'Waste Name', width: 250 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'left'},
-    { field: 'sum_weight', headerName: 'Summary Weight', width: 160 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'right',
+    { field: 'moi_waste_item_code', headerName: 'MOI Code', width: 130 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'left'},
+    { field: 'moi_waste_description', headerName: 'MOI Name', width: 250 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'left'},
+    { field: 'sum_waste_weight', headerName: 'Summary Weight', width: 160 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'right' ,
       valueFormatter: (params) => {
-          if (params.value == null) {
-              return '';
-          }
-          return params.value.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        if (params.value == null) {
+            return '';
+        }
+        return params.value.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
       }
     },
-    // { field: 'waste_update_by', headerName: 'Update By', width: 200 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'center'},
   ]
 
   return (
@@ -107,17 +88,17 @@ export default function Scrap_Summary_Weight_Date_Take_Off({ onSearch }) {
             <div className="w-screen ml-16 mt-20">
                 <div >
                     {/* <Smart_Scrap_SearchFactoryGroup onSearch={onSearch} /> */}
-                    <Smart_Scrap_SearchSummaryWeight
+                    <Smart_Scrap_SearchSummaryWeightMOI
                         onSearch={(queryParams) => {
                         setSelectedFactory(queryParams.factory);
                         setSelectedGroup(queryParams.group);
-                        setSelectedFromDate(queryParams.From_date_take_of);
-                        setSelectedToDate(queryParams.To_date_take_of);
+                        setSelectedFromDate(queryParams.From_date);
+                        setSelectedToDate(queryParams.To_date);
                         }}
                     />
                 </div>
             </div>
-            <Box sx={{width: '1340px' , height: 725 , marginTop: '25px' , marginLeft: '65px'}}>
+            <Box sx={{width: '965px' , height: 725 , marginTop: '25px' , marginLeft: '65px'}}>
                   <DataGrid
                     columns={columns}
                     // disableColumnFilter

@@ -14,6 +14,7 @@ import Scrap_Monthly_Monitoring_by_group from "./pages/Scrap_Monthly_Monitoring_
 import Scrap_Monthly_Monitoring_by_group_factory from "./pages/Scrap_Monthly_Monitoring_by_group_factory";
 import Scrap_Monthly_Monitoring_by_item from "./pages/Scrap_Monthly_Monitoring_by_item";
 import Scrap_MOI_Waste_Master from "./pages/Scrap_MOI_Waste_Master";
+import Scrap_Summary_Weight_MOI from "./pages/Scrap_Summary_Weight_MOI";
 
 export default function App() {
   
@@ -35,6 +36,7 @@ export default function App() {
               <Route path="/env_scrap_monthly_monitoring_by_group_factory" element={<Scrap_Monthly_Monitoring_by_group_factory />}/>
               <Route path="/env_scrap_monthly_monitoring_by_item" element={<Scrap_Monthly_Monitoring_by_item />}/>
               <Route path="/env_scrap_moi_waste_master" element={<Scrap_MOI_Waste_Master />}/>
+              <Route path="/env_scrap_summary_weight_moi" element={<Scrap_Summary_Weight_MOI />}/>
             </Route>
         </Routes>
   );

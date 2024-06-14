@@ -174,6 +174,10 @@ export default function Navbar({ onToggle }) {
         setMenuName("MOI Waste Item Master");
         setMenuIcon(<img src="/moi-1.png" alt="" width={30} />);
         break;
+      case "/env_scrap_summary_weight_moi":
+        setMenuName("Summary Weight Group MOI");
+        setMenuIcon(<img src="/summary-moi.png" alt="" width={30} />);
+        break;
       default:
         setMenuName("Smart Waste Management");
         setMenuIcon(<img src="/dashboard1.png" alt="" width={30} />);
@@ -662,6 +666,47 @@ export default function Navbar({ onToggle }) {
                 </ListItemIcon>
                 <ListItemText
                   primary="MOI Master"
+                  sx={{ opacity: open ? 1 : 0 }}
+                />
+              </ListItemButton>
+            </ListItem>
+            {/* </div> */}
+          </List>
+          </div>
+
+          <div className={`${getUserRoleNo === 3 ? "hidden" : "block"}`}>
+          <List open={open}>
+            <ListItem
+              onClick={() => setMenuName("Summary Weight Group MOI")}
+              disablePadding
+              sx={{ display: "block", color: "black" }}
+              component={Link}
+              to="/env_scrap_summary_weight_moi"
+            >
+              <ListItemButton
+                sx={{
+                  minHeight: 48,
+                  justifyContent: open ? "initial" : "center",
+                  px: 2.5,
+                }}
+              >
+                <ListItemIcon
+                  sx={{
+                    minWidth: 0,
+                    mr: open ? 3 : "auto",
+                    justifyContent: "center",
+                    color: "inherit", // Set initial color
+                    "&:hover": {
+                      color: "primary.main", // Change color on hover
+                    },
+                  }}
+                >
+                  <img src="/summary-moi.png" alt="" width={30} />
+                  {/* <ScaleOutlinedIcon />
+                   */}
+                </ListItemIcon>
+                <ListItemText
+                  primary="Summary Weight MOI"
                   sx={{ opacity: open ? 1 : 0 }}
                 />
               </ListItemButton>

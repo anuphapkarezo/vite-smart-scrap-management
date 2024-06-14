@@ -175,7 +175,7 @@ export default function Navbar({ onToggle }) {
         setMenuIcon(<img src="/moi-1.png" alt="" width={30} />);
         break;
       case "/env_scrap_summary_weight_moi":
-        setMenuName("Summary Weight Group MOI");
+        setMenuName("Summary Weight MOI");
         setMenuIcon(<img src="/summary-moi.png" alt="" width={30} />);
         break;
       default:

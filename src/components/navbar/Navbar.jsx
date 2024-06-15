@@ -14,6 +14,8 @@ import Fuji from "/Fuji.png";
 import { Link } from "react-router-dom";
 import CssBaseline from "@mui/material/CssBaseline";
 import ScaleOutlinedIcon from '@mui/icons-material/ScaleOutlined';
+import { useState } from 'react';
+import ArrowDropDownCircleIcon from '@mui/icons-material/ArrowDropDownCircle';
 
 //*mui icon ******************************************************
 import ComputerIcon from "@mui/icons-material/Computer";
@@ -28,6 +30,7 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  Collapse,
 } from "@mui/material";
 
 import AccountMenu from "./AccountMenu";
@@ -103,6 +106,12 @@ export default function Navbar({ onToggle }) {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
 
+  const [isSubMenuOpen, setIsSubMenuOpen] = useState(false);
+
+  const handleMainItemClick = () => {
+    setIsSubMenuOpen(!isSubMenuOpen);
+  };
+
   const handleDrawerOpen = () => {
     setOpen(true);
     onToggle(true); // Notify parent component
@@ -175,7 +184,7 @@ export default function Navbar({ onToggle }) {
         setMenuIcon(<img src="/moi-1.png" alt="" width={30} />);
         break;
       case "/env_scrap_summary_weight_moi":
-        setMenuName("Summary Weight MOI");
+        setMenuName("Summary Weight Group MOI");
         setMenuIcon(<img src="/summary-moi.png" alt="" width={30} />);
         break;
       default:
@@ -386,334 +395,479 @@ export default function Navbar({ onToggle }) {
             </ListItem>
           </List>
 
-          {/* // Master Prices List*/}
-          <div className={`${getUserRoleNo === 3 || getUserRoleNo === 2 ? "hidden" : "block"}`}>
-          <List open={open}>
-            <ListItem
-              onClick={() => setMenuName("Master Prices List")}
-              disablePadding
-              sx={{ display: "block", color: "black" }}
-              component={Link}
-              to="/env_scrap_prices_list"
-            >
-              <ListItemButton
-                sx={{
-                  minHeight: 48,
-                  justifyContent: open ? "initial" : "center",
-                  px: 2.5,
-                }}
+          {/* // MOI Waste Item Master*/}
+          <div className={`${getUserRoleNo === 3 ? "hidden" : "block"}`}>
+            <List open={open}>
+              <ListItem
+                onClick={() => setMenuName("MOI Master")}
+                disablePadding
+                sx={{ display: "block", color: "black" }}
+                component={Link}
+                to="/env_scrap_moi_waste_master"
               >
-                <ListItemIcon
+                <ListItemButton
                   sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : "auto",
-                    justifyContent: "center",
-                    color: "inherit", // Set initial color
-                    "&:hover": {
-                      color: "primary.main", // Change color on hover
-                    },
+                    minHeight: 48,
+                    justifyContent: open ? "initial" : "center",
+                    px: 2.5,
                   }}
                 >
-                  <img src="/price-list.png" alt="" width={30} />
-                  {/* <ScaleOutlinedIcon />
-                   */}
-                </ListItemIcon>
-                <ListItemText
-                  primary="Master Prices List"
-                  sx={{ opacity: open ? 1 : 0 }}
-                />
-              </ListItemButton>
-            </ListItem>
-          </List>
+                  <ListItemIcon
+                    sx={{
+                      minWidth: 0,
+                      mr: open ? 3 : "auto",
+                      justifyContent: "center",
+                      color: "inherit", // Set initial color
+                      "&:hover": {
+                        color: "primary.main", // Change color on hover
+                      },
+                    }}
+                  >
+                    <img src="/moi-1.png" alt="" width={30} />
+                    {/* <ScaleOutlinedIcon />
+                    */}
+                  </ListItemIcon>
+                  <ListItemText
+                    primary="MOI Master"
+                    sx={{ opacity: open ? 1 : 0 }}
+                  />
+                </ListItemButton>
+              </ListItem>
+              {/* </div> */}
+            </List>
+          </div>
+
+          {/* // Summary Weight Group MOI*/}
+          <div className={`${getUserRoleNo === 3 ? "hidden" : "block"}`}>
+            <List open={open}>
+              <ListItem
+                onClick={() => setMenuName("Summary Weight Group MOI")}
+                disablePadding
+                sx={{ display: "block", color: "black" }}
+                component={Link}
+                to="/env_scrap_summary_weight_moi"
+              >
+                <ListItemButton
+                  sx={{
+                    minHeight: 48,
+                    justifyContent: open ? "initial" : "center",
+                    px: 2.5,
+                  }}
+                >
+                  <ListItemIcon
+                    sx={{
+                      minWidth: 0,
+                      mr: open ? 3 : "auto",
+                      justifyContent: "center",
+                      color: "inherit", // Set initial color
+                      "&:hover": {
+                        color: "primary.main", // Change color on hover
+                      },
+                    }}
+                  >
+                    <img src="/summary-moi.png" alt="" width={30} />
+                    {/* <ScaleOutlinedIcon />
+                    */}
+                  </ListItemIcon>
+                  <ListItemText
+                    primary="Summary Weight MOI"
+                    sx={{ opacity: open ? 1 : 0 }}
+                  />
+                </ListItemButton>
+              </ListItem>
+              {/* </div> */}
+            </List>
+          </div>
+
+          {/* // Master Prices List*/}
+          <div className={`${getUserRoleNo === 3 || getUserRoleNo === 2 ? "hidden" : "block"}`}>
+            <List open={open}>
+              <ListItem
+                onClick={() => setMenuName("Master Prices List")}
+                disablePadding
+                sx={{ display: "block", color: "black" }}
+                component={Link}
+                to="/env_scrap_prices_list"
+              >
+                <ListItemButton
+                  sx={{
+                    minHeight: 48,
+                    justifyContent: open ? "initial" : "center",
+                    px: 2.5,
+                  }}
+                >
+                  <ListItemIcon
+                    sx={{
+                      minWidth: 0,
+                      mr: open ? 3 : "auto",
+                      justifyContent: "center",
+                      color: "inherit", // Set initial color
+                      "&:hover": {
+                        color: "primary.main", // Change color on hover
+                      },
+                    }}
+                  >
+                    <img src="/price-list.png" alt="" width={30} />
+                    {/* <ScaleOutlinedIcon />
+                    */}
+                  </ListItemIcon>
+                  <ListItemText
+                    primary="Master Prices List"
+                    sx={{ opacity: open ? 1 : 0 }}
+                  />
+                </ListItemButton>
+              </ListItem>
+            </List>
           </div>
 
           {/* // Master Company List*/}
           <div className={`${getUserRoleNo === 3 ? "hidden" : "block"}`}>
-          <List open={open}>
-            <ListItem
-              onClick={() => setMenuName("Master Company List")}
-              disablePadding
-              sx={{ display: "block", color: "black" }}
-              component={Link}
-              to="/env_scrap_company_list"
-            >
-              <ListItemButton
-                sx={{
-                  minHeight: 48,
-                  justifyContent: open ? "initial" : "center",
-                  px: 2.5,
-                }}
+            <List open={open}>
+              <ListItem
+                onClick={() => setMenuName("Master Company List")}
+                disablePadding
+                sx={{ display: "block", color: "black" }}
+                component={Link}
+                to="/env_scrap_company_list"
               >
-                <ListItemIcon
+                <ListItemButton
                   sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : "auto",
-                    justifyContent: "center",
-                    color: "inherit", // Set initial color
-                    "&:hover": {
-                      color: "primary.main", // Change color on hover
-                    },
+                    minHeight: 48,
+                    justifyContent: open ? "initial" : "center",
+                    px: 2.5,
                   }}
                 >
-                  <img src="/communicate.png" alt="" width={30} />
-                  {/* <ScaleOutlinedIcon />
-                   */}
-                </ListItemIcon>
-                <ListItemText
-                  primary="Master Company List"
-                  sx={{ opacity: open ? 1 : 0 }}
-                />
-              </ListItemButton>
-            </ListItem>
-          </List>
+                  <ListItemIcon
+                    sx={{
+                      minWidth: 0,
+                      mr: open ? 3 : "auto",
+                      justifyContent: "center",
+                      color: "inherit", // Set initial color
+                      "&:hover": {
+                        color: "primary.main", // Change color on hover
+                      },
+                    }}
+                  >
+                    <img src="/communicate.png" alt="" width={30} />
+                    {/* <ScaleOutlinedIcon />
+                    */}
+                  </ListItemIcon>
+                  <ListItemText
+                    primary="Master Company List"
+                    sx={{ opacity: open ? 1 : 0 }}
+                  />
+                </ListItemButton>
+              </ListItem>
+            </List>
           </div>
 
-          {/* // Monthly monitoring by Buyer*/}
-          <div className={`${getUserRoleNo === 3 ? "hidden" : "block"}`}>
-          <List open={open}>
-            <ListItem
-              onClick={() => setMenuName("Monthly monitoring by Buyer")}
-              disablePadding
-              sx={{ display: "block", color: "black" }}
-              component={Link}
-              to="/env_scrap_monthly_monitoring_by_buyer"
-            >
-              <ListItemButton
-                sx={{
-                  minHeight: 48,
-                  justifyContent: open ? "initial" : "center",
-                  px: 2.5,
-                }}
+          <div>
+            {/* Main List Item */}
+            <List open={open}>
+              <ListItem disablePadding sx={{ display: 'block', color: 'black' }} onClick={handleMainItemClick}>
+                <ListItemButton sx={{ minHeight: 48, justifyContent: open ? 'initial' : 'center', px: 2.5 }}>
+                  <ListItemIcon
+                    sx={{
+                      minWidth: 0,
+                      mr: open ? 3 : 'auto',
+                      justifyContent: 'center',
+                      color: 'inherit',
+                      '&:hover': {
+                        color: 'primary.main',
+                      },
+                    }}
+                  >
+                    <img src="/menu.png" alt="" width={30} />
+                    {/* <ArrowDropDownCircleIcon /> */}
+                  </ListItemIcon>
+                  <ListItemText primary="All Monitoring Menu" sx={{ opacity: open ? 1 : 0 }} />
+                </ListItemButton>
+              </ListItem>
+            </List>
+
+            {/* Submenus */}
+            <Collapse in={isSubMenuOpen} timeout="auto" unmountOnExit>
+              {/* Monthly monitoring by Buyer */}
+              <div className={`${getUserRoleNo === 3 ? 'hidden' : 'block'}`}>
+                <List open={open}>
+                  <ListItem
+                    onClick={() => setMenuName('Monthly monitoring by Buyer')}
+                    disablePadding
+                    sx={{ display: 'block', color: 'black' , marginLeft: 3.5}}
+                    component={Link}
+                    to="/env_scrap_monthly_monitoring_by_buyer"
+                  >
+                    <ListItemButton sx={{ minHeight: 48, justifyContent: open ? 'initial' : 'center', px: 2.5 }}>
+                      <ListItemIcon
+                        sx={{
+                          minWidth: 0,
+                          mr: open ? 3 : 'auto',
+                          justifyContent: 'center',
+                          color: 'inherit',
+                          '&:hover': {
+                            color: 'primary.main',
+                          },
+                        }}
+                      >
+                        <img src="/monitoring-buyer.png" alt="" width={30} />
+                      </ListItemIcon>
+                      <ListItemText primary="by Buyer" sx={{ opacity: open ? 1 : 0 }} />
+                    </ListItemButton>
+                  </ListItem>
+                </List>
+              </div>
+
+              {/* Monthly monitoring by Group */}
+              <div className={`${getUserRoleNo === 3 ? 'hidden' : 'block'}`}>
+                <List open={open}>
+                  <ListItem
+                    onClick={() => setMenuName('Monthly monitoring by Group')}
+                    disablePadding
+                    sx={{ display: 'block', color: 'black' , marginLeft: 3.5}}
+                    component={Link}
+                    to="/env_scrap_monthly_monitoring_by_group"
+                  >
+                    <ListItemButton sx={{ minHeight: 48, justifyContent: open ? 'initial' : 'center', px: 2.5 }}>
+                      <ListItemIcon
+                        sx={{
+                          minWidth: 0,
+                          mr: open ? 3 : 'auto',
+                          justifyContent: 'center',
+                          color: 'inherit',
+                          '&:hover': {
+                            color: 'primary.main',
+                          },
+                        }}
+                      >
+                        <img src="/monitor-group.png" alt="" width={30} />
+                      </ListItemIcon>
+                      <ListItemText primary="by Group" sx={{ opacity: open ? 1 : 0 }} />
+                    </ListItemButton>
+                  </ListItem>
+                </List>
+              </div>
+
+              {/* Monthly monitoring by Group and Factory */}
+              <div className={`${getUserRoleNo === 3 ? 'hidden' : 'block'}`}>
+                <List open={open}>
+                  <ListItem
+                    onClick={() => setMenuName('Monthly monitoring by Group and Factory')}
+                    disablePadding
+                    sx={{ display: 'block', color: 'black' , marginLeft: 3.5}}
+                    component={Link}
+                    to="/env_scrap_monthly_monitoring_by_group_factory"
+                  >
+                    <ListItemButton sx={{ minHeight: 48, justifyContent: open ? 'initial' : 'center', px: 2.5 }}>
+                      <ListItemIcon
+                        sx={{
+                          minWidth: 0,
+                          mr: open ? 3 : 'auto',
+                          justifyContent: 'center',
+                          color: 'inherit',
+                          '&:hover': {
+                            color: 'primary.main',
+                          },
+                          
+                        }}
+                      >
+                        <img src="/factory.png" alt="" width={30} />
+                      </ListItemIcon>
+                      <ListItemText primary="by Group&Factory" sx={{ opacity: open ? 1 : 0 }} />
+                    </ListItemButton>
+                  </ListItem>
+                </List>
+              </div>
+
+              {/* Monthly monitoring by Item */}
+              <div className={`${getUserRoleNo === 3 ? 'hidden' : 'block'}`}>
+                <List open={open}>
+                  <ListItem
+                    onClick={() => setMenuName('Monthly monitoring by Item (Weight,Amount)')}
+                    disablePadding
+                    sx={{ display: 'block', color: 'black' , marginLeft: 3.5}}
+                    component={Link}
+                    to="/env_scrap_monthly_monitoring_by_item"
+                  >
+                    <ListItemButton sx={{ minHeight: 48, justifyContent: open ? 'initial' : 'center', px: 2.5 }}>
+                      <ListItemIcon
+                        sx={{
+                          minWidth: 0,
+                          mr: open ? 3 : 'auto',
+                          justifyContent: 'center',
+                          color: 'inherit',
+                          '&:hover': {
+                            color: 'primary.main',
+                          },
+                        }}
+                      >
+                        <img src="/item.png" alt="" width={30} />
+                      </ListItemIcon>
+                      <ListItemText primary="by Item waste" sx={{ opacity: open ? 1 : 0 }} />
+                    </ListItemButton>
+                  </ListItem>
+                </List>
+              </div>
+            </Collapse>
+          </div>
+
+          {/* // Monthly monitoring by Buyer */}
+          {/* <div className={`${getUserRoleNo === 3 ? "hidden" : "block"}`}>
+            <List open={open}>
+              <ListItem
+                onClick={() => setMenuName("Monthly monitoring by Buyer")}
+                disablePadding
+                sx={{ display: "block", color: "black" }}
+                component={Link}
+                to="/env_scrap_monthly_monitoring_by_buyer"
               >
-                <ListItemIcon
+                <ListItemButton
                   sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : "auto",
-                    justifyContent: "center",
-                    color: "inherit", // Set initial color
-                    "&:hover": {
-                      color: "primary.main", // Change color on hover
-                    },
+                    minHeight: 48,
+                    justifyContent: open ? "initial" : "center",
+                    px: 2.5,
                   }}
                 >
-                  <img src="/monitoring-buyer.png" alt="" width={30} />
-                  {/* <ScaleOutlinedIcon />
-                   */}
-                </ListItemIcon>
-                <ListItemText
-                  primary="Monitoring by Buyer"
-                  sx={{ opacity: open ? 1 : 0 }}
-                />
-              </ListItemButton>
-            </ListItem>
-          </List>
-          </div>
+                  <ListItemIcon
+                    sx={{
+                      minWidth: 0,
+                      mr: open ? 3 : "auto",
+                      justifyContent: "center",
+                      color: "inherit", // Set initial color
+                      "&:hover": {
+                        color: "primary.main", // Change color on hover
+                      },
+                    }}
+                  >
+                    <img src="/monitoring-buyer.png" alt="" width={30} />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary="Monitoring by Buyer"
+                    sx={{ opacity: open ? 1 : 0 }}
+                  />
+                </ListItemButton>
+              </ListItem>
+            </List>
+          </div> */}
 
           {/* // Monthly monitoring by Group*/}
-          <div className={`${getUserRoleNo === 3 ? "hidden" : "block"}`}>
-          <List open={open}>
-            <ListItem
-              onClick={() => setMenuName("Monthly monitoring by Group")}
-              disablePadding
-              sx={{ display: "block", color: "black" }}
-              component={Link}
-              to="/env_scrap_monthly_monitoring_by_group"
-            >
-              <ListItemButton
-                sx={{
-                  minHeight: 48,
-                  justifyContent: open ? "initial" : "center",
-                  px: 2.5,
-                }}
+          {/* <div className={`${getUserRoleNo === 3 ? "hidden" : "block"}`}>
+            <List open={open}>
+              <ListItem
+                onClick={() => setMenuName("Monthly monitoring by Group")}
+                disablePadding
+                sx={{ display: "block", color: "black" }}
+                component={Link}
+                to="/env_scrap_monthly_monitoring_by_group"
               >
-                <ListItemIcon
+                <ListItemButton
                   sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : "auto",
-                    justifyContent: "center",
-                    color: "inherit", // Set initial color
-                    "&:hover": {
-                      color: "primary.main", // Change color on hover
-                    },
+                    minHeight: 48,
+                    justifyContent: open ? "initial" : "center",
+                    px: 2.5,
                   }}
                 >
-                  <img src="/monitor-group.png" alt="" width={30} />
-                  {/* <ScaleOutlinedIcon />
-                   */}
-                </ListItemIcon>
-                <ListItemText
-                  primary="Monitoring by Group"
-                  sx={{ opacity: open ? 1 : 0 }}
-                />
-              </ListItemButton>
-            </ListItem>
-          </List>
-          </div>
+                  <ListItemIcon
+                    sx={{
+                      minWidth: 0,
+                      mr: open ? 3 : "auto",
+                      justifyContent: "center",
+                      color: "inherit", // Set initial color
+                      "&:hover": {
+                        color: "primary.main", // Change color on hover
+                      },
+                    }}
+                  >
+                    <img src="/monitor-group.png" alt="" width={30} />
+                 
+                  </ListItemIcon>
+                  <ListItemText
+                    primary="Monitoring by Group"
+                    sx={{ opacity: open ? 1 : 0 }}
+                  />
+                </ListItemButton>
+              </ListItem>
+            </List>
+          </div> */}
 
           {/* // Monthly monitoring by Group and Factory*/}
-          <div className={`${getUserRoleNo === 3 ? "hidden" : "block"}`}>
-          <List open={open}>
-            <ListItem
-              onClick={() => setMenuName("Monthly monitoring by Group and Factory")}
-              disablePadding
-              sx={{ display: "block", color: "black" }}
-              component={Link}
-              to="/env_scrap_monthly_monitoring_by_group_factory"
-            >
-              <ListItemButton
-                sx={{
-                  minHeight: 48,
-                  justifyContent: open ? "initial" : "center",
-                  px: 2.5,
-                }}
+          {/* <div className={`${getUserRoleNo === 3 ? "hidden" : "block"}`}>
+            <List open={open}>
+              <ListItem
+                onClick={() => setMenuName("Monthly monitoring by Group and Factory")}
+                disablePadding
+                sx={{ display: "block", color: "black" }}
+                component={Link}
+                to="/env_scrap_monthly_monitoring_by_group_factory"
               >
-                <ListItemIcon
+                <ListItemButton
                   sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : "auto",
-                    justifyContent: "center",
-                    color: "inherit", // Set initial color
-                    "&:hover": {
-                      color: "primary.main", // Change color on hover
-                    },
+                    minHeight: 48,
+                    justifyContent: open ? "initial" : "center",
+                    px: 2.5,
                   }}
                 >
-                  <img src="/factory.png" alt="" width={30} />
-                  {/* <ScaleOutlinedIcon />
-                   */}
-                </ListItemIcon>
-                <ListItemText
-                  primary="Monitoring by Group&Factory"
-                  sx={{ opacity: open ? 1 : 0 }}
-                />
-              </ListItemButton>
-            </ListItem>
-          </List>
-          </div>
+                  <ListItemIcon
+                    sx={{
+                      minWidth: 0,
+                      mr: open ? 3 : "auto",
+                      justifyContent: "center",
+                      color: "inherit", // Set initial color
+                      "&:hover": {
+                        color: "primary.main", // Change color on hover
+                      },
+                    }}
+                  >
+                    <img src="/factory.png" alt="" width={30} />
+                
+                  </ListItemIcon>
+                  <ListItemText
+                    primary="Monitoring by Group&Factory"
+                    sx={{ opacity: open ? 1 : 0 }}
+                  />
+                </ListItemButton>
+              </ListItem>
+            </List>
+          </div> */}
 
           {/* // Monthly monitoring by Item*/}
-          <div className={`${getUserRoleNo === 3 ? "hidden" : "block"}`}>
-          <List open={open}>
-            <ListItem
-              onClick={() => setMenuName("Monthly monitoring by Item (Weight,Amount)")}
-              disablePadding
-              sx={{ display: "block", color: "black" }}
-              component={Link}
-              to="/env_scrap_monthly_monitoring_by_item"
-            >
-              <ListItemButton
-                sx={{
-                  minHeight: 48,
-                  justifyContent: open ? "initial" : "center",
-                  px: 2.5,
-                }}
+          {/* <div className={`${getUserRoleNo === 3 ? "hidden" : "block"}`}>
+            <List open={open}>
+              <ListItem
+                onClick={() => setMenuName("Monthly monitoring by Item (Weight,Amount)")}
+                disablePadding
+                sx={{ display: "block", color: "black" }}
+                component={Link}
+                to="/env_scrap_monthly_monitoring_by_item"
               >
-                <ListItemIcon
+                <ListItemButton
                   sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : "auto",
-                    justifyContent: "center",
-                    color: "inherit", // Set initial color
-                    "&:hover": {
-                      color: "primary.main", // Change color on hover
-                    },
+                    minHeight: 48,
+                    justifyContent: open ? "initial" : "center",
+                    px: 2.5,
                   }}
                 >
-                  <img src="/item.png" alt="" width={30} />
-                  {/* <ScaleOutlinedIcon />
-                   */}
-                </ListItemIcon>
-                <ListItemText
-                  primary="Monitoring by Item"
-                  sx={{ opacity: open ? 1 : 0 }}
-                />
-              </ListItemButton>
-            </ListItem>
-          </List>
-          </div>
-
-          {/* // MOI Waste Item Master*/}
-          <div className={`${getUserRoleNo === 3 ? "hidden" : "block"}`}>
-          <List open={open}>
-            <ListItem
-              onClick={() => setMenuName("MOI Master")}
-              disablePadding
-              sx={{ display: "block", color: "black" }}
-              component={Link}
-              to="/env_scrap_moi_waste_master"
-            >
-              <ListItemButton
-                sx={{
-                  minHeight: 48,
-                  justifyContent: open ? "initial" : "center",
-                  px: 2.5,
-                }}
-              >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : "auto",
-                    justifyContent: "center",
-                    color: "inherit", // Set initial color
-                    "&:hover": {
-                      color: "primary.main", // Change color on hover
-                    },
-                  }}
-                >
-                  <img src="/moi-1.png" alt="" width={30} />
-                  {/* <ScaleOutlinedIcon />
-                   */}
-                </ListItemIcon>
-                <ListItemText
-                  primary="MOI Master"
-                  sx={{ opacity: open ? 1 : 0 }}
-                />
-              </ListItemButton>
-            </ListItem>
-            {/* </div> */}
-          </List>
-          </div>
-
-          <div className={`${getUserRoleNo === 3 ? "hidden" : "block"}`}>
-          <List open={open}>
-            <ListItem
-              onClick={() => setMenuName("Summary Weight Group MOI")}
-              disablePadding
-              sx={{ display: "block", color: "black" }}
-              component={Link}
-              to="/env_scrap_summary_weight_moi"
-            >
-              <ListItemButton
-                sx={{
-                  minHeight: 48,
-                  justifyContent: open ? "initial" : "center",
-                  px: 2.5,
-                }}
-              >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : "auto",
-                    justifyContent: "center",
-                    color: "inherit", // Set initial color
-                    "&:hover": {
-                      color: "primary.main", // Change color on hover
-                    },
-                  }}
-                >
-                  <img src="/summary-moi.png" alt="" width={30} />
-                  {/* <ScaleOutlinedIcon />
-                   */}
-                </ListItemIcon>
-                <ListItemText
-                  primary="Summary Weight MOI"
-                  sx={{ opacity: open ? 1 : 0 }}
-                />
-              </ListItemButton>
-            </ListItem>
-            {/* </div> */}
-          </List>
-          </div>
+                  <ListItemIcon
+                    sx={{
+                      minWidth: 0,
+                      mr: open ? 3 : "auto",
+                      justifyContent: "center",
+                      color: "inherit", // Set initial color
+                      "&:hover": {
+                        color: "primary.main", // Change color on hover
+                      },
+                    }}
+                  >
+                    <img src="/item.png" alt="" width={30} />
+                  
+                  </ListItemIcon>
+                  <ListItemText
+                    primary="Monitoring by Item"
+                    sx={{ opacity: open ? 1 : 0 }}
+                  />
+                </ListItemButton>
+              </ListItem>
+            </List>
+          </div> */}
           {/* </div> */}
           {/* ---- */}
         </Drawer>

@@ -23,8 +23,15 @@ import Autocomplete from "@mui/material/Autocomplete";
 export default function Scrap_Waste_Item_Master_List({ onSearch }) {
   const [distinctWasteItemList, setDistinctWasteItemList] = useState([]);
   const [DistinctCountWasteItemMaster, setDistinctCountWasteItemMaster] = useState(0);
+  const [DistinctCountWasteItemMapFactory, setDistinctCountWasteItemMapFactory] = useState(0);
   const [distinctWasteGroupCodeNameList, setDistinctWasteGroupCodeNameList] = useState([]);
   const [distinctMoiItemCodeNamelist, setDistinctMoiItemCodeNamelist] = useState([]);
+  const [distinctWasteMapFactory, setDistinctWasteMapFactory] = useState([]);
+  const [distinctFactory, setDistinctFactory] = useState([]);
+  const [distinctWasteCode, setDistinctWasteCode] = useState([]);
+
+  const [selectedMapFactory, setSelectedMapFactory] = useState(null);
+  const [selectedMapWasteCode, setSelectedMapWasteCode] = useState(null);
 
   const [WasteItem, setWasteItem] = useState('');
   const [WasteGroup, setWasteGroup] = useState('');
@@ -35,6 +42,7 @@ export default function Scrap_Waste_Item_Master_List({ onSearch }) {
 
   const [isNavbarOpen, setIsNavbarOpen] = React.useState(false);
   const [isModalOpenAdd, setIsModalOpenAdd] = useState(false);
+  const [isModalOpenMap, setIsModalOpenMap] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const [isLoading, setIsLoading] = useState(false);
@@ -42,8 +50,15 @@ export default function Scrap_Waste_Item_Master_List({ onSearch }) {
   const [error, setError] = useState(null);
 
   const [columnVisibilityModel, setColumnVisibilityModel] = React.useState({});
+  const [columnVisibilityModelMap, setColumnVisibilityModelMap] = React.useState({});
+
 
   const [filterModel, setFilterModel] = React.useState({
+    items: [],
+    quickFilterExcludeHiddenColumns: true,
+    quickFilterValues: [''],
+  });
+  const [filterModelMap, setFilterModelMap] = React.useState({
     items: [],
     quickFilterExcludeHiddenColumns: true,
     quickFilterValues: [''],
@@ -122,7 +137,7 @@ export default function Scrap_Waste_Item_Master_List({ onSearch }) {
     setDistinctCountWasteItemMaster(0)
   }
 
-  const handleSaveAdd = (newValue) => {
+  const handleSaveAdd = () => {
     const parts = WasteGroup.group_code.split(' / ');
     const GroupCode = parts[0];
 
@@ -196,6 +211,67 @@ export default function Scrap_Waste_Item_Master_List({ onSearch }) {
     }
   }
 
+  const handleSaveMap = (newValue) => {
+    const Factory = selectedMapFactory.factory
+    const WasteCode = selectedMapWasteCode.waste_item_code
+    if (Factory === '' || WasteCode === '') {
+      return
+    }
+    
+    if (DistinctCountWasteItemMapFactory > 0) {
+      setSelectedMapFactory(null)
+      setSelectedMapWasteCode(null)
+      handleOpenDialog()
+      return
+    }
+
+    const swalWithZIndex = Swal.mixin({
+      customClass: {
+        popup: 'my-swal-popup', // Define a custom class for the SweetAlert popup
+      },
+    });
+    handleCloseModalMap();
+  
+    swalWithZIndex.fire({
+      title: "Confirm Save",
+      text: "Are you sure want to Map the data?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, Save",
+      cancelButtonText: "Cancel",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .get(
+            `http://10.17.100.115:3001/api/smart_scrap/insert-waste-item-map-factory?waste_item=${WasteCode}&factory=${Factory}`
+          )
+          .then(() => {
+            return fetchWasteMapFactory();
+          })
+          .then(() => {
+            Swal.fire({
+              icon: "success",
+              title: "Save Success",
+              text: "Saved data Waste Item Master successfully",
+              confirmButtonText: "OK",
+            });
+            setSelectedMapFactory(null)
+            setSelectedMapWasteCode(null)
+            setDistinctCountWasteItemMapFactory(0)
+          })
+          .catch((error) => {
+            console.error("Error saving data:", error);
+            Swal.fire({
+              icon: "error",
+              title: "Save Error",
+              text: "An error occurred while saving data",
+              confirmButtonText: "OK",
+            });
+          });
+      } 
+    });
+  }
+
   const handleOpenDialog = () => {
     setIsDialogOpen(true)
   };
@@ -207,6 +283,26 @@ export default function Scrap_Waste_Item_Master_List({ onSearch }) {
     setWasteDescTH('')
     setWasteUnit('')
     setMoiWasteItem('')
+  };
+
+  const handleOpenModalMap = () => {
+    setIsModalOpenMap(true)
+  };
+  const handleCloseModalMap = () => {
+    setIsModalOpenMap(false)
+  };
+
+  const handleUMapFactoryChange = (event, newValue) => {
+    setSelectedMapFactory(newValue);
+  }
+
+  const handleUMapCodeChange = (event, newValue) => {
+    setSelectedMapWasteCode(newValue);
+  }
+
+  const handleCloseMap = () => {
+    setSelectedMapFactory(null)
+    setSelectedMapWasteCode(null)
   };
 
   const fetchWasteMaster = async () => {
@@ -271,14 +367,83 @@ export default function Scrap_Waste_Item_Master_List({ onSearch }) {
       }
   };
 
+  const fetchWasteMapFactory = async () => {
+    try {
+      setIsLoading(true);
+      const response = await axios.get(`http://10.17.100.115:3001/api/smart_scrap/filter-waste-item-map-factory`);
+      const data = await response.data;
+      const rowsWithId = data.map((row, index) => ({
+          ...row,
+          id: index, // You can use a better unique identifier here if available
+      }));
+      setDistinctWasteMapFactory(rowsWithId);
+      } catch (error) {
+      console.error('Error fetching data:', error);
+      setError('An error occurred while fetching data Master prices list');
+      } finally {
+        setIsLoading(false); // Set isLoading back to false when fetch is complete
+      }
+  };
+
+  const fetchFactoryList = async () => {
+    try {
+      setIsLoading(true);
+      const response = await axios.get(`http://10.17.100.115:3001/api/smart_scrap/factorylist`);
+      const data = await response.data;
+      setDistinctFactory(data)
+      } catch (error) {
+      console.error('Error fetching data:', error);
+      setError('An error occurred while fetching data Master prices list');
+      } finally {
+        setIsLoading(false); // Set isLoading back to false when fetch is complete
+      }
+  };
+
+  const fetchWasteCodeList = async () => {
+    try {
+      setIsLoading(true);
+      const response = await axios.get(`http://10.17.100.115:3001/api/smart_scrap/filter-waste-item-list`);
+      const data = await response.data;
+      setDistinctWasteCode(data)
+      } catch (error) {
+      console.error('Error fetching data:', error);
+      setError('An error occurred while fetching data Master prices list');
+      } finally {
+        setIsLoading(false); // Set isLoading back to false when fetch is complete
+      }
+  };
+
+  const fetchCountWasteItemMapFactory = async () => {
+    try {
+      setIsLoading(true);
+      const response = await axios.get(`http://10.17.100.115:3001/api/smart_scrap/filter-count-waste-item-map-factory?Waste_item=${selectedMapWasteCode.waste_item_code}&factory=${selectedMapFactory.factory}`);
+      const data = await response.data;
+      const firstObject = data[0];
+      const count_waste_map = firstObject.count_waste_map;
+      setDistinctCountWasteItemMapFactory(count_waste_map);
+      } catch (error) {
+      console.error('Error fetching data:', error);
+      setError('An error occurred while fetching data Master prices list');
+      } finally {
+        setIsLoading(false); // Set isLoading back to false when fetch is complete
+      }
+  };
+
   useEffect(() => {
     fetchWasteMaster();
     fetchWasteGroupCodeNameList();
     fetchMoiItemCodeNameList();
+    fetchWasteMapFactory();
+    fetchFactoryList();
+    fetchWasteCodeList();
     if (WasteItem) {
       fetchCountWasteItemMaster();      
     }
-  }, [WasteItem]);
+    if (selectedMapWasteCode && selectedMapFactory) {
+      console.log('Fetch Count');
+      fetchCountWasteItemMapFactory();      
+    }
+  }, [WasteItem, selectedMapWasteCode, selectedMapFactory]);
 
   const columns = [
     { field: 'waste_item', headerName: 'Waste Code', width: 120 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'center'},
@@ -291,28 +456,54 @@ export default function Scrap_Waste_Item_Master_List({ onSearch }) {
     { field: 'update_date', headerName: 'Update Date', width: 160 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'left'},
   ]
 
+  const columns_Map = [
+    { field: 'waste_item_code', headerName: 'Waste Code', width: 200 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'left'},
+    { field: 'desc_en', headerName: 'Descriptions', width: 300 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'left'},
+    { field: 'waste_factory_name', headerName: 'Factory', width: 200 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'center'},
+  ]
+
   return (
     <>
         <Navbar onToggle={handleNavbarToggle}/>
         <Box marginLeft={isNavbarOpen ? "220px" : 4} marginTop={10}>
             <Box sx={{width: '1400px' , height: 600 , marginTop: '15px' , marginLeft: '65px'}}>
-                <Button 
-                    variant="contained" 
-                    className="btn_active hover:scale-110"
-                    // size="small"  btn_active hover:scale-110
-                    style={{  width: '260px', 
-                              height: '50px' , 
-                              backgroundColor: '#2B3499' , 
-                              color:'white' ,
-                              fontWeight: 'bold' , 
-                              boxShadow: '5px 5px 5px grey' ,
-                              borderRadius: 20 ,
-                              border: '1px solid black'
-                          }}
-                    onClick={handleOpenModalAdd}
-                    endIcon={<AddToPhotosIcon />}
-                    >ADD WASTE MASTER LIST
-                </Button>
+                <div style={{marginBottom: 15}}>
+                  <Button 
+                      variant="contained" 
+                      className="btn_active hover:scale-110"
+                      // size="small"  btn_active hover:scale-110
+                      style={{  width: '260px', 
+                                height: '50px' , 
+                                backgroundColor: '#2B3499' , 
+                                color:'white' ,
+                                fontWeight: 'bold' , 
+                                boxShadow: '5px 5px 5px grey' ,
+                                borderRadius: 20 ,
+                                border: '1px solid black'
+                            }}
+                      onClick={handleOpenModalAdd}
+                      endIcon={<AddToPhotosIcon />}
+                      >ADD WASTE MASTER LIST
+                  </Button>
+                  <Button 
+                      variant="contained" 
+                      className="btn_active hover:scale-110"
+                      // size="small"  btn_active hover:scale-110
+                      style={{  width: '260px', 
+                                height: '50px' , 
+                                backgroundColor: '#BC9F8B' , 
+                                color:'white' ,
+                                fontWeight: 'bold' , 
+                                boxShadow: '5px 5px 5px grey' ,
+                                borderRadius: 20 ,
+                                border: '1px solid black',
+                                marginLeft: 50
+                            }}
+                      onClick={handleOpenModalMap}
+                      endIcon={<AddToPhotosIcon />}
+                      >WASTE ITEM MAP FACTORY
+                  </Button>
+                </div>
                 <DataGrid
                   columns={columns}
                   // disableColumnFilter
@@ -440,11 +631,88 @@ export default function Scrap_Waste_Item_Master_List({ onSearch }) {
             </div>
             <div style={{display: 'flex', justifyContent: 'flex-end' , marginTop: 15 , height: 45 }}>
               <Button variant="contained" startIcon={<CancelIcon />} onClick={handleUCancelAdd} className="btn_hover" style={{backgroundColor: 'lightgray' , color: 'black' , width: 120 , height: 40 , marginRight: 10 , boxShadow: '3px 3px 5px grey', borderRadius: 10}}>
-                  Cancel
+                  Clear
               </Button> 
               <Button variant="contained" endIcon={<AddToPhotosIcon />} onClick={handleSaveAdd} className="btn_hover" style={{backgroundColor: 'lightgreen' , color: 'black' , width: 120 , height: 40 , boxShadow: '3px 3px 5px grey', borderRadius: 10}}>
                   SAVE
               </Button>
+            </div>
+          </Box>
+        </Modal>
+
+        <Modal
+          open={isModalOpenMap}
+          onClose={handleCloseModalMap}
+          aria-labelledby="key-weight-modal-title"
+          aria-describedby="key-weight-modal-description"
+        >
+          <Box sx={{position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: 785 , height: 680 , bgcolor: '#FFEBD4', boxShadow: 24, p: 4, borderRadius: 5 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between' , height: 20 , marginBottom: 20}}>
+                <div style={{width: '100%' ,fontWeight: 'bold' , fontSize: 20 , textAlign: 'center' }}>
+                    <label htmlFor="" >MAP FACTORY WASTE ITEM</label>
+                </div>
+                <div>
+                    <IconButton onClick={handleCloseModalMap} style={{position: 'absolute', top: '10px', right: '10px',}}>
+                        <CloseIcon style={{fontSize: '25px', color: 'white', backgroundColor: '#E55604'}} /> 
+                    </IconButton>
+                </div>
+            </div>
+            <div style={{display: 'flex'}}>
+              <Autocomplete
+                disablePortal
+                id="combo-box-demo-series"
+                options={distinctWasteCode}
+                getOptionLabel={(option) => option && option.waste_item_code}
+                value={selectedMapWasteCode}
+                onChange={handleUMapCodeChange}
+                sx={{ width: 230 , height: '55px' , backgroundColor: 'white'}}
+                renderInput={(params) => <TextField {...params} label="Waste Item Code" />}
+                isOptionEqualToValue={(option, value) =>
+                    option && value && option.waste_item_code === value.waste_item_code
+                }
+              />
+              <Autocomplete
+                disablePortal
+                id="combo-box-demo-series"
+                options={distinctFactory}
+                getOptionLabel={(option) => option && option.factory}
+                value={selectedMapFactory}
+                onChange={handleUMapFactoryChange}
+                sx={{ width: 230 , height: '55px' , backgroundColor: 'white', marginLeft: 1}}
+                renderInput={(params) => <TextField {...params} label="Factory" />}
+                isOptionEqualToValue={(option, value) =>
+                    option && value && option.factory === value.factory
+                }
+              />
+              <div style={{ marginLeft: 30, marginTop: 10}}>
+              <Button variant="contained" startIcon={<CancelIcon />} onClick={handleCloseMap} className="btn_hover" style={{backgroundColor: 'lightgray' , color: 'black' , width: 100 , height: 40 , marginRight: 10 , boxShadow: '3px 3px 5px grey', borderRadius: 10}}>
+                  Clear
+              </Button> 
+              <Button variant="contained" endIcon={<AddToPhotosIcon />} onClick={handleSaveMap} className="btn_hover" style={{backgroundColor: 'lightgreen' , color: 'black' , width: 100 , height: 40 , boxShadow: '3px 3px 5px grey', borderRadius: 10}}>
+                  SAVE
+              </Button>
+              </div>
+            </div>
+            <div style={{ height: 500 , backgroundColor: '#F5EDED', marginTop: 20, width: 725}}>
+              <DataGrid
+                columns={columns_Map}
+                rows={distinctWasteMapFactory}
+                slots={{ toolbar: GridToolbar }}
+                filterModel={filterModelMap}
+                onFilterModelChange={(newModel) => setFilterModelMap(newModel)}
+                slotProps={{ toolbar: { showQuickFilter: true } }}
+                columnVisibilityModel={columnVisibilityModelMap}
+                // checkboxSelection
+                onColumnVisibilityModelChange={(newModel) =>
+                  setColumnVisibilityModelMap(newModel)
+                }
+                getRowHeight={() => 40}
+                sx={{
+                  '& .MuiDataGrid-row': {
+                    backgroundColor: '#F6F5F5',
+                  },
+                }}
+              />
             </div>
           </Box>
         </Modal>

@@ -191,6 +191,10 @@ export default function Navbar({ onToggle }) {
         setMenuName("Master Waste Item List");
         setMenuIcon(<img src="/master.png" alt="" width={30} />);
         break;
+      case "/env_scrap_monthly_monitoring_upload_sold_waste":
+        setMenuName("Upload file for Invoice sold waste monthly monitoring");
+        setMenuIcon(<img src="/upload-file.png" alt="" width={30} />);
+        break;
         
       default:
         setMenuName("Smart Waste Management");
@@ -600,6 +604,47 @@ export default function Navbar({ onToggle }) {
                   </ListItemIcon>
                   <ListItemText
                     primary="Master Waste List"
+                    sx={{ opacity: open ? 1 : 0 }}
+                  />
+                </ListItemButton>
+              </ListItem>
+            </List>
+          </div>
+
+          {/* ๊ Upload file for Invoice sold waste monthly monitoring */}
+          <div className={`${getUserRoleNo === 3 || getUserRoleNo === 2 ? "hidden" : "block"}`}>
+            <List open={open}>
+              <ListItem
+                onClick={() => setMenuName("Upload file for Invoice sold waste monthly monitoring")}
+                disablePadding
+                sx={{ display: "block", color: "black" }}
+                component={Link}
+                to="/env_scrap_monthly_monitoring_upload_sold_waste"
+              >
+                <ListItemButton
+                  sx={{
+                    minHeight: 48,
+                    justifyContent: open ? "initial" : "center",
+                    px: 2.5,
+                  }}
+                >
+                  <ListItemIcon
+                    sx={{
+                      minWidth: 0,
+                      mr: open ? 3 : "auto",
+                      justifyContent: "center",
+                      color: "inherit", // Set initial color
+                      "&:hover": {
+                        color: "primary.main", // Change color on hover
+                      },
+                    }}
+                  >
+                    <img src="/upload-file.png" alt="" width={30} />
+                    {/* <ScaleOutlinedIcon />
+                    */}
+                  </ListItemIcon>
+                  <ListItemText
+                    primary="Upload file Invoice."
                     sx={{ opacity: open ? 1 : 0 }}
                   />
                 </ListItemButton>

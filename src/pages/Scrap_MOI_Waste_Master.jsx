@@ -499,7 +499,7 @@ export default function Scrap_MOI_Waste_Master({ onSearch }) {
     <>
       <Navbar onToggle={handleNavbarToggle}/>
       <Box marginLeft={isNavbarOpen ? "220px" : 4} marginTop={10}>
-            <div className="w-screen ml-16 mt-20">
+            <Box mt={10} maxWidth="100%" display="flex" justifyContent="left">
               <Button 
                   variant="contained" 
                   className="btn_active hover:scale-110"
@@ -517,8 +517,8 @@ export default function Scrap_MOI_Waste_Master({ onSearch }) {
                   endIcon={<AddToPhotosIcon />}
                   >ADD NEW MOI WASTE MASTER
               </Button>
-            </div>
-            <div className="w-screen ml-16 mt-5">
+            </Box>
+            <Box mt={2} maxWidth="100%" display="flex" justifyContent="">
               <Box sx={{width: 1250 , height: 700}}>
                 <DataGrid
                   columns={columns}
@@ -534,7 +534,7 @@ export default function Scrap_MOI_Waste_Master({ onSearch }) {
                   }
                 />
               </Box>
-            </div>
+            </Box>
             <Modal
                 open={isModalOpen_Add}
                 onClose={handleCloseModal_Add}

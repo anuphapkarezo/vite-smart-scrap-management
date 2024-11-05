@@ -197,7 +197,7 @@ export default function Scrap_Summary_Weight_MOI({ onSearch }) {
     <>
         <Navbar onToggle={handleNavbarToggle}/>
         <Box marginLeft={isNavbarOpen ? "220px" : 4} marginTop={8}>
-            <div className="w-screen ml-16 mt-20">
+            <Box mt={10} >
                 <div >
                     {/* <Smart_Scrap_SearchFactoryGroup onSearch={onSearch} /> */}
                     <Smart_Scrap_SearchSummaryWeightMOI
@@ -209,8 +209,8 @@ export default function Scrap_Summary_Weight_MOI({ onSearch }) {
                         }}
                     />
                 </div>
-            </div>
-            <Box sx={{width: '965px' , height: 725 , marginTop: '25px' , marginLeft: '65px'}}>
+              </Box>
+            <Box sx={{width: '965px' , height: 725 , marginTop: '25px' , marginLeft: ''}}>
                   <DataGrid
                     columns={columns}
                     // disableColumnFilter

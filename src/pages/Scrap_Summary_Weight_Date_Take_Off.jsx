@@ -104,20 +104,20 @@ export default function Scrap_Summary_Weight_Date_Take_Off({ onSearch }) {
     <>
         <Navbar onToggle={handleNavbarToggle}/>
         <Box marginLeft={isNavbarOpen ? "220px" : 4} marginTop={8}>
-            <div className="w-screen ml-16 mt-20">
-                <div >
-                    {/* <Smart_Scrap_SearchFactoryGroup onSearch={onSearch} /> */}
-                    <Smart_Scrap_SearchSummaryWeight
-                        onSearch={(queryParams) => {
-                        setSelectedFactory(queryParams.factory);
-                        setSelectedGroup(queryParams.group);
-                        setSelectedFromDate(queryParams.From_date_take_of);
-                        setSelectedToDate(queryParams.To_date_take_of);
-                        }}
-                    />
-                </div>
-            </div>
-            <Box sx={{width: '1340px' , height: 725 , marginTop: '25px' , marginLeft: '65px'}}>
+            {/* <div className="w-screen ml-16 mt-20"> */}
+            <Box mt={10} maxWidth="100%" display="flex" justifyContent="">
+              {/* <Smart_Scrap_SearchFactoryGroup onSearch={onSearch} /> */}
+              <Smart_Scrap_SearchSummaryWeight
+                  onSearch={(queryParams) => {
+                  setSelectedFactory(queryParams.factory);
+                  setSelectedGroup(queryParams.group);
+                  setSelectedFromDate(queryParams.From_date_take_of);
+                  setSelectedToDate(queryParams.To_date_take_of);
+                  }}
+              />
+            </Box>
+            {/* </div> */}
+            <Box sx={{width: '1340px' , height: 725 , marginTop: '25px' }}>
                   <DataGrid
                     columns={columns}
                     // disableColumnFilter

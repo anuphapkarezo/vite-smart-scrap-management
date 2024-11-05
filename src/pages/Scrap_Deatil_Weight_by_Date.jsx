@@ -155,8 +155,8 @@ export default function Scrap_Deatil_Weight_by_Date({ onSearch }) {
     <>
         <Navbar onToggle={handleNavbarToggle}/>
         <Box marginLeft={isNavbarOpen ? "220px" : 4} marginTop={8}>
-            <div className="w-screen ml-16 mt-20">
-                <div >
+            {/* <div className="w-screen ml-16 mt-20"> */}
+                <Box mt={10} maxWidth="100%" display="flex" justifyContent="">
                     {/* <Smart_Scrap_SearchFactoryGroup onSearch={onSearch} /> */}
                     <Smart_Scrap_SearchDetailsWeight
                         onSearch={(queryParams) => {
@@ -166,7 +166,7 @@ export default function Scrap_Deatil_Weight_by_Date({ onSearch }) {
                         setSelectedToDate(queryParams.To_date_take_of);
                         }}
                     />
-                </div>
+                </Box>
                 <div style={{ marginTop: 30}}>
                     {/* <button onClick={exportToCsv}>Export to CSV</button> */}
                     <Button 
@@ -178,7 +178,7 @@ export default function Scrap_Deatil_Weight_by_Date({ onSearch }) {
                             >Export to CSV
                     </Button>
                 </div>
-                <div style={{marginTop: 10 , fontSize: 14 , width: '1850px'}}>
+                <Box mt={2} maxWidth="100%" display="flex" justifyContent="">
                     <table>
                       <thead>
                         <tr>
@@ -397,8 +397,8 @@ export default function Scrap_Deatil_Weight_by_Date({ onSearch }) {
                         ))}
                       </tbody>
                     </table> */}
-                </div>
-            </div>
+                </Box>
+            {/* </div> */}
         </Box>
     </>
   );

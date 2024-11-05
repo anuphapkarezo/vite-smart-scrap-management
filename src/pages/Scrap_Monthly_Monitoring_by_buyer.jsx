@@ -847,15 +847,15 @@ export default function Scrap_Monthly_Monitoring_by_buyer({ onSearch }) {
     <>
         <Navbar onToggle={handleNavbarToggle}/>
         <Box marginLeft={isNavbarOpen ? "220px" : 4} marginTop={10}>
-          <div className="w-screen ml-16 mt-20">
-              <div >
+          {/* <div className="w-screen ml-16 mt-20"> */}
+            <Box mt={10} maxWidth="100%" display="flex" justifyContent="left">
                     <Smart_Scrap_SearchYearsMonitor
                         onSearch={(queryParams) => {
                         setSelectedFromYear(queryParams.fromyear);
                         setSelectedToYear(queryParams.toyear);
                         }}
                     />
-              </div>
+              </Box>
               <Box sx={{width: 1050 , height: 550 , marginTop: '25px'}}>
                 {isLoading ? (
                 <CircularProgress /> // Display a loading spinner while data is being fetched
@@ -912,7 +912,7 @@ export default function Scrap_Monthly_Monitoring_by_buyer({ onSearch }) {
                     <ReactApexChart options={basicBarChartData_Weight.options} series={basicBarChartData_Weight.series} type="bar" height={370} />
                   </Box>
               </div>
-          </div>
+          {/* </div> */}
         </Box>
     </>
   );

@@ -646,17 +646,17 @@ export default function Scrap_Record_Weight_Daily_Transaction({ onSearch }) {
     <>
       <Navbar onToggle={handleNavbarToggle}/>
       <Box marginLeft={isNavbarOpen ? "220px" : 4} marginTop={8}>
-    <div className="w-screen ml-16 mt-20">
-        <div >
-            {/* <Smart_Scrap_SearchFactoryGroup onSearch={onSearch} /> */}
-            <Smart_Scrap_SearchFactoryGroup
-                onSearch={(queryParams) => {
-                  setSelectedFactory(queryParams.factory);
-                  setSelectedGroup(queryParams.group);
-                  setSelectedDate(queryParams.date_take_of);
-                }}
-            />
-        </div>
+    {/* <div className="w-screen ml-16 mt-20"> */}
+        <Box mt={10} maxWidth="100%" display="flex" justifyContent="">
+          {/* Search component */}
+          <Smart_Scrap_SearchFactoryGroup
+            onSearch={(queryParams) => {
+              setSelectedFactory(queryParams.factory);
+              setSelectedGroup(queryParams.group);
+              setSelectedDate(queryParams.date_take_of);
+            }}
+          />
+        </Box>
         <Box sx={{width: '1675px' , height: 725 , marginTop: '25px'}}>
             {isLoading ? (
               <CircularProgress /> // Display a loading spinner while data is being fetched
@@ -826,7 +826,7 @@ export default function Scrap_Record_Weight_Daily_Transaction({ onSearch }) {
             </Button>
           </DialogActions>
         </Dialog>
-    </div>
+    {/* </div> */}
     </Box>
     </>
   );

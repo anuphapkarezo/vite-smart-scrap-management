@@ -247,8 +247,8 @@ export default function Scrap_Monthly_Monitoring_by_item({ onSearch }) {
     <>
         <Navbar onToggle={handleNavbarToggle}/>
         <Box marginLeft={isNavbarOpen ? "220px" : 4} marginTop={10}>
-          <div className="w-screen ml-16 mt-20">
-              <div >
+          {/* <div className="w-screen ml-16 mt-20"> */}
+              <Box mt={10} ml={2.5} maxWidth="100%" display="flex" justifyContent="">
                     <Smart_Scrap_SearchMonitorItem
                         onSearch={(queryParams) => {
                         setSelectedFromYear(queryParams.fromyear);
@@ -258,8 +258,8 @@ export default function Scrap_Monthly_Monitoring_by_item({ onSearch }) {
                         setSelectedItem(queryParams.item);
                         }}
                     />
-              </div>
-              <div style={{ marginTop: 30}}>
+              </Box>
+              <div style={{ marginTop: 30, marginLeft: 25}}>
                     {/* <button onClick={exportToCsv}>Export to CSV</button> */}
                     <Button 
                             variant="contained" 
@@ -270,10 +270,10 @@ export default function Scrap_Monthly_Monitoring_by_item({ onSearch }) {
                             >Export Amount
                     </Button>
               </div>
-              <div style={{marginTop: 5 , fontSize: 18 , color: 'blue'}}>
+              <div style={{marginTop: 5 , fontSize: 18 , color: 'blue', marginLeft: 25}}>
                   Monthly monitoring by Amount (THB)
               </div>
-              <div style={{marginTop: 5 , fontSize: 14 , width: '1850px' , height: 'auto'}}>
+              <div style={{marginTop: 5 , fontSize: 14 , width: '100%' , height: 'auto', marginLeft: 25}}>
                     <table>
                       <thead>
                           <tr>
@@ -406,7 +406,7 @@ export default function Scrap_Monthly_Monitoring_by_item({ onSearch }) {
                         </tbody>
                     </table>
                 </div>
-                <div style={{ marginTop: 100}}>
+                <div style={{ marginTop: 50, marginLeft: 25}}>
                     {/* <button onClick={exportToCsv}>Export to CSV</button> */}
                     <Button 
                             variant="contained" 
@@ -417,10 +417,10 @@ export default function Scrap_Monthly_Monitoring_by_item({ onSearch }) {
                             >Export Weight
                     </Button>
                 </div>
-                <div style={{marginTop: 5 , fontSize: 18 , color: 'blue'}}>
+                <div style={{marginTop: 5 , fontSize: 18 , color: 'blue', marginLeft: 25}}>
                   Monthly monitoring by Weight (KG)
                 </div>
-                <div style={{marginTop: 5 , marginBottom: 10,  fontSize: 14 , width: '1850px' , height: 780}}>
+                <div style={{marginTop: 5 , marginBottom: 10,  fontSize: 14 , width: '100%' , height: 780, marginLeft: 25}}>
                     <table>
                       <thead>
                           <tr>
@@ -552,7 +552,7 @@ export default function Scrap_Monthly_Monitoring_by_item({ onSearch }) {
                         </tbody>
                     </table>
                 </div>
-          </div>
+          {/* </div> */}
         </Box>
     </>
   );

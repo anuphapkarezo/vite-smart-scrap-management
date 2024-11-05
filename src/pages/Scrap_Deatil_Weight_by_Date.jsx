@@ -178,8 +178,8 @@ export default function Scrap_Deatil_Weight_by_Date({ onSearch }) {
                             >Export to CSV
                     </Button>
                 </div>
-                <Box mt={2} maxWidth="100%" display="flex" justifyContent="">
-                    <table>
+                <div style={{height: '100%', width:1610 , fontSize: 14, overflow: 'auto', paddingBottom: 15, paddingRight: 5, marginTop: 10}}>
+                    <table style={{width: 1850, borderCollapse: 'collapse',}}>
                       <thead>
                         <tr>
                           <th
@@ -397,7 +397,7 @@ export default function Scrap_Deatil_Weight_by_Date({ onSearch }) {
                         ))}
                       </tbody>
                     </table> */}
-                </Box>
+                </div>
             {/* </div> */}
         </Box>
     </>

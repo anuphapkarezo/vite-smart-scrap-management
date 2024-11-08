@@ -132,8 +132,26 @@ function Login() {
               Go to dashboard with guest
             </Link> */}
           </form>
+          {/* <div style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+            }}>
+            <div style={{
+                width: 670,
+                height: '100%',
+                display: 'flex',
+                justifyContent: 'center',
+                fontSize: 20,
+                backgroundColor: 'orange',
+            }}>
+                Noted : Shutdown Server 6/11/24, 06:00 PM - 7/11/24, 08:00 AM.
+            </div>
+          </div> */}
         </div>
+        
       </div>
+
     </>
   );
 }

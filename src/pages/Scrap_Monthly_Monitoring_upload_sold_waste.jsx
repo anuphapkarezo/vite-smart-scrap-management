@@ -168,7 +168,7 @@ export default function Scrap_Monthly_Monitoring_upload_sold_waste({ onSearch })
 
               if (index === 0) return;
               if (factory === '') return;
-              const response = await axios.get(`http://10.17.100.115:3001/api/smart_scrap/filter-count-inv-sold-waste?factory=${factory}&inv_no=${inv_no}&comp_code=${company_code}&iss_date=${issue_date}&take_date=${takeout_date}&waste_item=${waste_item}&month_inv=${month_inv}`);
+              const response = await axios.get(`http://10.17.100.115:3001/api/smart_scrap/filter-count-inv-sold-waste?factory=${factory}&inv_no=${inv_no}&comp_code=${company_code}&iss_date=${issue_date}&take_date=${takeout_date}&waste_item=${waste_item}&month_inv=${month_inv}&weight=${weigh}`);
               const data = response.data;
               const count_data = data[0].count_data;
               
